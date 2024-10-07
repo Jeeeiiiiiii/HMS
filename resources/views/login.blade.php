@@ -63,7 +63,7 @@
     @endif
 
     <!-- Form Header -->
-    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 text-center">Welcome Back!</h2>
+    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 text-center">Login</h2>
     <p class="text-xs sm:text-sm text-gray-500 text-center">Please login to your account</p>
 
     <!-- Login Form -->
