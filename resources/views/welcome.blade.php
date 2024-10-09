@@ -31,7 +31,7 @@
             <a href="#" class="text-gray-800 hover:text-primary">Services</a>
             <a href="#" class="text-gray-800 hover:text-primary">About</a>
             <a href="#" class="text-gray-800 hover:text-primary">Contact</a>
-            <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded">Login</a>
+            <a href="{{ route('login') }}" class="bg-primary text-gray px-4 py-2 rounded">Login</a>
         </nav>
     </header>
 
