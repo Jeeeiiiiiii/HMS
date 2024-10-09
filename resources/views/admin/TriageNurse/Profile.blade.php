@@ -9,8 +9,7 @@
         <div class="flex flex-col sm:flex-row items-center gap-6">
             <div class="text-center sm:text-left">
                 <div class="flex space-x-4">
-                    <h2 class="text-4xl font-semibold mb-2">{{ $triagenurse->name }}</h2>
-                    <h2 class="text-4xl font-semibold mb-2">- {{ $triagenurse->specialization }}</h2>
+                    <h2 class="text-4xl font-semibold mb-2">Triage Nurse {{ $triagenurse->name }}</h2>
                 </div>
                 <p class="text-lg text-gray-600 mb-2">Departments:
                     @if($triagenurse->departments->isEmpty())

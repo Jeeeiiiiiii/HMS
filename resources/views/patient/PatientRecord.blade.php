@@ -9,7 +9,7 @@
         <!-- Admission Details -->       
         <div class="lg:col-span-1 bg-white p-4 rounded-md shadow-md border border-gray-200">
             <div class="flex justify-between items-center bg-gray-100 rounded-t-md p-4">
-                <h2 class="text-lg font-semibold text-gray-800">Admission Details docikok</h2>
+                <h2 class="text-lg font-semibold text-gray-800">Admission Details</h2>
             </div>
             <div class="p-4 space-y-6"> <!-- Added space-y-6 for consistent spacing -->
                 <div>

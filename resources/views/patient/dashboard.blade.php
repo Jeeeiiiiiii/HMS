@@ -114,7 +114,7 @@
                     <!-- Display Session Details -->
                     <div>
                         <p class="font-medium text-gray-800">{{ $session->device_name }}</p>
-                        <p class="text-sm text-gray-600">{{ $session->browser_name }} - {{ $session->last_active_at->diffForHumans() }}</p>
+                        <p class="text-sm text-gray-600">{{ $session->browser_name }} - {{ $session->last_active_at ? $session->last_active_at->diffForHumans() : 'No activity recorded' }}</p>
                     </div>
                 </div>
             @endforeach

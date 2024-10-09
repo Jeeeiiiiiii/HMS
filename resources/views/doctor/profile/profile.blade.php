@@ -11,7 +11,8 @@
                 <div class="text-gray-600 font-medium text-lg">Welcome!</div>
             </div>
             <div>
-                <div class="text-gray-800 font-bold text-3xl">{{ $doctor->name }}</div>
+                <div class="text-gray-800 font-bold text-3xl">Dr. {{ $doctor->name }}</div>
+                <div class="text-gray-800 font-bold text-3xl">- {{ $doctor->profile->specialization }}</div>
             </div>
         </div>
 

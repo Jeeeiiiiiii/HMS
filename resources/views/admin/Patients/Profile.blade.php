@@ -15,15 +15,19 @@
                     @if($patient->admission->isEmpty())
                         <span class="text-gray-400">N/A</span>
                     @else
-                        @foreach($patient->admission as $admission)
-                            @if($admission->department)
-                                <span class="inline-block bg-blue-100 text-blue-600 rounded-full px-2 py-1 text-sm font-medium mr-2">{{ $admission->department->department_name }}</span>
-                            @else
-                                <span class="text-gray-400">N/A</span>
-                            @endif
-                        @endforeach
+                        @php
+                            $uniqueDepartments = $patient->admission->pluck('department.department_name')->unique();
+                        @endphp
+                        @if($uniqueDepartments->isEmpty())
+                            <span class="text-gray-400">N/A</span>
+                        @else
+                            @foreach($uniqueDepartments as $departmentName)
+                                <span class="inline-block bg-blue-100 text-blue-600 rounded-full px-2 py-1 text-sm font-medium mr-2">{{ $departmentName }}</span>
+                            @endforeach
+                        @endif
                     @endif
                 </p>
+
 
             </div>
         </div>
