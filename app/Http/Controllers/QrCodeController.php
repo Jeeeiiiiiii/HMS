@@ -19,36 +19,45 @@ class QrCodeController extends Controller
     if ($patientRecord && $patientRecord->qrcode->isNotEmpty()) {
         // Get the first QR code associated with this PatientRecord
         $qrCode = $patientRecord->qrcode->first();
-        return response()->json(['path' => Storage::url($qrCode->file_path)]);
+
+        // Use Storage::disk('s3')->url to get the correct URL for the QR code
+        return response()->json(['path' => Storage::disk('s3')->url($qrCode->file_path)]);
     } else {
         return response()->json(['path' => null], 404); // Handle the case where no QR code is found
     }
 }
+
 
     public function showRecord($patientRecordId)
-{
-    $Record = Record::with('record_qrcode')->find($patientRecordId);
+    {
+        $record = Record::with('record_qrcode')->find($patientRecordId);
 
-    if ($Record && $Record->record_qrcode->isNotEmpty()) {
-        // Get the first QR code associated with this PatientRecord
-        $qrCode = $Record->record_qrcode->first();
-        return response()->json(['path' => Storage::url($qrCode->file_path)]);
-    } else {
-        return response()->json(['path' => null], 404); // Handle the case where no QR code is found
+        if ($record && $record->record_qrcode->isNotEmpty()) {
+            // Get the first QR code associated with this Record
+            $qrCode = $record->record_qrcode->first();
+
+            // Use Storage::disk('s3')->url to get the correct URL for the QR code
+            return response()->json(['path' => Storage::disk('s3')->url($qrCode->file_path)]);
+        } else {
+            return response()->json(['path' => null], 404); // Handle the case where no QR code is found
+        }
     }
-}
+
 
     public function showOrder($patientRecordId)
 {
-    $Record = Order::with('order_qrcode')->find($patientRecordId);
+    $order = Order::with('order_qrcode')->find($patientRecordId);
 
-    if ($Record && $Record->order_qrcode->isNotEmpty()) {
-        // Get the first QR code associated with this PatientRecord
-        $qrCode = $Record->order_qrcode->first();
-        return response()->json(['path' => Storage::url($qrCode->file_path)]);
+    if ($order && $order->order_qrcode->isNotEmpty()) {
+        // Get the first QR code associated with this Order
+        $qrCode = $order->order_qrcode->first();
+
+        // Use Storage::disk('s3')->url to get the correct URL for the QR code
+        return response()->json(['path' => Storage::disk('s3')->url($qrCode->file_path)]);
     } else {
         return response()->json(['path' => null], 404); // Handle the case where no QR code is found
     }
 }
+
 
 }

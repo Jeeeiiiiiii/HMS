@@ -199,22 +199,36 @@ class NurseController extends Controller
         }
 
 
-    public function generateQRCode(Record $record)
+            public function generateQRCode(Record $record)
         {
             // Generate the URL that the QR code will point to
             $url = route('Record.show', $record->id);
-
+        
             // Generate the QR code as a PNG image pointing to the URL
             $qrCodeImage = QrCode::format('png')->size(200)->generate($url);
         
-            // Define a unique file path where the QR code image will be stored
+            // Define a unique file path where the QR code image will be stored in the S3 bucket
             $uniqueId = Str::uuid(); // Generate a unique ID
-            $filePath = 'public/RecordQRcodes/' . $record->id . '_' . $uniqueId . '.png';
+            $filePath = 'RecordQRcodes/' . $record->id . '_' . $uniqueId . '.png';
         
-            // Save the QR code image to the storage
-            Storage::put($filePath, $qrCodeImage);
+            // Attempt to save the QR code image to the S3 storage
+            try {
+                Storage::disk('s3')->put($filePath, $qrCodeImage);
+                
+                // Log successful upload
+                \Log::info('QR code uploaded successfully to S3 at: ' . $filePath);
+            } catch (\Exception $e) {
+                // Log any errors that occur during upload
+                \Log::error('Error uploading QR code to S3: ' . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
+            }
         
-            // Store the file path in the database, associating it with the patient record
+            if (Storage::disk('s3')->exists($filePath)) {
+                \Log::info('QR code exists on S3 at: ' . $filePath);
+            } else {
+                \Log::error('QR code does not exist on S3 at: ' . $filePath);
+            }
+        
+            // Store the file path in the database, associating it with the record
             RecordQrCode::create([
                 'patient_record_id' => $record->patient_record_id,
                 'record_id' => $record->id,
@@ -222,6 +236,7 @@ class NurseController extends Controller
                 'patient_id' => $record->patient_id,
             ]);
         }
+        
 
         public function showQR(Record $record)
         {

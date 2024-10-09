@@ -314,22 +314,36 @@ class DoctorController extends Controller
         
         }
 
-    public function generateQRCode(Order $order)
+        public function generateQRCode(Order $order)
         {
             // Generate the URL that the QR code will point to
             $url = route('Order.show', $order->id);
-
+        
             // Generate the QR code as a PNG image pointing to the URL
             $qrCodeImage = QrCode::format('png')->size(200)->generate($url);
         
-            // Define a unique file path where the QR code image will be stored
+            // Define a unique file path where the QR code image will be stored in the S3 bucket
             $uniqueId = Str::uuid(); // Generate a unique ID
-            $filePath = 'public/OrderQRcodes/' . $order->id . '_' . $uniqueId . '.png';
+            $filePath = 'OrderQRcodes/' . $order->id . '_' . $uniqueId . '.png';
         
-            // Save the QR code image to the storage
-            Storage::put($filePath, $qrCodeImage);
+            // Attempt to save the QR code image to the S3 storage
+            try {
+                Storage::disk('s3')->put($filePath, $qrCodeImage);
+                
+                // Log successful upload
+                \Log::info('QR code uploaded successfully to S3 at: ' . $filePath);
+            } catch (\Exception $e) {
+                // Log any errors that occur during upload
+                \Log::error('Error uploading QR code to S3: ' . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
+            }
         
-            // Store the file path in the database, associating it with the patient record
+            if (Storage::disk('s3')->exists($filePath)) {
+                \Log::info('QR code exists on S3 at: ' . $filePath);
+            } else {
+                \Log::error('QR code does not exist on S3 at: ' . $filePath);
+            }
+        
+            // Store the file path in the database, associating it with the order
             OrderQrCode::create([
                 'patient_record_id' => $order->patient_record_id,
                 'order_id' => $order->id,
@@ -337,6 +351,7 @@ class DoctorController extends Controller
                 'patient_id' => $order->patient_id,
             ]);
         }
+        
 
         public function showQR(Order $order)
         {

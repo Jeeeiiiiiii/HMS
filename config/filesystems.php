@@ -45,16 +45,18 @@ return [
         ],
 
         's3' => [
-            'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
-            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            'throw' => false,
-        ],
+        'driver' => 's3',
+        'key' => env('AWS_ACCESS_KEY_ID'),  // Correctly reference the variable name
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),  // Correctly reference the variable name
+        'region' => env('AWS_DEFAULT_REGION'),  // Correctly reference the variable name
+        'bucket' => env('AWS_BUCKET'),  // Correctly reference the variable name
+        
+        'endpoint' => env('AWS_ENDPOINT', null),  // Optional, set to null if not used
+        'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),  // Reference correctly
+        'throw' => true,  // This can be kept if you want to handle exceptions manually
+        'visibility' => 'public',  // Optional, can be omitted if not needed
+    ],
+
 
     ],
 

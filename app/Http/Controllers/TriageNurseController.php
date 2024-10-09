@@ -26,6 +26,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Log;
 use Hash;
 use Auth;
 use Mail;
@@ -218,22 +219,36 @@ class TriageNurseController extends Controller
         }
 
 
-    public function generateQRCode(PatientRecord $patientRecord)
+        public function generateQRCode(PatientRecord $patientRecord)
         {
             // Generate the URL that the QR code will point to
             $url = route('patientRecord.show', $patientRecord->id);
 
             // Generate the QR code as a PNG image pointing to the URL
             $qrCodeImage = QrCode::format('png')->size(200)->generate($url);
-        
-            // Define a unique file path where the QR code image will be stored
+
+            // Define a unique file path where the QR code image will be stored in the S3 bucket
             $uniqueId = Str::uuid(); // Generate a unique ID
-            $filePath = 'public/qrcodes/' . $patientRecord->id . '_' . $uniqueId . '.png';
-        
-            // Save the QR code image to the storage
-            Storage::put($filePath, $qrCodeImage);
-        
-            // Store the file path in the database, associating it with the patient record
+            $filePath = 'PatientQRcodes/' . $patientRecord->id . '_' . $uniqueId . '.png';
+
+            // Attempt to save the QR code image to the S3 storage
+            try {
+                Storage::disk('s3')->put($filePath, $qrCodeImage);
+                
+                // Log successful upload
+                \Log::info('QR code uploaded successfully to S3 at: ' . $filePath);
+            } catch (\Exception $e) {
+                // Log any errors that occur during upload
+                \Log::error('Error uploading QR code to S3: ' . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
+            }
+
+            if (Storage::disk('s3')->exists($filePath)) {
+                \Log::info('QR code exists on S3 at: ' . $filePath);
+            } else {
+                \Log::error('QR code does not exist on S3 at: ' . $filePath);
+            }
+
+            // Store the file path in the database
             PatientQrCode::create([
                 'patient_record_id' => $patientRecord->id,
                 'file_path' => $filePath,
@@ -241,6 +256,8 @@ class TriageNurseController extends Controller
                 'qr_code_type' => 'admission',
             ]);
         }
+
+        
 
     public function showQR(PatientRecord $patientRecord)
         {
