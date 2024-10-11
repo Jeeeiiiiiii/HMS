@@ -13,7 +13,8 @@
         <!-- Start of Form -->
         <form action="{{ route('department_post_final') }}" method="POST">
             @csrf <!-- Always include CSRF token for form security -->
-
+            <input type="hidden" name="token" value="{{ $token }}">
+            
             <div id="step1" class="step">
                 <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Department Registration</div>
                 <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Step 1: Basic Information</div>

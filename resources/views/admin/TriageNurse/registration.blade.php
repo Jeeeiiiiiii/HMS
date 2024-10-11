@@ -13,6 +13,7 @@
         <!-- Start of Form -->
         <form action="{{ route('triage_nurse_post_final') }}" method="POST">
             @csrf <!-- Always include CSRF token for form security -->
+            <input type="hidden" name="token" value="{{ $token }}">
 
             <div id="step1" class="step">
                 <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Triage Nurse Registration</div>

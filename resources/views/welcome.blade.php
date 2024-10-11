@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class= "scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,10 +16,10 @@
                 <span class="ml-2 text-xl font-bold text-gray-800">Ospital ng Parañaque</span>
             </div>
             <nav class="hidden md:flex space-x-4">
-                <a href="#" class="text-gray-800 hover:text-primary">Home</a>
-                <a href="#" class="text-gray-800 hover:text-primary">Services</a>
-                <a href="#" class="text-gray-800 hover:text-primary">About</a>
-                <a href="#" class="text-gray-800 hover:text-primary">Contact</a>
+                <a href="#home" class="text-gray-800 hover:text-primary">Home</a>
+                <a href="#services" class="text-gray-800 hover:text-primary">Services</a>
+                <a href="#about" class="text-gray-800 hover:text-primary">About</a>
+                <a href="#contact" class="text-gray-800 hover:text-primary">Contact</a>
                 <a href="{{ route('login') }}" class="bg-primary text-gray px-4 py-2 rounded">Login</a>
             </nav>
             <button class="md:hidden" onclick="toggleMenu()">
@@ -27,16 +27,16 @@
             </button>
         </div>
         <nav id="mobile-menu" class="md:hidden bg-white px-4 py-2 flex flex-col space-y-2 hidden">
-            <a href="#" class="text-gray-800 hover:text-primary">Home</a>
-            <a href="#" class="text-gray-800 hover:text-primary">Services</a>
-            <a href="#" class="text-gray-800 hover:text-primary">About</a>
-            <a href="#" class="text-gray-800 hover:text-primary">Contact</a>
+            <a href="#home" class="text-gray-800 hover:text-primary">Home</a>
+            <a href="#services" class="text-gray-800 hover:text-primary">Services</a>
+            <a href="#about" class="text-gray-800 hover:text-primary">About</a>
+            <a href="#contact" class="text-gray-800 hover:text-primary">Contact</a>
             <a href="{{ route('login') }}" class="bg-primary text-gray px-4 py-2 rounded">Login</a>
         </nav>
     </header>
 
     <main>
-        <section class="bg-primary text-primary-foreground py-20">
+        <section id= "home" class="bg-primary text-primary-foreground py-20">
             <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
                 <div class="md:w-1/2 mb-8 md:mb-0">
                     <h1 class="text-4xl md:text-5xl font-bold mb-4">Your Health, Our Priority</h1>
@@ -49,7 +49,7 @@
             </div>
         </section>
 
-        <section class="py-20">
+        <section id= "services" class="py-20">
             <div class="container mx-auto px-4">
                 <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -73,7 +73,7 @@
         </section>
 
 
-        <section class="bg-gray-100 py-20">
+        <section id= "about" class="bg-gray-100 py-20">
             <div class="container mx-auto px-4">
                 <h2 class="text-3xl font-bold text-center mb-12">Patient Testimonials</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -97,7 +97,7 @@
             </div>
         </section>
 
-        <section class="py-20">
+        <section id= "contact" class="py-20">
             <div class="container mx-auto px-4">
                 <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">

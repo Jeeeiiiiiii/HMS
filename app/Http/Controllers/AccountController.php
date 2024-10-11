@@ -210,38 +210,46 @@ class AccountController extends Controller
 
     ////////// Doctor Logic
     public function final_registration(Request $request, $token)
-    {
-        // Validate the token
+{
+    // Validate the token
     $temporaryUser = TemporaryUser::where('registration_token', $token)->first();
 
     if (!$temporaryUser) {
         return redirect()->route('login')->with('error', 'Invalid confirmation token.');
     }
-    $temporaryUser->delete();
 
-    return view('admin.Doctors.registration');
-    }
+    // Pass the token to the view
+    return view('admin.Doctors.registration', compact('token'));
+}
 
     public function doctor_post_final(Request $request)
-    {
+{
+    // Validate the token
+    $temporaryUser = TemporaryUser::where('registration_token', $request->token)->first();
 
-        Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => ['required','confirmed','min:8','regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
-        ])->validate();
-        
-        $user = Doctor::create([
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'name' => $request->name, 
-            
-            // ... other user fields
-        ]); 
+    if (!$temporaryUser) {
+        return redirect()->route('login')->with('error', 'Invalid confirmation token.');
+    }
 
-        // Create the DoctorProfile record, using the ID of the newly created doctor
-        DoctorProfile::create([
-        'doctor_id' => $user->id, // Associate the profile with the doctor
+    // Validate the input
+    Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email',
+        'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
+        'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
+    ])->validate();
+
+    // Create the Doctor record
+    $doctor = Doctor::create([
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'name' => $request->name,
+        // ... other user fields
+    ]);
+
+    // Create the DoctorProfile record, using the ID of the newly created doctor
+    DoctorProfile::create([
+        'doctor_id' => $doctor->id, // Associate the profile with the doctor
         'name' => $request->name,
         'age' => $request->age,
         'birthday' => $request->birthday,
@@ -253,38 +261,50 @@ class AccountController extends Controller
         'gender' => $request->gender,
         'telephone_no' => $request->telephone_no,
     ]);
-    
-        return redirect('login')->withSuccess('Doctor Registration Completed');
-    }
+
+    // Now delete the temporary user
+    $temporaryUser->delete();
+
+    return redirect('login')->withSuccess('Doctor Registration Completed');
+}
+
 
     ////////// Patient Logic
     public function patient_final_registration(Request $request, $token)
-    {
-        // Validate the token
+{
+    // Validate the token
     $temporaryUser = TemporaryUser::where('registration_token', $token)->first();
 
     if (!$temporaryUser) {
         return redirect()->route('login')->with('error', 'Invalid confirmation token.');
     }
-    $temporaryUser->delete();
 
-    return view('admin.Patients.registration');
-    }
+    // Pass the token to the view
+    return view('admin.Patients.registration', compact('token'));
+}
 
     public function patient_post_final(Request $request)
-    {
+{
+    // Validate the token
+    $temporaryUser = TemporaryUser::where('registration_token', $request->token)->first();
 
-        Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => ['required','confirmed','min:8','regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
-        ])->validate();
-        
-        // Create the Patient record
+    if (!$temporaryUser) {
+        return redirect()->route('login')->with('error', 'Invalid confirmation token.');
+    }
+
+    // Validate the input
+    Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email',
+        'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
+        'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
+    ])->validate();
+
+    // Create the Patient record
     $patient = Patient::create([
         'email' => $request->email,
         'password' => Hash::make($request->password),
-        'name' => $request->name, 
+        'name' => $request->name,
         // ... other user fields
     ]);
 
@@ -302,40 +322,51 @@ class AccountController extends Controller
         'telephone_no' => $request->telephone_no,
     ]);
 
-    
-        return redirect('login')->withSuccess('Patient Registration Completed');
-    }
+    // Now delete the temporary user
+    $temporaryUser->delete();
+
+    return redirect('login')->withSuccess('Patient Registration Completed');
+}
+
 
     ////////// Nurse Logic
-    public function nurse_final_registration(Request $request, $token)
-    {
-        // Validate the token
+public function nurse_final_registration(Request $request, $token)
+{
+    // Validate the token
     $temporaryUser = TemporaryUser::where('registration_token', $token)->first();
 
     if (!$temporaryUser) {
         return redirect()->route('login')->with('error', 'Invalid confirmation token.');
     }
-    $temporaryUser->delete();
 
-    return view('admin.Nurse.registration');
-    }
+    // Pass the token to the view
+    return view('admin.Nurse.registration', compact('token'));
+}
 
     public function nurse_post_final(Request $request)
     {
+        // Validate the token
+        $temporaryUser = TemporaryUser::where('registration_token', $request->token)->first();
 
+        if (!$temporaryUser) {
+            return redirect()->route('login')->with('error', 'Invalid confirmation token.');
+        }
+
+        // Validate the input
         Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
-            'password' => ['required','confirmed','min:8','regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
+            'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
+            'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
         ])->validate();
-        
+
+        // Create the nurse
         $user = Nurse::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'name' => $request->name, 
-            
+            'name' => $request->name,
             // ... other user fields
-        ]); 
+        ]);
 
         // Create the NurseProfile record, using the ID of the newly created nurse
         NurseProfile::create([
@@ -350,45 +381,57 @@ class AccountController extends Controller
             'gender' => $request->gender,
             'telephone_no' => $request->telephone_no,
         ]);
-    
+
+        // Now delete the temporary user
+        $temporaryUser->delete();
+
         return redirect('login')->withSuccess('Nurse Registration Completed');
     }
+
 
     ////////// TriageNurse Logic
     public function triage_nurse_final_registration(Request $request, $token)
     {
-        // Validate the token
+    // Validate the token
     $temporaryUser = TemporaryUser::where('registration_token', $token)->first();
 
     if (!$temporaryUser) {
         return redirect()->route('login')->with('error', 'Invalid confirmation token.');
     }
-    $temporaryUser->delete();
 
-    return view('admin.TriageNurse.registration');
+    // Pass the token to the view
+    return view('admin.TriageNurse.registration', compact('token'));
     }
+
 
     
     public function triage_nurse_post_final(Request $request)
     {
+        // Validate the token
+        $temporaryUser = TemporaryUser::where('registration_token', $request->token)->first();
 
+        if (!$temporaryUser) {
+            return redirect()->route('login')->with('error', 'Invalid confirmation token.');
+        }
+
+        // Validate the input
         Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
             'password' => ['required','confirmed','min:8','regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
         ])->validate();
-        
+
+        // Create the triage nurse
         $user = TriageNurse::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'name' => $request->name, 
-            
+            'name' => $request->name,
             // ... other user fields
         ]); 
 
-        // Create the TriageNurseProfile record, using the ID of the newly created triage nurse
+        // Create the profile
         TriageNurseProfile::create([
-            'triage_nurse_id' => $user->id, // Associate the profile with the triage nurse
+            'triage_nurse_id' => $user->id,
             'name' => $request->name,
             'age' => $request->age,
             'birthday' => $request->birthday,
@@ -399,43 +442,60 @@ class AccountController extends Controller
             'gender' => $request->gender,
             'telephone_no' => $request->telephone_no,
         ]);
-    
+
+        // Now delete the temporary user
+        $temporaryUser->delete();
+
         return redirect('login')->withSuccess('Triage Nurse Registration Completed');
     }
+
 
     ////////// Department Logic
     public function department_final_registration(Request $request, $token)
     {
         // Validate the token
-    $temporaryUser = TemporaryUser::where('registration_token', $token)->first();
+        $temporaryUser = TemporaryUser::where('registration_token', $token)->first();
 
-    if (!$temporaryUser) {
-        return redirect()->route('login')->with('error', 'Invalid confirmation token.');
-    }
-    $temporaryUser->delete();
+        if (!$temporaryUser) {
+            return redirect()->route('login')->with('error', 'Invalid confirmation token.');
+        }
 
-    return view('admin.Department.registration');
+        // Pass the token to the view
+        return view('admin.Department.registration', compact('token'));
     }
 
     public function department_post_final(Request $request)
     {
+        // Validate the token
+        $temporaryUser = TemporaryUser::where('registration_token', $request->token)->first();
 
+        if (!$temporaryUser) {
+            return redirect()->route('login')->with('error', 'Invalid confirmation token.');
+        }
+
+        // Validate the input
         Validator::make($request->all(), [
             'department_name' => 'required',
             'email' => 'required|email',
-            'password' => ['required','confirmed','min:8','regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
+            'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
+            'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
         ])->validate();
-        
-        Department::create([
+
+        // Create the department
+        $department = Department::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'department_name' => $request->department_name, 
+            'department_name' => $request->department_name,
             'department_code' => $request->department_code,
             'phone_number' => $request->phone_number,
-            'address' => $request->address,            
-            // ... other user fields
-        ]); 
-    
+            'address' => $request->address,
+            // ... other department fields
+        ]);
+
+        // Now delete the temporary user
+        $temporaryUser->delete();
+
         return redirect('login')->withSuccess('Department Registration Completed');
     }
+
 }
