@@ -68,15 +68,17 @@
 
                 <!-- Order Status -->
                 <div class="mb-4">
-                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                    <select id="status" name="status" class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                        <option value="pending">Pending</option>
-                        <option value="completed">Completed</option>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <p class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full">
+                        Pending
+                    </p>
+                    <input type="hidden" name="status" value="pending">
                     @error('status')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
+
+
 
                 <!-- Order Date -->
                 <div class="mb-4">
