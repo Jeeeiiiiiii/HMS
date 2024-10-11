@@ -121,10 +121,13 @@ class AccountController extends Controller
                         Auth::guard('admin')->login($user);
 
                 // Log session for admin
-                AdminSession::create(
-                    ['admin_id' => $user->id, 'device_name' => $deviceName, 'browser_name' => $browserName],
-                    ['last_active_at' => now()]
-                );
+                AdminSession::create([
+                    'admin_id' => $user->id,
+                    'device_name' => $deviceName,
+                    'browser_name' => $browserName,
+                    'last_active_at' => now(), // Include last_active_at in the same array
+                ]);
+
 
             return redirect()->route('admin_dashboard')->with('success', 'Login successful');
             } 
@@ -134,10 +137,13 @@ class AccountController extends Controller
             Auth::guard('doctor')->login($user);
 
             // Log session for doctor
-            DoctorSession::create(
-                ['doctor_id' => $user->id, 'device_name' => $deviceName, 'browser_name' => $browserName],
-                ['last_active_at' => now()]
-            );
+            DoctorSession::create([
+                'doctor_id' => $user->id,
+                'device_name' => $deviceName,
+                'browser_name' => $browserName,
+                'last_active_at' => now(), // Include last_active_at in the same array
+            ]);
+
 
             return redirect()->route('doctor_dashboard')->with('success', 'Login successful');
         } 
@@ -147,10 +153,13 @@ class AccountController extends Controller
             Auth::guard('nurse')->login($user);
 
             // Log session for nurse
-            NurseSession::create(
-                ['nurse_id' => $user->id, 'device_name' => $deviceName, 'browser_name' => $browserName],
-                ['last_active_at' => now()]
-            );
+            NurseSession::create([
+                'nurse_id' => $user->id,
+                'device_name' => $deviceName,
+                'browser_name' => $browserName,
+                'last_active_at' => now(), // Include last_active_at in the same array
+            ]);
+
 
             return redirect()->route('nurse_dashboard')->with('success', 'Login successful');
         } 
@@ -160,10 +169,13 @@ class AccountController extends Controller
             Auth::guard('nurse')->login($user);
 
             // Log session for triage nurse
-            TriageNurseSession::create(
-                ['triage_nurse_id' => $user->id, 'device_name' => $deviceName, 'browser_name' => $browserName],
-                ['last_active_at' => now()]
-            );
+            TriageNurseSession::create([
+                'triage_nurse_id' => $user->id,
+                'device_name' => $deviceName,
+                'browser_name' => $browserName,
+                'last_active_at' => now(), // Include last_active_at in the same array
+            ]);
+
 
             return redirect()->route('triagenurse_dashboard')->with('success', 'Login successful');
         } 
@@ -173,10 +185,12 @@ class AccountController extends Controller
             Auth::guard('patient')->login($user);
 
             // Log session for patient
-            Session::create(
-            ['patient_id' => $user->id, 'device_name' => $deviceName, 'browser_name' => $browserName],
-            ['last_active_at' => now()]
-        );
+            Session::create([
+                'patient_id' => $user->id,
+                'device_name' => $deviceName,
+                'browser_name' => $browserName,
+                'last_active_at' => now(), // Include last_active_at in the same array
+            ]);
             return redirect()->route('patient_dashboard', ['id' => $user->id])->with('success', 'Login successful as patient');
         }
 
@@ -185,10 +199,13 @@ class AccountController extends Controller
             Auth::guard('department')->login($user);
 
             // Log session for department
-            DepartmentSession::create(
-            ['department_id' => $user->id, 'device_name' => $deviceName, 'browser_name' => $browserName],
-            ['last_active_at' => now()]
-        );
+            DepartmentSession::create([
+                'department_id' => $user->id,
+                'device_name' => $deviceName,
+                'browser_name' => $browserName,
+                'last_active_at' => now(), // Include last_active_at in the same array
+            ]);
+
             return redirect()->route('department_dashboard', ['id' => $user->id])->with('success', 'Login successful as department');
         }
                 
