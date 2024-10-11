@@ -67,7 +67,7 @@
                     <label for="password" class="block text-sm font-medium text-gray-700">New Password</label>
                     <input type="password" id="password" class="block mt-1 w-full rounded-md border shadow-sm px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" name="password" required>
                     @if ($errors->has('password'))
-                    <span class="text-danger">{{ $errors->first('password') }}</span>
+                    <span class="text-red-500 text-sm">{{ $errors->first('password') }}</span>
                     @endif
                 </div>
 
@@ -76,7 +76,7 @@
                     <label for="password-confirm" class="block text-sm font-medium text-gray-700">Confirm Password</label>
                     <input type="password" id="password-confirm" class="block mt-1 w-full rounded-md border shadow-sm px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" name="password_confirmation" required>
                     @if ($errors->has('password_confirmation'))
-                    <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                    <span class="text-red-500 text-sm">{{ $errors->first('password_confirmation') }}</span>
                     @endif
                 </div>
 

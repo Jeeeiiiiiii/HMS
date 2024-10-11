@@ -41,11 +41,6 @@
                             <td class="py-2 px-4 border-b border-gray-50">
                                 <div class="flex flex-wrap gap-2">
                                     <a href="{{ route('doctor_addorder', $record->patient->id) }}" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 transition duration-200">Issue Order</a>
-                                    <form action="#" method="POST" onsubmit="return confirm('Delete?')" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 transition duration-200">Delete</button>
-                                    </form>
                                 </div>
                             </td>
                         </tr>
