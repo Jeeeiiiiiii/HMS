@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ospital ng Parañaque</title>
+    <title>Ospital ni Carla Dagaraga</title>
     @vite('resources/css/app.css') <!-- Link to your Tailwind CSS file -->
     <script src="https://cdn.tailwindcss.com"></script> <!-- Optionally include Tailwind CDN -->
 </head>
@@ -20,7 +20,9 @@
                 <a href="#services" class="text-gray-800 hover:text-primary">Services</a>
                 <a href="#about" class="text-gray-800 hover:text-primary">About</a>
                 <a href="#contact" class="text-gray-800 hover:text-primary">Contact</a>
-                <a href="{{ route('login') }}" class="bg-primary text-gray px-4 py-2 rounded">Login</a>
+                <div class = "px-8 fixed right-0">
+                <a href="{{ route('login') }}" class="text-gray-800 hover:text-primary">Login</a>
+                </div>
             </nav>
             <button class="md:hidden" onclick="toggleMenu()">
                 <span id="menu-icon">Menu</span>
