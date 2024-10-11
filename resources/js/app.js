@@ -3,35 +3,49 @@ import './bootstrap';
 document.addEventListener("DOMContentLoaded", function() {
     const spinner = document.getElementById("loading-spinner");
 
+    // Function to show spinner
+    function showSpinner() {
+        spinner.classList.remove('hidden');
+    }
+
+    // Function to hide spinner
+    function hideSpinner() {
+        spinner.classList.add('hidden');
+    }
+
     // Show spinner before page unload
     window.addEventListener('beforeunload', function() {
-        spinner.classList.remove('hidden');
+        showSpinner();
     });
 
-    // Optionally, hide the spinner once the new page is loaded
+    // Hide spinner once the new page is loaded
     window.addEventListener('load', function() {
-        spinner.classList.add('hidden');
+        hideSpinner();
     });
 
     // Show spinner on form submission
     document.querySelectorAll('form').forEach(function(form) {
         form.addEventListener('submit', function() {
-            spinner.classList.remove('hidden');
+            showSpinner();
         });
     });
 
     // Show spinner on link clicks
     document.querySelectorAll('a').forEach(function(link) {
         link.addEventListener('click', function(event) {
-            // Optionally, check if the link is external or should trigger a page load
-            // For example, skip links with target="_blank" or href="#"
             const href = link.getAttribute('href');
             if (href && !href.startsWith('#') && !link.hasAttribute('target')) {
-                spinner.classList.remove('hidden');
+                showSpinner();
             }
         });
     });
+
+    // Hide spinner when navigating back
+    window.addEventListener('popstate', function() {
+        hideSpinner();
+    });
 });
+
 
 
 
