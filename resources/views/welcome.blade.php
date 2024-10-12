@@ -15,13 +15,13 @@
                     <img src="logo.jpg" alt="Logo" class="h-8 w-8 object-contain" />
                 <span class="ml-2 text-xl font-bold text-gray-800">Ospital ng Parañaque</span>
             </div>
-            <nav class="hidden md:flex space-x-4">
+            <nav class="hidden md:flex space-x-4 flex-wrap">
                 <a href="#home" class="text-gray-800 hover:text-primary">Home</a>
                 <a href="#services" class="text-gray-800 hover:text-primary">Services</a>
                 <a href="#about" class="text-gray-800 hover:text-primary">About</a>
                 <a href="#contact" class="text-gray-800 hover:text-primary">Contact</a>
-                <div class = "px-8 fixed right-0">
-                <a href="{{ route('login') }}" class="text-gray-800 hover:text-primary">Login</a>
+                <div class="px-8">
+                    <a href="{{ route('login') }}" class="text-gray-800 hover:text-primary ml-4">Login</a>
                 </div>
             </nav>
             <button class="md:hidden" onclick="toggleMenu()">
