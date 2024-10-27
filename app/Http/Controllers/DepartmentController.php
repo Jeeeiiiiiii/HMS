@@ -9,7 +9,9 @@ use App\Models\TriageNurse;
 use App\Models\Patient;
 use App\Models\Department;
 use App\Models\Order;
+use App\Models\erOrder;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\OrderStatusChanged;
 use Auth;
 
 class DepartmentController extends Controller
@@ -100,6 +102,48 @@ class DepartmentController extends Controller
 
     }
 
+    public function ERMedicalOrders(Request $request) 
+    {
+        $department = auth()->guard('department')->user();
+        
+        // Get the search query and status filter from the request
+        $search = $request->input('search');
+        $status = $request->input('status', 'pending'); // Default to 'pending'
+
+        // Find the specific department by ID
+        $departmentId = $department->id;
+        $departments = Department::findOrFail($departmentId);
+
+        // Get related orders based on the status
+        $ordersQuery = $departments->er_orders(); // Get the orders relationship
+
+        // Filter by status
+        if ($status === 'completed') {
+            $ordersQuery->where('order_status', 'completed');
+        } else { // Default to 'pending'
+            $ordersQuery->where('order_status', 'pending');
+        }
+
+        // Apply search filter if provided
+        if ($search) {
+            $ordersQuery->where(function($query) use ($search) {
+                $query->whereHas('patient', function($subQuery) use ($search) {
+                    $subQuery->where('name', 'like', '%' . $search . '%'); // Search by patient's name
+                })
+                ->orWhereHas('doctor', function($subQuery) use ($search) {
+                    $subQuery->where('name', 'like', '%' . $search . '%'); // Search by doctor's name
+                });
+            });
+        }
+
+        $orders = $ordersQuery->get(); // Get the filtered results
+
+        // Pass the filtered orders and department to the view
+        return view('department.ERMedicalOrder', compact('orders', 'department', 'ordersQuery', 'status'));
+
+    }
+    
+
     public function ScanQR(){
     // Retrieve the patient using the provided ID
     $department = auth()->guard('department')->user();
@@ -113,8 +157,26 @@ class DepartmentController extends Controller
         $order = Order::findOrFail($id);
         $order->status = $request->input('status');
         $order->save();
+        $orderStatus = $order->status;
+
+        // Notify the department user
+        $department = $order->doctor; // Assuming the order has a department relationship
+        $department->notify(new OrderStatusChanged($order, $orderStatus));
 
         return redirect()->back()->with('success', 'Order status updated successfully.');
+    }
+
+    public function updateEROrderStatus(Request $request, $id)
+    {
+        $order = erOrder::findOrFail($id);
+        $order->order_status = $request->input('status');
+        $order->save();
+
+        // Notify the department user
+        $department = $order->department; // Assuming the order has a department relationship
+        $department->notify(new OrderStatusChanged($order));
+
+        return redirect()->back()->with('success', 'Emergency Room Order status updated successfully.');
     }
 
 

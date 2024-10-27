@@ -14,6 +14,7 @@ use App\Models\Nurse;
 use App\Models\TriageNurse;
 use App\Models\Admission;
 use App\Models\Order;
+use App\Models\erOrder;
 
 class Department extends Authenticatable
 {
@@ -80,6 +81,11 @@ class Department extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class); 
+    }
+
+    public function er_orders()
+    {
+        return $this->hasMany(erOrder::class); 
     }
 
 }

@@ -48,7 +48,10 @@
                 <i class="ri-menu-line"></i>
             </button>
             
-            <ul class="ml-auto flex items-center">                             
+            <ul class="ml-auto flex items-center">      
+                      
+
+                <!-- Profile Dropdown -->
                 <li class="dropdown ml-3">
                     <button type="button" class="dropdown-toggle flex items-center">
                         <i class="ri-user-3-line text-xl text-blue-500 mr-2"></i>
@@ -64,6 +67,28 @@
                 </li>
             </ul>
         </div>
+
+        <script>
+            function toggleNotifications() {
+                var dropdown = document.getElementById('notificationDropdown');
+                dropdown.classList.toggle('hidden');
+            }
+
+            function toggleOlderNotifications() {
+                var olderNotifications = document.getElementById('olderNotifications');
+                var toggleButton = document.getElementById('toggleButton');
+
+                if (olderNotifications.classList.contains('hidden')) {
+                    olderNotifications.classList.remove('hidden');
+                    toggleButton.textContent = 'Show Less';
+                } else {
+                    olderNotifications.classList.add('hidden');
+                    toggleButton.textContent = 'See Previous Notifications';
+                }
+            }
+        </script>
+
+
         
         <div id="loading-spinner" class="hidden fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
             <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>

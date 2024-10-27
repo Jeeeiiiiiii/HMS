@@ -27,6 +27,10 @@ class DoctorController extends Controller
 {
     // Specify the 'doctor' guard to get the logged-in doctor
     $doctor = auth()->guard('doctor')->user(); 
+    // Fetch the latest 5 notifications
+    $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+    // Count older notifications
+    $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
     // Get all patient records assigned to this doctor, excluding discharged patients
     $patientRecords = $doctor->patientRecords()
@@ -49,7 +53,7 @@ class DoctorController extends Controller
                       ->take(3)  // Limit to 3 records
                       ->get();
     
-    return view('doctor.dashboard', compact('patientRecords', 'doctor', 'patients'));
+    return view('doctor.dashboard', compact('patientRecords', 'doctor', 'patients', 'latestNotifications', 'olderNotifications'));
 }
 
 
@@ -206,11 +210,37 @@ class DoctorController extends Controller
 
     public function updateOrderStatus(Request $request, $id)
         {
-            $order = Order::findOrFail($id);
-            $order->status = $request->input('status');
-            $order->save();
+            // Find the PatientRecord by its ID
+            $record = PatientRecord::findOrFail($id);
+            
+            // Update the status of PatientRecord
+            $record->status = $request->input('status');
+            $record->save();
+        
+            // Assuming ErOrder has a relationship with PatientRecord,
+            // update the status of the related ErOrder
+            if ($record->er_order) {  // Adjust this line if relationship is different
+                $record->er_order->status = $request->input('status');
+                $record->er_order->save();
+            }
+        
+            return redirect()->back()->with('success', 'Admission Status updated successfully for both PatientRecord and ER Order.');
+        }
+        
 
-            return redirect()->back()->with('success', 'Order status updated successfully.');
+    public function dischargeDetails($id)
+        {
+            $doctor = auth()->guard('doctor')->user();
+            // Retrieve the patient using the provided ID
+            $patient = Patient::with('patientrecord')->find($id);
+
+            // Check if the patient exists
+            if (!$patient) {
+                return redirect()->back()->withErrors(['message' => 'Patient not found.']);
+            }
+
+            // Pass the patient data to the view
+            return view('doctor.dischargeDetails', compact('patient', 'doctor'));
         }
 
     public function discharge($id)

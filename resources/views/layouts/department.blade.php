@@ -31,6 +31,12 @@
                 </a>
             </li>
             <li class="mb-1 group">
+                <a href="{{ route('er_department_medical_order') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
+                    <i class="ri-file-list-3-line mr-3 text-lg"></i>
+                    <span class="text-sm">ER Medical Orders</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
                 <a href="{{ route('department_scan_qr') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
                     <i class="ri-qr-scan-line mr-3 text-lg"></i>
                     <span class="text-sm">Scan QR Code</span>

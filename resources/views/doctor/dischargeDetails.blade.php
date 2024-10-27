@@ -1,6 +1,6 @@
-@extends('layouts.emergencyroom')
+@extends('layouts.doctor')
 
-@section('title', 'Details')
+@section('title', 'Discharge Details')
 
 @section('contents')
 <div class="p-6 space-y-6">
@@ -42,47 +42,56 @@
 
         <!-- Admission Details -->
         <div class="lg:col-span-2 bg-white rounded-md border border-gray-100 shadow-lg">
-            <div class="bg-gray-600 text-white text-lg font-semibold rounded-t-lg p-4 flex justify-between items-center">
-                <div>Admission Records</div>
-                <a href="{{ route('emergencyroom_addorder', $patient->id) }}" class="text-white-600 hover:text-blue-500 transition-colors">
-                    <i class="ri-edit-box-line"></i>
-                </a>
+            <div class="bg-gray-600 text-white text-lg font-semibold rounded-t-lg p-4">
+                Admission Records
             </div>
             <div class="p-6">
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-center text-gray-600 border-collapse border border-gray-200">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">ER Medical Order</th>
-                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Order Status</th>
-                                <th class="px-4 py-2 font-semibold border-b border-gray-300">Admission Status</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Admission</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Date of Admission</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Status of Admission</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($patient->er_order as $record)
+                            @foreach ($patient->patientrecord as $record)
                             <tr>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
-                                    <a href="{{ route('emergencyroom_orderpage', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
-                                        {{ $record->type }}
+                                    <a href="{{ route('doctor_patientrecord', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
+                                        {{ $record->reason_for_admission }}
                                     </a>
                                 </td>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
-                                    @if ($record->order_status === 'pending')
-                                        <span class="inline-block text-yellow-500 font-semibold bg-yellow-100 py-2 px-4 rounded-md">Pending</span>
-                                    @elseif ($record->order_status === 'completed')
-                                        <span class="inline-block text-green-500 font-semibold bg-green-100 py-2 px-4 rounded-md">Completed</span>
-                                    @endif
+                                    {{ $record->admitting_date_and_time }}
                                 </td>
-                                <td class="px-4 py-2 border-b border-gray-200">
+                                <td class="px-4 py-2 border-b border-r border-gray-200">
                                     @if ($record->status === 'pending')
                                         <span class="inline-block text-yellow-500 font-semibold bg-yellow-100 py-2 px-4 rounded-md">Pending</span>
-                                    @elseif ($record->status === 'completed')
-                                        <span class="inline-block text-green-500 font-semibold bg-green-100 py-2 px-4 rounded-md">Admitted</span>
                                     @elseif ($record->status === 'not admitted')
                                         <span class="inline-block text-gray-500 font-semibold bg-gray-100 py-2 px-4 rounded-md">Not Admitted</span>
+                                    @elseif ($record->status === 'admitted')
+                                        <span class="inline-block text-green-500 font-semibold bg-green-100 py-2 px-4 rounded-md">Admitted</span>
                                     @elseif ($record->status === 'discharged')
                                         <span class="inline-block text-red-500 font-semibold bg-red-100 py-2 px-4 rounded-md">Discharged</span>
                                     @endif
+                                </td>
+                                <td class="px-4 py-2 border-b border-gray-200">
+                                    <form action="{{ route('doctor.updateOrderStatus', $record->id) }}" method="POST" class="flex items-center justify-center">
+                                        @csrf
+                                        <div class="flex items-center space-x-4">
+                                            <select name="status" class="form-select border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="pending" {{ $record->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="not admitted" {{ $record->status == 'not admitted' ? 'selected' : '' }}>Not Admitted</option>
+                                                <option value="admitted" {{ $record->status == 'admitted' ? 'selected' : '' }}>Admit</option>
+                                            </select>
+                                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-5 rounded shadow transition-all duration-150 ease-in-out">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

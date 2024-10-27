@@ -15,6 +15,7 @@ use App\Models\Nurse;
 use App\Models\TriageNurse;
 use App\Models\Doctor;
 use App\Models\Order;
+use App\Models\erOrder;
 use App\Models\RecordQrCode;
 use App\Models\OrderQrCode;
 use App\Models\TreatmentPlan;
@@ -74,6 +75,11 @@ class PatientRecord extends Model
     public function order()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function er_order()
+    {
+        return $this->hasOne(erOrder::class);
     }
 
     public function qrcode()

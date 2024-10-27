@@ -230,7 +230,6 @@
                                 <th class="px-6 py-4 font-semibold border-b border-r border-gray-300">Medical Orders</th>
                                 <th class="px-6 py-4 font-semibold border-b border-r border-gray-300">Date of Medical Orders</th>
                                 <th class="px-6 py-4 font-semibold border-b border-r border-gray-300">Status</th>
-                                <th class="px-6 py-4 font-semibold border-b border-r border-gray-300">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -255,22 +254,6 @@
                                     @elseif ($order->status === 'completed')
                                         <span class="inline-block text-green-500 font-semibold bg-green-100 py-2 px-4 rounded-md">Completed</span>
                                     @endif
-                                </td>
-
-                                <!-- Dropdown for Doctor to Change Status -->
-                                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                                    <form action="{{ route('doctor.updateOrderStatus', $order->id) }}" method="POST" class="flex items-center justify-center">
-                                        @csrf
-                                        <div class="flex items-center space-x-4">
-                                            <select name="status" class="form-select border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-500 focus:border-blue-500">
-                                                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                                <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                            </select>
-                                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-5 rounded shadow transition-all duration-150 ease-in-out">
-                                                Update
-                                            </button>
-                                        </div>
-                                    </form>
                                 </td>
                             </tr>
                             @endforeach

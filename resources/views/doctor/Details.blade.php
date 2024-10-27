@@ -1,6 +1,6 @@
 @extends('layouts.doctor')
 
-@section('title', 'Dashboard')
+@section('title', 'Details')
 
 @section('contents')
 <div class="p-6 space-y-6">
@@ -51,7 +51,9 @@
                         <thead>
                             <tr>
                                 <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Admission</th>
-                                <th class="px-4 py-2 font-semibold border-b border-gray-300">Date of Admission</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Date of Admission</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Status of Admission</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,8 +64,34 @@
                                         {{ $record->reason_for_admission }}
                                     </a>
                                 </td>
-                                <td class="px-4 py-2 border-b border-gray-200">
+                                <td class="px-4 py-2 border-b border-r border-gray-200">
                                     {{ $record->admitting_date_and_time }}
+                                </td>
+                                <td class="px-4 py-2 border-b border-r border-gray-200">
+                                    @if ($record->status === 'pending')
+                                        <span class="inline-block text-yellow-500 font-semibold bg-yellow-100 py-2 px-4 rounded-md">Pending</span>
+                                    @elseif ($record->status === 'not admitted')
+                                        <span class="inline-block text-gray-500 font-semibold bg-gray-100 py-2 px-4 rounded-md">Not Admitted</span>
+                                    @elseif ($record->status === 'admitted')
+                                        <span class="inline-block text-green-500 font-semibold bg-green-100 py-2 px-4 rounded-md">Admitted</span>
+                                    @elseif ($record->status === 'discharged')
+                                        <span class="inline-block text-red-500 font-semibold bg-red-100 py-2 px-4 rounded-md">Discharged</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-2 border-b border-gray-200">
+                                    <form action="{{ route('doctor.updateOrderStatus', $record->id) }}" method="POST" class="flex items-center justify-center">
+                                        @csrf
+                                        <div class="flex items-center space-x-4">
+                                            <select name="status" class="form-select border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="pending" {{ $record->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="not admitted" {{ $record->status == 'not admitted' ? 'selected' : '' }}>Not Admitted</option>
+                                                <option value="admitted" {{ $record->status == 'admitted' ? 'selected' : '' }}>Admit</option>
+                                            </select>
+                                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-5 rounded shadow transition-all duration-150 ease-in-out">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

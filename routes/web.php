@@ -12,6 +12,7 @@ use App\Http\Controllers\TriageNurseController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -274,8 +275,10 @@ Route::middleware('patient')->group(function (){
         
         Route::get('department/dashboard', [DepartmentController::class, 'dashboard'])->name('department_dashboard');
         Route::get('department/medicalOrders', [DepartmentController::class, 'MedicalOrders'])->name('department_medical_order');
+        Route::get('department/ERmedicalOrders', [DepartmentController::class, 'ERMedicalOrders'])->name('er_department_medical_order');
         Route::get('department/scanqr', [DepartmentController::class, 'ScanQR'])->name('department_scan_qr');
         Route::post('department/order/{id}/update-status', [DepartmentController::class, 'updateOrderStatus'])->name('department.updateOrderStatus');
+        Route::post('department/er_order/{id}/update-status', [DepartmentController::class, 'updateEROrderStatus'])->name('department.updateEROrderStatus');
         Route::get('department/doctors/{id}/order', [DepartmentController::class, 'showOrder'])->name('department_order');
         Route::get('department/doctors/{id}/profile', [DepartmentController::class, 'showDoctorProfile'])->name('department_doctors_profile');
         Route::get('department/nurses/{id}/profile', [DepartmentController::class, 'showNurseProfile'])->name('department_nurses_profile');
@@ -323,11 +326,15 @@ Route::middleware('patient')->group(function (){
 
     
 
+    //////////// Notification
+    Route::get('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('markNotificationAsRead');
+    Route::get('/notifications', [NotificationController::class, 'allNotifications'])->name('notifications.all');
 
-        Route::get('/patient-record/{patientRecord}', [TriageNurseController::class, 'showQR'])->name('patientRecord.show');
-        Route::get('/nurse/patient-record/{record}', [NurseController::class, 'showQR'])->name('Record.show');
-        Route::get('/doctor/order/{order}', [DoctorController::class, 'showQR'])->name('Order.show');
-        Route::get('/er/order/{order}', [EmergencyRoomController::class, 'showQR'])->name('erOrder.show');
+
+    Route::get('/patient-record/{patientRecord}', [TriageNurseController::class, 'showQR'])->name('patientRecord.show');
+    Route::get('/nurse/patient-record/{record}', [NurseController::class, 'showQR'])->name('Record.show');
+    Route::get('/doctor/order/{order}', [DoctorController::class, 'showQR'])->name('Order.show');
+    Route::get('/er/order/{order}', [EmergencyRoomController::class, 'showQR'])->name('erOrder.show');
     
     
     
