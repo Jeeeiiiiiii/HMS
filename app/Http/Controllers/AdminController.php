@@ -6,7 +6,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Nurse;
 use App\Models\TriageNurse;
-use App\Models\ChargeNurse;
+use App\Models\EmergencyRoom;
 use App\Models\BedControl;
 use App\Models\Department;
 use App\Models\TemporaryUser;
@@ -32,8 +32,9 @@ class AdminController extends Controller
         $departmentCount = Department::count();
         $patientsCount = Patient::count();
         $triageNursesCount = TriageNurse::count();
+        $emergencyRoomCount = EmergencyRoom::count();
         
-        return view('admin.AdminDashboard', compact('admin', 'doctorsCount', 'nursesCount', 'departmentCount', 'patientsCount', 'triageNursesCount'));
+        return view('admin.AdminDashboard', compact('admin', 'doctorsCount', 'nursesCount', 'departmentCount', 'patientsCount', 'triageNursesCount', 'emergencyRoomCount'));
     }
     
 
@@ -627,7 +628,54 @@ class AdminController extends Controller
 
 
 
+    /////////////////////////////////// Emergency Room
 
+    public function emergencyrooms(Request $request) 
+    {
+        $admin = auth()->guard('admin')->user();
+        
+        // Get the search query from the request
+        $search = $request->input('search');
+
+        // Query nurses based on the search input
+        $emergencyrooms = EmergencyRoom::where(function($query) use ($search) {
+            if ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            }
+        })->get();
+        
+        // Pass the emergencyrooms and admin to the view
+        return view('admin.EmergencyRoom.EmergencyRoom', compact('emergencyrooms', 'admin'));
+    }
+
+
+    public function EmergencyRoomRegister(){
+        $admin = auth()->guard('admin')->user();
+        return view('admin.EmergencyRoom.Add', compact('admin'));
+    }
+
+
+    public function EmergencyRoomPostRegistration(Request $request): RedirectResponse
+    {  
+        $request->validate([
+        'email' => 'required|email',
+    ]);
+
+    $token = Str::random(32);
+
+    $temporaryUser = TemporaryUser::create([
+        'email' => $request->get('email'),
+        'registration_token' => $token,
+    ]);
+
+    // Send registration confirmation email with link including token
+    Mail::send('email.emergency_room_registration_link', ['email' => $temporaryUser->email, 'token' => $token], function($message) use ($temporaryUser) {
+        $message->to($temporaryUser->email)->subject('Complete Your Registration');
+    });
+
+    return redirect('admin/dashboard')->withSuccess('A confirmation email has been sent to your address.');
+    }
 
 
 

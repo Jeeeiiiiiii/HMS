@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Admin;
 use App\Models\Department;
 use App\Models\TriageNurse;
+use App\Models\EmergencyRoom;
 use App\Models\TemporaryUser;
 use App\Models\Profile;
 use App\Models\AdminProfile;
@@ -21,6 +22,7 @@ use App\Models\AdminSession;
 use App\Models\NurseSession;
 use App\Models\TriageNurseSession;
 use App\Models\DepartmentSession;
+use App\Models\EmergencyRoomSession;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -207,6 +209,21 @@ class AccountController extends Controller
             ]);
 
             return redirect()->route('department_dashboard', ['id' => $user->id])->with('success', 'Login successful as department');
+        }
+
+        elseif (Auth::guard('eroom')->attempt($credentials)) {
+            $user = EmergencyRoom::where('email', $request->input('email'))->first();
+            Auth::guard('eroom')->login($user);
+
+            // Log session for department
+            EmergencyRoomSession::create([
+                'emergency_room_id' => $user->id,
+                'device_name' => $deviceName,
+                'browser_name' => $browserName,
+                'last_active_at' => now(), // Include last_active_at in the same array
+            ]);
+
+            return redirect()->route('emergencyroom_dashboard', ['id' => $user->id])->with('success', 'Login successful as department');
         }
                 
         else {
@@ -500,6 +517,58 @@ public function nurse_final_registration(Request $request, $token)
 
         // Create the department
         $department = Department::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'department_name' => $request->department_name,
+            'department_code' => $request->department_code,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            // ... other department fields
+        ]);
+
+        // Now delete the temporary user
+        $temporaryUser->delete();
+
+        return redirect('login')->withSuccess('Department Registration Completed');
+    }
+
+
+
+
+
+    ////////// Emergency Room Logic
+    public function emergency_room_final_registration(Request $request, $token)
+    {
+        // Validate the token
+        $temporaryUser = TemporaryUser::where('registration_token', $token)->first();
+
+        if (!$temporaryUser) {
+            return redirect()->route('login')->with('error', 'Invalid confirmation token.');
+        }
+
+        // Pass the token to the view
+        return view('admin.EmergencyRoom.registration', compact('token'));
+    }
+
+    public function emergency_room_post_final(Request $request)
+    {
+        // Validate the token
+        $temporaryUser = TemporaryUser::where('registration_token', $request->token)->first();
+
+        if (!$temporaryUser) {
+            return redirect()->route('login')->with('error', 'Invalid confirmation token.');
+        }
+
+        // Validate the input
+        Validator::make($request->all(), [
+            'department_name' => 'required',
+            'email' => 'required|email',
+            'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
+            'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
+        ])->validate();
+
+        // Create the department
+        $department = EmergencyRoom::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'department_name' => $request->department_name,

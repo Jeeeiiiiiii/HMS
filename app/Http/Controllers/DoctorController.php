@@ -368,6 +368,8 @@ class DoctorController extends Controller
                 $userGuard = 'patient';
             } elseif (auth()->guard('department')->check()) {
                 $userGuard = 'department';
+            } elseif (auth()->guard('eroom')->check()) {
+                $userGuard = 'eroom';
             }
         
             // If no valid guard is found, deny access

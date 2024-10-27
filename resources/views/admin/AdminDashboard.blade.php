@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="bg-white rounded-lg border border-gray-200 p-6 shadow-lg hover:shadow-xl transition duration-200 transform hover:scale-105">
             <div class="flex justify-between items-center mb-6">
                 <div>
@@ -61,6 +61,17 @@
                 <img src="/nurse.png" alt="" class="w-14 h-14 rounded-md object-cover block">
             </div>
             <a href="{{ route('admin_triagenurse') }}" class="text-blue-600 font-semibold text-sm hover:text-blue-700">View details</a>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-200 p-6 shadow-lg hover:shadow-xl transition duration-200 transform hover:scale-105">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <div class="text-3xl font-semibold text-gray-800">{{ $emergencyRoomCount }}</div>
+                    <div class="text-md font-medium text-gray-500">Emergency Room</div>
+                </div>
+                <img src="/er.jpg" alt="" class="w-14 h-14 rounded-md object-cover block">
+            </div>
+            <a href="{{ route('admin_emergencyroom') }}" class="text-blue-600 font-semibold text-sm hover:text-blue-700">View details</a>
         </div>
     </div>
 </div>

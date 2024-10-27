@@ -13,51 +13,27 @@
     
     <!-- start: Sidebar -->
     <div class="fixed left-0 top-0 w-64 h-full bg-gray-900 p-4 z-50 sidebar-menu transition-transform">
-        <a href="{{ route('admin_dashboard') }}" class="flex items-center pb-4 border-b border-b-gray-800">
+        <a href="{{ route('department_dashboard') }}" class="flex items-center pb-4 border-b border-b-gray-800">
             <img src="/logo.png" alt="" class="w-8 h-8 rounded object-cover">
             <span class="text-lg font-bold text-white ml-3">Hospital</span>
         </a>
         <ul class="mt-4">
             <li class="mb-1 group">
-                <a href="{{ route('admin_dashboard') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
-                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                <a href="{{ route('emergencyroom_dashboard') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
+                    <i class="ri-file-line mr-3 text-lg"></i>
                     <span class="text-sm">Dashboard</span>
                 </a>
             </li>
             <li class="mb-1 group">
-                <a href="{{ route('admin_patients') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
-                    <i class="ri-user-3-line mr-3 text-lg"></i>
-                    <span class="text-sm">Patients</span>
+                <a href="{{ route('emergencyroom_medical_order') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
+                    <i class="ri-file-list-3-line mr-3 text-lg"></i>
+                    <span class="text-sm">Medical Orders</span>
                 </a>
             </li>
             <li class="mb-1 group">
-                <a href="{{ route('admin_doctors') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
-                    <i class="ri-nurse-fill mr-3 text-lg"></i>
-                    <span class="text-sm">Doctors</span>
-                </a>
-            </li>
-            <li class="mb-1 group">
-                <a href="{{ route('admin_nurses') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
-                    <i class="ri-nurse-line mr-3 text-lg"></i>
-                    <span class="text-sm">Nurses</span>
-                </a>
-            </li>
-            <li class="mb-1 group">
-                <a href="{{ route('admin_departments') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
-                    <i class="ri-home-2-line mr-3 text-lg"></i>
-                    <span class="text-sm">Departments</span>
-                </a>
-            </li>
-            <li class="mb-1 group">
-                <a href="{{ route('admin_emergencyroom') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
-                    <i class="ri-home-2-line mr-3 text-lg"></i>
-                    <span class="text-sm">Emergency Room</span>
-                </a>
-            </li>
-            <li class="mb-1 group">
-                <a href="{{ route('admin_triagenurse') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
-                    <i class="ri-nurse-line mr-3 text-lg"></i>
-                    <span class="text-sm">Triage Nurse</span>
+                <a href="{{ route('emergencyroom_scan_qr') }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
+                    <i class="ri-qr-scan-line mr-3 text-lg"></i>
+                    <span class="text-sm">Scan QR Code</span>
                 </a>
             </li>
         </ul>
@@ -79,7 +55,7 @@
                     </button>
                     <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
                         <li>
-                            <a href="{{ route('admin_profile', $admin->id) }}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                            <a href="{{ route('emergencyroom_profile', $eroom->id) }}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
                         </li>
                         <li>
                             <a href="{{ route('logout') }}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
@@ -88,11 +64,9 @@
                 </li>
             </ul>
         </div>
-
         <div id="loading-spinner" class="hidden fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
             <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
-
 
         <div class="p-6">
             @if(session()->has('success'))
@@ -111,7 +85,9 @@
             <div>@yield('contents')</div>
         </div>
     </main>
-     <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
+
+
 </body>
 </html>

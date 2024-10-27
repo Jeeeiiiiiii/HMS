@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EmergencyRoomController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\NurseController;
 use App\Http\Controllers\PatientController;
@@ -61,6 +62,9 @@ Route::controller(AccountController::class)->group(function () {
     ////////// TriageNurse Logic
     Route::get('triagenurse/final_registration/{token}', 'triage_nurse_final_registration')->name('triage_nurse_final_register');
     Route::post('triagenurse/post_final', 'triage_nurse_post_final')->name('triage_nurse_post_final');
+    ////////// EmergencyRoom Logic
+    Route::get('emergencyroom/final_registration/{token}', 'emergency_room_final_registration')->name('emergency_room_final_register');
+    Route::post('emergencyroom/post_final', 'emergency_room_post_final')->name('emergency_room_post_final');
     
 });
 
@@ -120,6 +124,12 @@ Route::middleware('admin')->group(function (){
     Route::post('/departments/{departmentId}/doctors/{doctorId}/remove', [AdminController::class, 'removeDoctorFromDepartment'])->name('doctors.remove');
     Route::post('/departments/{departmentId}/nurses/{nurseId}/remove', [AdminController::class, 'removeNurseFromDepartment'])->name('nurses.remove');
     Route::post('/departments/{departmentId}/triage_nurses/{triagenurseId}/remove', [AdminController::class, 'removeTriageNurseFromDepartment'])->name('triage_nurses.remove');
+
+
+    ////////// Emergency Room Logic
+    Route::get('admin/emergencyroom', [AdminController::class, 'emergencyrooms'])->name('admin_emergencyroom');
+    Route::get('admin/emergencyroom/register', [AdminController::class, 'EmergencyRoomRegister'])->name('emergencyroom_register');
+    Route::post('admin/emergencyroom/post/register', [AdminController::class, 'EmergencyRoomPostRegistration'])->name('emergency.room.register.post'); 
 
 
     //Delete Functions
@@ -283,9 +293,41 @@ Route::middleware('patient')->group(function (){
         });
 
     
+
+
+    
+
+    //////////////// Emergency Room
+    Route::middleware('eroom')->group(function (){
+        
+        Route::get('emergencyroom/dashboard', [EmergencyRoomController::class, 'dashboard'])->name('emergencyroom_dashboard');
+        Route::get('emergencyroom/medicalOrders', [EmergencyRoomController::class, 'MedicalOrders'])->name('emergencyroom_medical_order');
+        Route::get('emergencyroom/scanqr', [EmergencyRoomController::class, 'ScanQR'])->name('emergencyroom_scan_qr');
+        Route::get('emergencyroom/AddOrder/{id}', [EmergencyRoomController::class, 'AddOrder'])->name('emergencyroom_addorder');
+        Route::get('emergencyroom/AddMedicalOrder/{id}', [EmergencyRoomController::class, 'AddMedicalOrder'])->name('emergencyroom_addmedicalorder');
+        Route::post('/emergencyroom/{patientId}/storeOrder', [EmergencyRoomController::class, 'storeOrder'])->name('emergencyroom_storeOrder');
+        Route::post('emergencyroom/order/{id}/update-status', [EmergencyRoomController::class, 'updateOrderStatus'])->name('emergencyroom.updateOrderStatus');
+        Route::get('emergencyroom/doctors/{id}/order', [EmergencyRoomController::class, 'showOrder'])->name('emergencyroom_order');
+        Route::get('emergencyroom/orderpage/{id}', [EmergencyRoomController::class, 'OrderPage'])->name('emergencyroom_orderpage');
+        Route::get('emergencyroom/doctors/{id}/profile', [EmergencyRoomController::class, 'Details'])->name('emergencyroom_patients_profile');
+       
+        ////////// qr code
+        Route::get('/emergencyroom/order/qr-code/{patientRecordId}', [QrCodeController::class, 'showerOrder']);
+
+        ////////// profile
+        Route::get('emergencyroom/profile/{id}', [EmergencyRoomController::class, 'profile'])->name('emergencyroom_profile');
+        Route::get('emergencyroom/profile/{id}/changepass', [EmergencyRoomController::class, 'changepass'])->name('emergencyroom_changepass');
+        Route::post('emergencyroom/profile/emergencyroom_submitpass', [EmergencyRoomController::class, 'emergencyroom_submitpass'])->name('emergencyroom_submitpass');
+        Route::get('emergencyroom/profile/{id}/sessions', [EmergencyRoomController::class, 'showSessions'])->name('emergencyroom_sessions');
+        });
+
+    
+
+
         Route::get('/patient-record/{patientRecord}', [TriageNurseController::class, 'showQR'])->name('patientRecord.show');
         Route::get('/nurse/patient-record/{record}', [NurseController::class, 'showQR'])->name('Record.show');
         Route::get('/doctor/order/{order}', [DoctorController::class, 'showQR'])->name('Order.show');
+        Route::get('/er/order/{order}', [EmergencyRoomController::class, 'showQR'])->name('erOrder.show');
     
     
     

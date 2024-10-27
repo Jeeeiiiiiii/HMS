@@ -56,6 +56,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'admin' => \App\Http\Middleware\Admin::class,
         'department' => \App\Http\Middleware\Department::class,
+        'eroom' => \App\Http\Middleware\EmergencyRoom::class,
         'doctor' => \App\Http\Middleware\Doctor::class,
         'nurse' => \App\Http\Middleware\Nurse::class,
         'patient' => \App\Http\Middleware\Patient::class,

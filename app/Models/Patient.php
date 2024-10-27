@@ -17,9 +17,11 @@ use App\Models\PatientRecord;
 use App\Models\PhysicalAssessment;
 use App\Models\Session;
 use App\Models\Order;
+use App\Models\erOrder;
 use App\Models\Record;
 use App\Models\RecordQrCode;
 use App\Models\OrderQrCode;
+use App\Models\erOrderQrCode;
 use App\Models\TreatmentPlan;
 
 class Patient extends Authenticatable
@@ -87,6 +89,11 @@ class Patient extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function er_order()
+    {
+        return $this->hasMany(erOrder::class);
+    }
+
     public function record()
     {
         return $this->hasMany(Record::class);
@@ -109,6 +116,11 @@ class Patient extends Authenticatable
     public function order_qr_codes()
     {
         return $this->hasMany(OrderQrCode::class);
+    }
+
+    public function er_order_qr_codes()
+    {
+        return $this->hasMany(erOrderQrCode::class);
     }
 
     public function patientrecord()

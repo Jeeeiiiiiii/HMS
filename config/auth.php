@@ -57,6 +57,9 @@ return [
         ],'triagenurse' => [
             'driver' => 'session',
             'provider' => 'triagenurses',
+        ], 'eroom' => [
+            'driver' => 'session',
+            'provider' => 'erooms',
         ],
     ],
 
@@ -99,6 +102,9 @@ return [
         ],'triagenurses' => [
             'driver' => 'eloquent',
             'model' => App\Models\TriageNurse::class,
+        ],'erooms' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\EmergencyRoom::class,
         ],
 
         // 'users' => [

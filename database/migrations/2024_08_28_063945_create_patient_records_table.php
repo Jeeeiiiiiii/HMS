@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('test_id')->constrained()->onDelete('cascade');
             $table->foreignId('vital_id')->constrained()->onDelete('cascade');
             $table->foreignId('admission_id')->constrained()->onDelete('cascade');
+            $table->string('status')->default('pending');
             $table->text('reason_for_admission');
             $table->dateTime('admitting_date_and_time');
             $table->timestamps();

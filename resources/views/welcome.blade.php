@@ -75,29 +75,43 @@
         </section>
 
 
-        <section id= "about" class="bg-gray-100 py-20">
+        <section id="about" class="bg-gray-100 py-20">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-12">Patient Testimonials</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <h2 class="text-3xl font-bold text-center mb-12">Patient Process Guide</h2>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
                     @foreach ([
-                        ['name' => 'John Doe', 'text' => 'Exceptional care and attention. The staff went above and beyond.'],
-                        ['name' => 'Jane Smith', 'text' => 'State-of-the-art facilities and highly skilled doctors. Highly recommended!']
-                    ] as $testimonial)
+                        ['step' => '1', 'title' => 'Triage', 'description' => 'The initial assessment where patients are evaluated and categorized based on the urgency of their condition.'],
+                        ['step' => '2', 'title' => 'ER', 'description' => 'Immediate care for emergency cases is provided in the Emergency Room, stabilizing the patient.'],
+                        ['step' => '3', 'title' => 'Lab', 'description' => 'Patients undergo diagnostic tests, including blood tests, X-rays, or scans as prescribed by the doctor.'],
+                        ['step' => '4', 'title' => 'Admit', 'description' => 'After diagnosis, patients may be admitted for further treatment or observation in the hospital.'],
+                        ['step' => '5', 'title' => 'Clearance', 'description' => 'Once treatment is complete, patients receive discharge instructions and necessary clearances before going home.']
+                    ] as $step)
                     <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                        <div class="p-6">
-                            <div class="flex items-center mb-4">
-                                @for ($i = 0; $i < 5; $i++)
-                                <svg class="h-5 w-5 text-yellow-400 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0l3.092 6.363L24 8.364l-4.636 4.728L20.184 24 12 20.727 3.816 24 5.636 13.092 0 8.364l8.908-1.001L12 0z" /></svg>
-                                @endfor
+                        <div class="p-6 text-center">
+                            <div class="mb-4">
+                                <div class="text-4xl font-bold text-primary mb-2">{{ $step['step'] }}</div>
+                                <h3 class="text-xl font-semibold">{{ $step['title'] }}</h3>
                             </div>
-                            <p class="text-muted-foreground mb-4">"{{ $testimonial['text'] }}"</p>
-                            <p class="font-semibold">{{ $testimonial['name'] }}</p>
+                            <p class="text-muted-foreground mb-4">{{ $step['description'] }}</p>
                         </div>
                     </div>
                     @endforeach
                 </div>
+                <div class="flex justify-center mt-8">
+                    <div class="w-full md:w-1/2">
+                        <div class="relative pt-1">
+                            <div class="overflow-hidden h-2 text-xs flex bg-primary-foreground bg-opacity-20 rounded">
+                                <div style="width: 100%" class="bg-primary-foreground shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center"></div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <span class="text-2xl font-bold text-primary ">Process Complete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
+
 
         <section id= "contact" class="py-20">
             <div class="container mx-auto px-4">

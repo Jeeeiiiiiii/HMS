@@ -39,21 +39,27 @@ class TriageNurseController extends Controller
         {
             $triagenurse = Auth::guard('triagenurse')->user();
             
-            // Get the search input from the request
+            // Get the search query and status filter from the request
             $search = $request->input('search');
-            
-            // Fetch only admitted patients, and apply search if there is any
-            $patients = Patient::where('status', 'admitted') // Automatically filter by 'admitted'
-                ->when($search, function($query, $search) {
-                    // If there is a search term, filter by name or email
-                    return $query->where(function($subQuery) use ($search) {
+            $status = $request->input('status', 'pending'); // Default to 'admitted'
+
+            // Query patients and filter by status and search if provided
+            $patients = Patient::where(function($query) use ($status, $search) {
+                if ($status) {
+                    $query->where('status', $status); // Filter by status ('admitted' or 'pending')
+                }
+                if ($search) {
+                    $query->where(function($subQuery) use ($search) {
                         $subQuery->where('name', 'like', '%' . $search . '%')
                                 ->orWhere('email', 'like', '%' . $search . '%');
                     });
-                })->get();
+                }
+            })->get();
             
-            return view('triagenurse.Patient', compact('patients', 'triagenurse'));
+            // Pass the filtered patients, status, and triagenurse data to the view
+            return view('triagenurse.Patient', compact('patients', 'status', 'triagenurse'));
         }
+
 
     
 
@@ -274,6 +280,8 @@ class TriageNurseController extends Controller
                 $userGuard = 'patient';
             } elseif (auth()->guard('department')->check()) {
                 $userGuard = 'department';
+            } elseif (auth()->guard('eroom')->check()) {
+                $userGuard = 'eroom';
             }
         
             // If no valid guard is found, deny access

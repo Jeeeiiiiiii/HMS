@@ -13,8 +13,15 @@
             <!-- Search and Filter Section -->
             <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
                 
-                <!-- Patient Status Select -->
+                <!-- Status Filter -->
                 <form action="{{ route('triagenurse_dashboard') }}" method="GET" class="flex flex-col sm:flex-row w-full sm:w-auto gap-4">
+                    <div>
+                        <select name="status" class="w-full sm:w-[180px] border border-gray-300 rounded-lg p-2" onchange="this.form.submit()">
+                            <option value="pending" {{ request('status', 'pending') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="admitted" {{ request('status') == 'admitted' ? 'selected' : '' }}>Admitted</option>
+                        </select>
+                    </div>
+
                     <!-- Search Input -->
                     <div class="flex w-full sm:w-auto items-center space-x-2">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search patients..." class="w-full sm:w-auto bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
