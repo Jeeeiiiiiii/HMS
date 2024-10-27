@@ -96,12 +96,7 @@
                             <td class="py-2 px-4 border-b border-gray-50">
                                 <div class="flex flex-wrap gap-2">
                                     <a href="{{ route('doctor_detailspatient', $record->patient->id) }}" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 transition duration-200">Details</a>
-                                    <form action="{{ route('doctor.discharge', $record->patient->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to discharge this patient?')" class="inline-block">
-                                        @csrf
-                                        <button type="submit" class="text-white bg-orange-600 hover:bg-red-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-3 py-2 transition duration-200">
-                                            Discharge
-                                        </button>
-                                    </form>
+                                    <a href="{{ route('doctor.dischargePage', $record->patient->id) }}" class="text-white bg-orange-600 hover:bg-red-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-3 py-2 transition duration-200">Discharge</a>
                                 </div>
                             </td>
                         </tr>

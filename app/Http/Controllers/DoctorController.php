@@ -13,6 +13,7 @@ use App\Models\TreatmentPlan;
 use App\Models\Order;
 use App\Models\Test;
 use App\Models\OrderQRcode;
+use App\Models\AbstractQRcode;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -245,9 +246,21 @@ class DoctorController extends Controller
 
     public function discharge($id)
         {
-            $patient = Patient::findOrFail($id);
+            $patient = PatientRecord::findOrFail($id);
             $patient->status = 'discharged';  // Update status to discharged
             $patient->save();
+
+            if ($patient->er_order) {  // Adjust this line if relationship is different
+                $patient->er_order->status = 'discharged';
+                $patient->er_order->save();
+            }
+
+            // Fetch the existing order record
+            $record = PatientRecord::with(['abstract_qrcode'])->findOrFail($id);
+
+            // Call the generateQRCode method
+            $this->generateAbstractQRCode($record);
+
 
             return redirect()->back()->with('success', 'Patient has been discharged.');
         }
@@ -338,7 +351,7 @@ class DoctorController extends Controller
             DB::rollBack();
             // Log the error message and stack trace
             \Log::error('Error creating profile: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
-            return redirect()->route('nurse_dashboard')->with('error', 'There was an error creating the Medical Order: ' . $e->getMessage());
+            return redirect()->route('doctor_dashboard')->with('error', 'There was an error creating the Medical Order: ' . $e->getMessage());
         }
         
         
@@ -381,6 +394,43 @@ class DoctorController extends Controller
                 'patient_id' => $order->patient_id,
             ]);
         }
+
+        public function generateAbstractQRCode(PatientRecord $record)
+        {
+            // Generate the URL that the QR code will point to
+            $url = route('MedicalAbstract.show', $record->id);
+        
+            // Generate the QR code as a PNG image pointing to the URL
+            $qrCodeImage = QrCode::format('png')->size(200)->generate($url);
+        
+            // Define a unique file path where the QR code image will be stored in the S3 bucket
+            $uniqueId = Str::uuid(); // Generate a unique ID
+            $filePath = 'MedicalAbstractQRcodes/' . $record->id . '_' . $uniqueId . '.png';
+        
+            // Attempt to save the QR code image to the S3 storage
+            try {
+                Storage::disk('s3')->put($filePath, $qrCodeImage);
+                
+                // Log successful upload
+                \Log::info('QR code uploaded successfully to S3 at: ' . $filePath);
+            } catch (\Exception $e) {
+                // Log any errors that occur during upload
+                \Log::error('Error uploading QR code to S3: ' . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
+            }
+        
+            if (Storage::disk('s3')->exists($filePath)) {
+                \Log::info('QR code exists on S3 at: ' . $filePath);
+            } else {
+                \Log::error('QR code does not exist on S3 at: ' . $filePath);
+            }
+        
+            // Store the file path in the database, associating it with the order
+            AbstractQrCode::create([
+                'patient_record_id' => $record->id,
+                'file_path' => $filePath,
+                'patient_id' => $record->patient_id,
+            ]);
+        }
         
 
         public function showQR(Order $order)
@@ -409,6 +459,34 @@ class DoctorController extends Controller
         
             // If authorized, show the QR code details
             return view('doctor.show', compact('order'));
+        }
+
+        public function showAbstractQR(PatientRecord $record)
+        {
+            // Get the currently authenticated user's guard
+            $userGuard = null;
+        
+            if (auth()->guard('triagenurse')->check()) {
+                $userGuard = 'triagenurse';
+            } elseif (auth()->guard('doctor')->check()) {
+                $userGuard = 'doctor';
+            } elseif (auth()->guard('nurse')->check()) {
+                $userGuard = 'nurse';
+            } elseif (auth()->guard('patient')->check()) {
+                $userGuard = 'patient';
+            } elseif (auth()->guard('department')->check()) {
+                $userGuard = 'department';
+            } elseif (auth()->guard('eroom')->check()) {
+                $userGuard = 'eroom';
+            }
+        
+            // If no valid guard is found, deny access
+            if (!$userGuard) {
+                return redirect()->route('login')->with('error', 'Unauthorized Access');
+            }
+        
+            // If authorized, show the QR code details
+            return view('doctor.showMedicalAbstract', compact('record'));
         }
         
 

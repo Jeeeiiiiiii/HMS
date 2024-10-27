@@ -76,7 +76,7 @@
                                 <td class="px-4 py-2 border-b border-gray-200">
                                     @if ($record->status === 'pending')
                                         <span class="inline-block text-yellow-500 font-semibold bg-yellow-100 py-2 px-4 rounded-md">Pending</span>
-                                    @elseif ($record->status === 'completed')
+                                    @elseif ($record->status === 'admitted')
                                         <span class="inline-block text-green-500 font-semibold bg-green-100 py-2 px-4 rounded-md">Admitted</span>
                                     @elseif ($record->status === 'not admitted')
                                         <span class="inline-block text-gray-500 font-semibold bg-gray-100 py-2 px-4 rounded-md">Not Admitted</span>

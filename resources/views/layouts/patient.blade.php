@@ -35,6 +35,12 @@
                     <span class="text-sm">Treatment Plan</span>
                 </a>
             </li>
+            <li class="mb-1 group">
+                <a href="{{ route('patient_treatmentplan', $patient->id) }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
+                    <i class="ri-calendar-line mr-3 text-lg"></i>
+                    <span class="text-sm">Medical Abstract</span>
+                </a>
+            </li>
         </ul>
     </div>
     <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>

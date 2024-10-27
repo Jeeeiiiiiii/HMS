@@ -18,6 +18,7 @@ use App\Models\Order;
 use App\Models\erOrder;
 use App\Models\RecordQrCode;
 use App\Models\OrderQrCode;
+use App\Models\AbstractQrCode;
 use App\Models\TreatmentPlan;
 
 class PatientRecord extends Model
@@ -95,6 +96,11 @@ class PatientRecord extends Model
     public function order_qrcode()
     {
         return $this->HasMany(OrderQrCode::class);
+    }
+
+    public function abstract_qrcode()
+    {
+        return $this->HasMany(AbstractQrCode::class);
     }
 
     public function treatment_plan()

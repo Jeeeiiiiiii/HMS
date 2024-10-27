@@ -158,6 +158,7 @@ Route::middleware('doctor')->group(function (){
     Route::get('doctor/AddMedicalOrder/{id}', [DoctorController::class, 'AddMedicalOrder'])->name('doctor_addmedicalorder');
     Route::post('/doctor/{patientId}/storeOrder', [DoctorController::class, 'storeOrder'])->name('storeOrder');
     Route::post('/doctor/order/{id}/update-status', [DoctorController::class, 'updateOrderStatus'])->name('doctor.updateOrderStatus');
+    Route::get('doctor/DischargeDetailsPatient/{id}', [DoctorController::class, 'dischargeDetails'])->name('doctor.dischargePage');
     Route::post('/doctor/{id}/discharge', [DoctorController::class, 'discharge'])->name('doctor.discharge');
 
 
@@ -334,6 +335,7 @@ Route::middleware('patient')->group(function (){
     Route::get('/patient-record/{patientRecord}', [TriageNurseController::class, 'showQR'])->name('patientRecord.show');
     Route::get('/nurse/patient-record/{record}', [NurseController::class, 'showQR'])->name('Record.show');
     Route::get('/doctor/order/{order}', [DoctorController::class, 'showQR'])->name('Order.show');
+    Route::get('/doctor/MedicalAbstract/{record}', [DoctorController::class, 'showAbstractQR'])->name('MedicalAbstract.show');
     Route::get('/er/order/{order}', [EmergencyRoomController::class, 'showQR'])->name('erOrder.show');
     
     
