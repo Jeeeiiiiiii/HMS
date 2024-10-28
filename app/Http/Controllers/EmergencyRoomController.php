@@ -12,6 +12,7 @@ use App\Models\Department;
 use App\Models\Nurse;
 use App\Models\TreatmentPlan;
 use App\Models\erOrder;
+use App\Models\Order;
 use App\Models\Test;
 use App\Models\erOrderQRcode;
 use Auth;

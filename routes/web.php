@@ -258,6 +258,7 @@ Route::middleware('patient')->group(function (){
     Route::get('patient/treatmentplanpage/{id}', [PatientController::class, 'TreatmentPlanPage'])->name('patient_treatmentplanpage');
     Route::get('patient/orderpage/{id}', [PatientController::class, 'OrderPage'])->name('patient_orderpage');
     Route::get('patient/patient_treatmentplan/{id}', [PatientController::class, 'TreatmentPlan'])->name('patient_treatmentplan');
+    Route::get('patient/medicalabstract/{id}', [PatientController::class, 'MedicalAbstract'])->name('patient_medicalabstract');
     Route::get('patient/Treatments/{id}', [PatientController::class, 'Treatments'])->name('patient_treatments');
     
 
@@ -265,6 +266,8 @@ Route::middleware('patient')->group(function (){
     Route::get('/patient/qr-code/{patientRecordId}', [QrCodeController::class, 'show']);
     Route::get('/patient/record/qr-code/{patientRecordId}', [QrCodeController::class, 'showRecord']);
     Route::get('/patient/order/qr-code/{patientRecordId}', [QrCodeController::class, 'showOrder']);
+    Route::get('/patient/abstract/qr-code/{patientRecordId}', [QrCodeController::class, 'showAbstract']);
+    Route::get('/patient/erorder/qr-code/{patientRecordId}', [QrCodeController::class, 'showerOrder']);
 
     //verify password
     Route::post('/verify-password', [PatientController::class, 'verifyPassword'])->name('verify-password');

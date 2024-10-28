@@ -463,28 +463,6 @@ class DoctorController extends Controller
 
         public function showAbstractQR(PatientRecord $record)
         {
-            // Get the currently authenticated user's guard
-            $userGuard = null;
-        
-            if (auth()->guard('triagenurse')->check()) {
-                $userGuard = 'triagenurse';
-            } elseif (auth()->guard('doctor')->check()) {
-                $userGuard = 'doctor';
-            } elseif (auth()->guard('nurse')->check()) {
-                $userGuard = 'nurse';
-            } elseif (auth()->guard('patient')->check()) {
-                $userGuard = 'patient';
-            } elseif (auth()->guard('department')->check()) {
-                $userGuard = 'department';
-            } elseif (auth()->guard('eroom')->check()) {
-                $userGuard = 'eroom';
-            }
-        
-            // If no valid guard is found, deny access
-            if (!$userGuard) {
-                return redirect()->route('login')->with('error', 'Unauthorized Access');
-            }
-        
             // If authorized, show the QR code details
             return view('doctor.showMedicalAbstract', compact('record'));
         }

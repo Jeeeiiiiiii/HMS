@@ -88,7 +88,7 @@
         </div>
 
         <div class="p-4 space-y-6">
-            @forelse ($record->medicalOrders as $order)
+            @forelse ($record->order as $order)
                 <div class="border-b border-gray-200 pb-4 mb-4">
                     <div>
                         <p class="text-sm font-medium text-gray-500">Order Title</p>
@@ -112,7 +112,7 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-500">Order Date</p>
-                        <p class="text-lg text-gray-800">{{ $order->order_date ? $order->order_date->format('Y-m-d') : 'N/A' }}</p>
+                        <p class="text-lg text-gray-800">{{ $order->order_date ? \Carbon\Carbon::parse($order->order_date)->format('Y-m-d') : 'N/A' }}</p>
                     </div>
                 </div>
             @empty
@@ -128,13 +128,13 @@
             <h2 class="text-lg font-semibold text-gray-800">Patient Admissions</h2>
         </div>
 
-            <div class="p-4 space-y-4">
-                <div>
+        <div class="p-4 space-y-4">
+            <div>
                     <p class="text-sm font-medium text-gray-500">Total Admissions</p>
-                    <p class="text-lg font-semibold text-gray-800">{{ $record->admissions->count() ?? '0' }}</p>
+                    <p class="text-lg font-semibold text-gray-800">{{ $record->count() ?? '0' }}</p>
                 </div>
 
-                @if ($record->admissions->contains('status', 'admitted'))
+                @if ($record->status === 'admitted') <!-- Check if status is 'admitted' -->
                     <div>
                         <p class="text-sm font-medium text-gray-500">Current Status</p>
                         <p class="text-lg font-semibold text-red-600">Active Admission</p>

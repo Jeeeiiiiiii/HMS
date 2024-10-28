@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\Order;
+use App\Models\erOrder;
 use App\Models\Record;
 use App\Models\PatientRecord;
 use App\Models\TreatmentPlan;
@@ -38,8 +39,12 @@ class PatientController extends Controller
     $admission = PatientRecord::where('patient_id', $patientId)
         ->latest()
         ->first();
+
+    $erorder = erOrder::where('patient_id', $patientId)
+    ->latest()
+    ->first();
     
-    return view('patient.dashboard', compact('sessions', 'patient', 'medicalOrders', 'rounds', 'admission'));
+    return view('patient.dashboard', compact('sessions', 'patient', 'medicalOrders', 'rounds', 'admission', 'erorder'));
     }
 
     public function TreatmentPlan($id)
@@ -54,6 +59,20 @@ class PatientController extends Controller
         // Pass the patient data to the view
         return view('patient.TreatmentPlan', compact('patient'));
     }
+
+    public function MedicalAbstract($id)
+    {
+    $patient = auth()->guard('patient')->user();
+
+    // Check if the patient exists
+    if (!$patient) {
+        return redirect()->back()->withErrors(['message' => 'Patient not found.']);
+    }
+
+        // Pass the patient data to the view
+        return view('patient.MedicalAbstract', compact('patient'));
+    }
+
 
     public function Treatments($id)
     {

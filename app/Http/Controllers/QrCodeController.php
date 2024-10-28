@@ -75,5 +75,20 @@ class QrCodeController extends Controller
     }
 }
 
+        public function showAbstract($patientRecordId)
+{
+    $order = PatientRecord::with('abstract_qrcode')->find($patientRecordId);
+
+    if ($order && $order->abstract_qrcode->isNotEmpty()) {
+        // Get the first QR code associated with this Order
+        $qrCode = $order->abstract_qrcode->first();
+
+        // Use Storage::disk('s3')->url to get the correct URL for the QR code
+        return response()->json(['path' => Storage::disk('s3')->url($qrCode->file_path)]);
+    } else {
+        return response()->json(['path' => null], 404); // Handle the case where no QR code is found
+    }
+}
+
 
 }
