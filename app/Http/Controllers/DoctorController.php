@@ -463,8 +463,11 @@ class DoctorController extends Controller
 
         public function showAbstractQR(PatientRecord $record)
         {
+            // Find the patient using the patient_id from the record
+            $patient = Patient::find($record->patient_id);
+
             // If authorized, show the QR code details
-            return view('doctor.showMedicalAbstract', compact('record'));
+            return view('doctor.showMedicalAbstract', compact('record', 'patient'));
         }
         
 

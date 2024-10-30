@@ -259,6 +259,7 @@ Route::middleware('patient')->group(function (){
     Route::get('patient/orderpage/{id}', [PatientController::class, 'OrderPage'])->name('patient_orderpage');
     Route::get('patient/patient_treatmentplan/{id}', [PatientController::class, 'TreatmentPlan'])->name('patient_treatmentplan');
     Route::get('patient/medicalabstract/{id}', [PatientController::class, 'MedicalAbstract'])->name('patient_medicalabstract');
+    Route::get('patient/medicalabstractpage/{id}', [PatientController::class, 'MedicalAbstractPage'])->name('patient_medicalabstractpage');
     Route::get('patient/Treatments/{id}', [PatientController::class, 'Treatments'])->name('patient_treatments');
     
 

@@ -79,11 +79,26 @@ class PatientController extends Controller
         $patient = auth()->guard('patient')->user();
         // Retrieve the patient using the provided ID
         $patientRecord = PatientRecord::with(['profile', 'vital', 'admission', 'test', 'patient', 'record', 'qrcode', 'treatment_plan', 'order'])->find($id);
-        
 
         // Pass the patient data to the view
         return view('patient.Treatment', compact('patient', 'patientRecord'));
         }
+
+    public function MedicalAbstractPage($id)
+    {
+        $patient = auth()->guard('patient')->user();
+        // Retrieve the patient using the provided ID
+        $record = PatientRecord::with(['profile', 'vital', 'admission', 'test', 'patient', 'record', 'qrcode', 'treatment_plan', 'order'])->find($id);
+        // Check if the record exists and retrieve the patient ID from it
+        if ($record) {
+            $admission = Patient::find($record->patient_id);
+        } else {
+            $admission = null; // or handle the case where the record is not found
+        }
+
+        // Pass the patient data to the view
+        return view('patient.MedicalAbstractPage', compact('patient', 'record', 'admission'));
+    }
 
     public function profile($id){
     // Retrieve the patient using the provided ID

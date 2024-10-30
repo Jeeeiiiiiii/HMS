@@ -41,10 +41,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($patient->patientrecord as $record)
+                            @foreach ($patient->patientrecord->filter(fn($record) => $record->status === 'discharged') as $record)
                             <tr>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
-                                    <a href="{{ route('patient_treatments', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
+                                    <a href="{{ route('patient_medicalabstractpage', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
                                         {{ $record->reason_for_admission }}
                                     </a>
                                 </td>

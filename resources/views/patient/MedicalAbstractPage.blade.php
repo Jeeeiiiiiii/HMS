@@ -1,8 +1,14 @@
-@extends('layouts.registration')
+@extends('layouts.patient')
 
 @section('title', 'Registration')
 
 @section('contents')
+<!-- Back Button -->
+<div class="p-6">
+    <button onclick="goBack()" class="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <i class="ri-arrow-left-line text-xl"></i> <!-- Remixicon arrow left icon -->
+    </button>
+</div>
 
 <div class="p-6 space-y-6"> <!-- Added space-y-6 to create uniform spacing between sections -->
     <h1 class="text-2xl font-bold mb-4"> Medical Abstract</h1>
@@ -137,11 +143,11 @@
             <div>
                 <p class="text-sm font-medium text-gray-500">Admission Records</p>
                 <div class="space-y-2">
-                    @foreach ($patient->patientrecord as $admission)
+                    @foreach ($admission->patientrecord as $admissions)
                         <div class="flex justify-between">
-                            <span class="text-gray-700">{{ $admission->reason_for_admission }}</span>
-                            <span class="font-semibold {{ $admission->status === 'discharged' ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $admission->status === 'discharged' ? 'Cleared' : 'Not Cleared' }}
+                            <span class="text-gray-700">{{ $admissions->reason_for_admission }}</span>
+                            <span class="font-semibold {{ $admissions->status === 'discharged' ? 'text-green-600' : 'text-red-600' }}">
+                                {{ $admissions->status === 'discharged' ? 'Cleared' : 'Not Cleared' }}
                             </span>
                         </div>
                     @endforeach
@@ -152,8 +158,8 @@
                 <p class="text-sm font-medium text-gray-500">Current Status</p>
                 @php
                     // Check if there are any admissions with the status 'admitted' or 'pending'
-                    $hasActiveAdmissions = $patient->patientrecord->contains(function ($admission) {
-                        return $admission->status === 'admitted' || $admission->status === 'pending';
+                    $hasActiveAdmissions = $patient->patientrecord->contains(function ($admissions) {
+                        return $admissions->status === 'admitted' || $admissions->status === 'pending';
                     });
                 @endphp
                 <p class="text-lg font-semibold {{ $hasActiveAdmissions ? 'text-red-600' : 'text-green-600' }}">
@@ -165,4 +171,16 @@
     
     </div>
 </div>
+
+<script>
+function goBack() {
+    if (document.referrer) {
+        // If there is a referrer, go back to the referring page
+        window.location.href = document.referrer;
+    } else {
+        // Fallback URL if there is no referrer (e.g., when opened in a new tab)
+        window.location.href = '/your-fallback-url'; // Replace with the URL you want to redirect to
+    }
+}
+</script>
 @endsection

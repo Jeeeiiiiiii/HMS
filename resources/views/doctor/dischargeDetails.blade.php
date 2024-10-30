@@ -65,13 +65,15 @@
                                 </td>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
                                     @if ($record->status === 'pending')
-                                        <span class="inline-block text-yellow-500 font-semibold bg-yellow-100 py-2 px-4 rounded-md">Pending</span>
-                                    @elseif ($record->status === 'not admitted')
-                                        <span class="inline-block text-gray-500 font-semibold bg-gray-100 py-2 px-4 rounded-md">Not Admitted</span>
+                                        <span class="text-lg font-semibold text-yellow-400">Pending</span>
                                     @elseif ($record->status === 'admitted')
-                                        <span class="inline-block text-green-500 font-semibold bg-green-100 py-2 px-4 rounded-md">Admitted</span>
+                                        <span class="text-lg font-semibold text-green-400">Admitted</span>
+                                    @elseif ($record->status === 'not admitted')
+                                        <span class="text-lg font-semibold text-gray-400">Not Admitted</span>
                                     @elseif ($record->status === 'discharged')
-                                        <span class="inline-block text-red-500 font-semibold bg-red-100 py-2 px-4 rounded-md">Discharged</span>
+                                        <span class="text-lg font-semibold text-red-400">Discharged</span>
+                                    @else
+                                        <span class="text-lg font-semibold text-gray-400">N/A</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-2 border-b border-gray-200">
