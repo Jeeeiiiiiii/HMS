@@ -224,6 +224,14 @@ class DoctorController extends Controller
                 $record->er_order->status = $request->input('status');
                 $record->er_order->save();
             }
+
+            // Retrieve the Patient model and update its status if necessary
+            $patient = Patient::find($record->patient_id);
+            if ($patient && $patient->status !== 'admitted') {
+                // Only update the status if it's not already 'admitted'
+                $patient->status = $request->input('status');
+                $patient->save();
+            }
         
             return redirect()->back()->with('success', 'Admission Status updated successfully for both PatientRecord and ER Order.');
         }
