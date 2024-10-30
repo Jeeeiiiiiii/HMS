@@ -19,12 +19,13 @@ class erOrder extends Model
         'nurse_id',
         'department_id',
         'patient_record_id', 
+        'emergency_room_id', 
         'type', 
         'description', 
         'order_status', 
         'status', 
         'order_date',
-        'title', 
+        'title',
         ];
 
     protected $dates = ['order_date'];

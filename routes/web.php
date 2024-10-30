@@ -332,6 +332,7 @@ Route::middleware('patient')->group(function (){
 
     //////////// Notification
     Route::get('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('markNotificationAsRead');
+    Route::get('/notifications/mark-as-read-er/{id}', [NotificationController::class, 'markAsReadER'])->name('markNotificationAsReadER');
     Route::get('/notifications', [NotificationController::class, 'allNotifications'])->name('notifications.all');
 
 

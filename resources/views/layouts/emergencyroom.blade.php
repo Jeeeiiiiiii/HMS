@@ -48,7 +48,62 @@
                 <i class="ri-menu-line"></i>
             </button>
             
-            <ul class="ml-auto flex items-center">                             
+            <ul class="ml-auto flex items-center">    
+                <!-- Notification Bell Icon -->
+                <li class="relative ml-3">
+                    <button type="button" onclick="toggleNotifications()" class="relative text-gray-600">
+                        <i class="ri-notification-3-line text-xl"></i>
+                        @php
+                            $user = auth()->guard('eroom')->user();
+                        @endphp
+
+                        @if($user && optional($user->unreadNotifications)->count() > 0)
+                            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                                {{ $user->unreadNotifications->count() }}
+                            </span>
+                        @endif
+
+                    </button>
+
+                    <!-- Notifications Dropdown -->
+                    <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg max-h-80 overflow-y-auto">
+                        <ul id="latestNotifications">
+                            @foreach($latestNotifications as $notification)
+                                <li class="p-2 border-b text-sm {{ $notification->read_at ? 'text-gray-500' : 'font-semibold text-black' }}">
+                                    <a href="{{ route('markNotificationAsReadER', $notification->id) }}" class="block hover:bg-gray-100 p-2 rounded-md flex items-center">
+                                        <!-- Blue circle icon for unread notifications -->
+                                        @if(!$notification->read_at)
+                                            <i class="ri-circle-fill text-blue-500 mr-2"></i>
+                                        @endif
+                                        {{ $notification->data['message'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        <!-- Hidden Section for Older Notifications -->
+                        <ul id="olderNotifications" class="hidden">
+                            @foreach($olderNotifications as $notification)
+                                <li class="p-2 border-b text-sm {{ $notification->read_at ? 'text-gray-500' : 'font-semibold text-black' }}">
+                                    <a href="{{ route('markNotificationAsReadER', $notification->id) }}" class="block hover:bg-gray-100 p-2 rounded-md flex items-center">
+                                        @if(!$notification->read_at)
+                                            <i class="ri-circle-fill text-blue-500 mr-2"></i>
+                                        @endif
+                                        {{ $notification->data['message'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        <!-- Link to show older notifications -->
+                        @if($olderNotifications->isNotEmpty())
+                            <div class="p-2 text-center">
+                                <button onclick="toggleOlderNotifications()" class="text-blue-500 text-sm" id="toggleButton">See Previous Notifications</button>
+                            </div>
+                        @endif
+                    </div>
+                </li>
+
                 <li class="dropdown ml-3">
                     <button type="button" class="dropdown-toggle flex items-center">
                         <i class="ri-user-3-line text-xl text-blue-500 mr-2"></i>
@@ -64,6 +119,28 @@
                 </li>
             </ul>
         </div>
+
+        <script>
+            function toggleNotifications() {
+                var dropdown = document.getElementById('notificationDropdown');
+                dropdown.classList.toggle('hidden');
+            }
+
+            function toggleOlderNotifications() {
+                var olderNotifications = document.getElementById('olderNotifications');
+                var toggleButton = document.getElementById('toggleButton');
+
+                if (olderNotifications.classList.contains('hidden')) {
+                    olderNotifications.classList.remove('hidden');
+                    toggleButton.textContent = 'Show Less';
+                } else {
+                    olderNotifications.classList.add('hidden');
+                    toggleButton.textContent = 'See Previous Notifications';
+                }
+            }
+        </script>
+
+        
         <div id="loading-spinner" class="hidden fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
             <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>

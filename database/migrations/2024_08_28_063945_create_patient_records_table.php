@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('nurse_id')->constrained()->onDelete('cascade');
             $table->foreignId('triage_nurse_id')->constrained()->onDelete('cascade');
             $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
-            $table->foreignId('emergency_room_id')->constrained()->onDelete('cascade');
             $table->foreignId('profile_id')->constrained()->onDelete('cascade');
             $table->foreignId('test_id')->constrained()->onDelete('cascade');
             $table->foreignId('vital_id')->constrained()->onDelete('cascade');

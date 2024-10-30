@@ -8,10 +8,12 @@ use App\Models\Nurse;
 use App\Models\TriageNurse;
 use App\Models\Patient;
 use App\Models\Department;
+use App\Models\EmergencyRoom;
 use App\Models\Order;
 use App\Models\erOrder;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\OrderStatusChanged;
+use App\Notifications\EROrderStatusChanged;
 use Auth;
 
 class DepartmentController extends Controller
@@ -167,17 +169,20 @@ class DepartmentController extends Controller
     }
 
     public function updateEROrderStatus(Request $request, $id)
-    {
-        $order = erOrder::findOrFail($id);
-        $order->order_status = $request->input('status');
-        $order->save();
+{
+    $order = erOrder::findOrFail($id);
+    $order->order_status = $request->input('status');
+    $order->save();
+    $orderStatus = $order->order_status;
 
-        // Notify the department user
-        $department = $order->department; // Assuming the order has a department relationship
-        $department->notify(new OrderStatusChanged($order));
-
-        return redirect()->back()->with('success', 'Emergency Room Order status updated successfully.');
+    // Using the eroom guard to notify EmergencyRoom users
+    $emergencyRoomUsers = EmergencyRoom::where('id', $order->emergency_room_id)->get();
+    foreach ($emergencyRoomUsers as $user) {
+        $user->notify(new EROrderStatusChanged($order, $orderStatus));
     }
+
+    return redirect()->back()->with('success', 'Emergency Room Order status updated and notified successfully.');
+}
 
 
     public function showOrder($id)

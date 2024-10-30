@@ -15,4 +15,13 @@ class NotificationController extends Controller
         return back();
     }
 
+    public function markAsReadER($id)
+    {
+        $notification = auth('eroom')->user()->notifications()->find($id);
+        if ($notification && !$notification->read_at) {
+            $notification->markAsRead();
+        }
+        return back();
+    }
+
 }

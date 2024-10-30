@@ -29,6 +29,10 @@ class EmergencyRoomController extends Controller
     public function dashboard(Request $request) 
     {
         $eroom = auth()->guard('eroom')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('eroom')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('eroom')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
         // Get the search query and status filter from the request
         $search = $request->input('search');
@@ -46,7 +50,7 @@ class EmergencyRoomController extends Controller
         })->get();
 
         // Pass the filtered patients and status to the view
-        return view('emergencyroom.dashboard', compact('patients', 'status', 'eroom'));
+        return view('emergencyroom.dashboard', compact('patients', 'status', 'eroom', 'latestNotifications', 'olderNotifications'));
     }
 
 
@@ -54,6 +58,10 @@ class EmergencyRoomController extends Controller
     public function MedicalOrders(Request $request) 
     {
         $eroom = auth()->guard('eroom')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('eroom')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('eroom')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
         // Get the search query and status filter from the request
         $search = $request->input('search');
@@ -71,15 +79,19 @@ class EmergencyRoomController extends Controller
         })->get();
 
         // Pass the filtered patients and status to the view
-        return view('emergencyroom.medicalOrder', compact('patients', 'status', 'eroom'));
+        return view('emergencyroom.medicalOrder', compact('patients', 'status', 'eroom', 'latestNotifications', 'olderNotifications'));
 
     }
 
     public function ScanQR(){
     // Retrieve the patient using the provided ID
     $eroom = auth()->guard('eroom')->user();
+    // Fetch the latest 5 notifications
+    $latestNotifications = auth('eroom')->user()->notifications()->latest()->take(5)->get();
+    // Count older notifications
+    $olderNotifications = auth('eroom')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
-        return view('emergencyroom.ScanQR', compact('eroom'));
+        return view('emergencyroom.ScanQR', compact('eroom', 'latestNotifications', 'olderNotifications'));
     }
 
     public function Details($id)
@@ -87,14 +99,17 @@ class EmergencyRoomController extends Controller
         $eroom = Auth::guard('eroom')->user();
         // Retrieve the patient using the provided ID
         $patient = Patient::with('patientrecord')->find($id);
-
+    // Fetch the latest 5 notifications
+        $latestNotifications = auth('eroom')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('eroom')->user()->notifications()->latest()->skip(5)->take(20)->get();
         // Check if the patient exists
         if (!$patient) {
             return redirect()->back()->withErrors(['message' => 'Patient not found.']);
         }
 
         // Pass the patient data to the view
-        return view('emergencyroom.Details', compact('patient', 'eroom'));
+        return view('emergencyroom.Details', compact('patient', 'eroom', 'latestNotifications', 'olderNotifications'));
     }
 
     public function AddOrder($id)
@@ -102,6 +117,10 @@ class EmergencyRoomController extends Controller
     $eroom = auth()->guard('eroom')->user();
     // Retrieve the patient using the provided ID
     $patient = Patient::with('patientrecord')->find($id);
+    // Fetch the latest 5 notifications
+    $latestNotifications = auth('eroom')->user()->notifications()->latest()->take(5)->get();
+    // Count older notifications
+    $olderNotifications = auth('eroom')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
     // Check if the patient exists
     if (!$patient) {
@@ -110,7 +129,7 @@ class EmergencyRoomController extends Controller
 
 
         // Pass the patient data to the view
-        return view('emergencyroom.AddOrder', compact('patient', 'eroom'));
+        return view('emergencyroom.AddOrder', compact('patient', 'eroom', 'latestNotifications', 'olderNotifications'));
     }
 
     public function OrderPage($id)
@@ -118,10 +137,13 @@ class EmergencyRoomController extends Controller
         $eroom = auth()->guard('eroom')->user();
     // Retrieve the patient using the provided ID
     $patient = erOrder::with(['patientRecord', 'order_qrcode'])->find($id);
-    
+    // Fetch the latest 5 notifications
+    $latestNotifications = auth('eroom')->user()->notifications()->latest()->take(5)->get();
+    // Count older notifications
+    $olderNotifications = auth('eroom')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
     // Pass the patient data to the view
-    return view('emergencyroom.OrderPage', compact('patient', 'eroom'));
+    return view('emergencyroom.OrderPage', compact('patient', 'eroom', 'latestNotifications', 'olderNotifications'));
     }
 
     public function AddMedicalOrder($id)
@@ -133,13 +155,18 @@ class EmergencyRoomController extends Controller
         $doctors = Doctor::all(); // Retrieve all doctors
         $nurses = Nurse::all();   // Retrieve all nurses
 
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('eroom')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('eroom')->user()->notifications()->latest()->skip(5)->take(20)->get();
+        
         // Check if the patient exists
         if (!$patientRecord) {
             return redirect()->back()->withErrors(['message' => 'Patient not found.']);
         }
 
         // Pass the patient data to the view
-        return view('emergencyroom.AddMedicalOrder', compact('patientRecord', 'doctors', 'nurses', 'eroom', 'departments'));
+        return view('emergencyroom.AddMedicalOrder', compact('patientRecord', 'doctors', 'nurses', 'eroom', 'departments', 'latestNotifications', 'olderNotifications'));
     }
 
     public function storeOrder(Request $request, $patientId)
@@ -151,7 +178,7 @@ class EmergencyRoomController extends Controller
 
 
         $patientRecord = PatientRecord::findOrFail($patientId);
-        
+        $eroom = Auth::guard('eroom')->user();
 
         // Create the Order record
         $order = erOrder::create([
@@ -160,6 +187,7 @@ class EmergencyRoomController extends Controller
             'nurse_id' => $patientRecord->nurse_id,
             'department_id' => $request->admitting_department,
             'patient_record_id' => $patientRecord->id,
+            'emergency_room_id' => $eroom->id,
             'type' => $request->type,
             'description' => $request->description,
             'status' => $request->status,
@@ -227,7 +255,7 @@ class EmergencyRoomController extends Controller
         }
         
 
-        public function showQR(Order $order)
+        public function showQR(erOrder $order)
         {
             // Get the currently authenticated user's guard
             $userGuard = null;

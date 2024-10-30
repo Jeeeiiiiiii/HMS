@@ -1,6 +1,6 @@
-@extends('layouts.emergencyroom')
+@extends('layouts.registration')
 
-@section('title', 'Registration')
+@section('title', 'ER Medical Order')
 
 @section('contents')
 
@@ -69,11 +69,32 @@
                 </div>
                 <div>
                     <p class="text-sm font-medium text-gray-500">Order Status</p>
-                    <p class="text-lg font-semibold text-gray-800">{{ $order->status ?? 'N/A' }}</p>
+                    <p class="text-lg font-semibold text-gray-800">
+                        @if ($order->status === 'pending')
+                            <span class="text-lg font-semibold text-yellow-400">Pending</span>
+                        @elseif ($order->status === 'completed')
+                            <span class="text-lg font-semibold text-green-400">Completed</span>
+                        @else
+                            <span class="text-lg font-semibold text-gray-400">N/A</span>
+                        @endif
+                    </p>
                 </div>
+
                 <div>
                     <p class="text-sm font-medium text-gray-500">Admission Status</p>
-                    <p class="text-lg font-semibold text-gray-800">{{ $order->status ?? 'N/A' }}</p>
+                    <p class="text-lg font-semibold text-gray-800">
+                        @if ($order->status === 'pending')
+                            <span class="text-lg font-semibold text-yellow-400">Pending</span>
+                        @elseif ($order->status === 'admitted')
+                            <span class="text-lg font-semibold text-green-400">Admitted</span>
+                        @elseif ($order->status === 'not admitted')
+                            <span class="text-lg font-semibold text-gray-400">Not Admitted</span>
+                        @elseif ($order->status === 'discharged')
+                            <span class="text-lg font-semibold text-red-400">Discharged</span>
+                        @else
+                            <span class="text-lg font-semibold text-gray-400">N/A</span>
+                        @endif
+                    </p>
                 </div>
                 <div>
                     <p class="text-sm font-medium text-gray-500">Order Date</p>

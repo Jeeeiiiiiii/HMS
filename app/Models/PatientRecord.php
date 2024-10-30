@@ -13,6 +13,7 @@ use App\Models\PatientQrCode;
 use App\Models\Record;
 use App\Models\Nurse;
 use App\Models\TriageNurse;
+use App\Models\EmergencyRoom;
 use App\Models\Doctor;
 use App\Models\Order;
 use App\Models\erOrder;
@@ -23,7 +24,7 @@ use App\Models\TreatmentPlan;
 
 class PatientRecord extends Model
 {
-    protected $fillable = ['patient_id', 'profile_id', 'test_id', 'vital_id', 'admission_id', 'doctor_id','nurse_id', 'triage_nurse_id', 'reason_for_admission', 'admitting_date_and_time',];
+    protected $fillable = ['patient_id', 'profile_id', 'test_id', 'vital_id', 'admission_id', 'doctor_id','nurse_id', 'triage_nurse_id', 'reason_for_admission', 'admitting_date_and_time'];
 
     protected $dates = [
         'admitting_date_and_time',
@@ -66,6 +67,11 @@ class PatientRecord extends Model
     public function admission()
     {
         return $this->belongsTo(Admission::class);
+    }
+
+    public function eroom()
+    {
+        return $this->belongsTo(EmergencyRoom::class);
     }
 
     public function record()
