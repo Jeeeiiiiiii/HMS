@@ -5,6 +5,76 @@
 @section('contents')
 <div class="p-6">
     <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <div class="grid grid-cols-1 gap-6">
+            <!-- Latest Medical Orders Section with Progress Bar -->
+            <div class="bg-white border border-gray-200 shadow-lg p-4 rounded-lg">
+                <h2 class="text-lg font-semibold text-gray-800 mb-3">Latest Medical Orders</h2>
+                <ul class="space-y-4">
+                    @if($admission)
+                        <li class="flex flex-col p-4 bg-gray-50 rounded-md">
+                            <!-- Progress Bar -->
+                            @php
+                                // Define the steps for the progress bar
+                                $steps = ['Triage', 'ER', 'Lab', 'Admission'];
+                                
+                                // Determine the current step based on status
+                                $currentStep = array_search($admission->status, $steps) + 1;
+                                $totalSteps = count($steps);
+                            @endphp
+
+                            <div class="flex items-center justify-between">
+                            @foreach($steps as $index => $step)
+
+                                @if ($index === 3) <!-- Skip the "discharged" step -->
+                                    <div class="flex items-center justify-between">
+                                        <!-- Step Circle -->
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 z-10
+                                            {{ $index + 1 <= $currentStep ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-300 bg-white' }}">
+                                            @if ($index + 1 < $currentStep)
+                                                <Check className="w-6 h-6 text-white" />
+                                            @else
+                                                <span class="text-sm font-medium">{{ $index + 1 }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @break
+                                @endif
+
+                                <div class="flex items-center justify-between flex-1">
+                                    <!-- Step Circle -->
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 z-10
+                                        {{ $index + 1 <= $currentStep ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-300 bg-white' }}">
+                                        @if ($index + 1 < $currentStep)
+                                            <Check className="w-6 h-6 text-white" />
+                                        @else
+                                            <span class="text-sm font-medium">{{ $index + 1 }}</span>
+                                        @endif
+                                    </div>
+                                    <!-- Connector Line -->
+                                    @if ($index < $totalSteps - 1)
+                                        <div class="flex-1 h-1 {{ $index + 1 < $currentStep ? 'bg-blue-500' : 'bg-gray-600' }} px-2" style="margin-top: 10px;">
+                                            <!-- This line represents the connector between steps -->
+                                        </div>
+                                    @endif
+                                </div>
+                            @endforeach
+                            </div>
+
+                            <!-- Step Labels -->
+                            <div class="flex items-center justify-between mt-2">
+                                @foreach($steps as $index => $step)
+                                    <span class="text-xs font-medium {{ $index + 1 <= $currentStep ? 'text-blue-600' : 'text-gray-500' }}">
+                                        {{ $step }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        </li>
+                    @else
+                        <li class="p-2 text-gray-500">No admission record found.</li>
+                    @endif
+                </ul>
+            </div>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Latest Medical Orders Section -->
             <div class="bg-white border border-gray-200 shadow-lg p-4 rounded-lg">

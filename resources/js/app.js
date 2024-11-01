@@ -142,6 +142,7 @@ sidebarOverlay.addEventListener('click', function (e) {
 });
 
 // end: Popper
+  
 
 
 
