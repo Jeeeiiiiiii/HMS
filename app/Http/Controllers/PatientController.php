@@ -23,6 +23,11 @@ class PatientController extends Controller
     $sessions = $patient->sessions()->orderBy('last_active_at', 'desc')->get();
 
     $patientId = $patient->id;
+    // Fetch the latest 5 notifications
+    $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+    // Count older notifications
+    $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
 
      // Fetch the latest medical orders, rounds, and admission information
      $medicalOrders = Order::where('patient_id', $patientId)
@@ -44,12 +49,16 @@ class PatientController extends Controller
     ->latest()
     ->first();
     
-    return view('patient.dashboard', compact('sessions', 'patient', 'medicalOrders', 'rounds', 'admission', 'erorder'));
+    return view('patient.dashboard', compact('sessions', 'patient', 'medicalOrders', 'rounds', 'admission', 'erorder', 'latestNotifications', 'olderNotifications'));
     }
 
     public function TreatmentPlan($id)
     {
     $patient = auth()->guard('patient')->user();
+    // Fetch the latest 5 notifications
+    $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+    // Count older notifications
+    $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
     // Check if the patient exists
     if (!$patient) {
@@ -57,12 +66,16 @@ class PatientController extends Controller
     }
 
         // Pass the patient data to the view
-        return view('patient.TreatmentPlan', compact('patient'));
+        return view('patient.TreatmentPlan', compact('patient', 'latestNotifications', 'olderNotifications'));
     }
 
     public function MedicalAbstract($id)
     {
     $patient = auth()->guard('patient')->user();
+    // Fetch the latest 5 notifications
+    $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+    // Count older notifications
+    $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
     // Check if the patient exists
     if (!$patient) {
@@ -70,23 +83,31 @@ class PatientController extends Controller
     }
 
         // Pass the patient data to the view
-        return view('patient.MedicalAbstract', compact('patient'));
+        return view('patient.MedicalAbstract', compact('patient', 'latestNotifications', 'olderNotifications'));
     }
 
 
     public function Treatments($id)
     {
         $patient = auth()->guard('patient')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
         // Retrieve the patient using the provided ID
         $patientRecord = PatientRecord::with(['profile', 'vital', 'admission', 'test', 'patient', 'record', 'qrcode', 'treatment_plan', 'order'])->find($id);
 
         // Pass the patient data to the view
-        return view('patient.Treatment', compact('patient', 'patientRecord'));
+        return view('patient.Treatment', compact('patient', 'patientRecord', 'latestNotifications', 'olderNotifications'));
         }
 
     public function MedicalAbstractPage($id)
     {
         $patient = auth()->guard('patient')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
         // Retrieve the patient using the provided ID
         $record = PatientRecord::with(['profile', 'vital', 'admission', 'test', 'patient', 'record', 'qrcode', 'treatment_plan', 'order'])->find($id);
         // Check if the record exists and retrieve the patient ID from it
@@ -97,7 +118,7 @@ class PatientController extends Controller
         }
 
         // Pass the patient data to the view
-        return view('patient.MedicalAbstractPage', compact('patient', 'record', 'admission'));
+        return view('patient.MedicalAbstractPage', compact('patient', 'record', 'admission', 'latestNotifications', 'olderNotifications'));
     }
 
     public function profile($id){
@@ -120,6 +141,10 @@ class PatientController extends Controller
     {
     // Retrieve the patient using the provided ID
     $patient = Patient::with('patientrecord')->find($id);
+    // Fetch the latest 5 notifications
+    $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+    // Count older notifications
+    $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
     // Check if the patient exists
     if (!$patient) {
@@ -127,51 +152,83 @@ class PatientController extends Controller
     }
 
     // Pass the patient data to the view
-    return view('patient.Details', compact('patient'));
+    return view('patient.Details', compact('patient', 'latestNotifications', 'olderNotifications'));
     }
 
-    public function PatientRecord($id)
+    public function PatientRecord($id, $notification_id = null)
         {
         $patient = auth()->guard('patient')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
         // Retrieve the patient using the provided ID
+
+        $notification = auth('patient')->user()->notifications()->find($notification_id);
+        // Check if the notification exists and if it has not been read
+        if ($notification) {
+            if (!$notification->read_at) {
+                $notification->markAsRead();
+                \Log::info('Notification marked as read', ['notification_id' => $notification_id]);
+            } else {
+                \Log::info('Notification was already read', ['notification_id' => $notification_id]);
+            }
+        } else {
+            \Log::info('Notification not found', ['notification_id' => $notification_id]);
+        }
+        
+        
+
         $patientRecord = PatientRecord::with(['profile', 'vital', 'admission', 'test', 'patient', 'record', 'qrcode', 'treatment_plan', 'order'])->find($id);
         
 
         // Pass the patient data to the view
-        return view('patient.PatientRecord', compact('patient', 'patientRecord'));
+        return view('patient.PatientRecord', compact('patient', 'patientRecord', 'latestNotifications', 'olderNotifications'));
         }
 
     public function Record($id)
         {
         $patient = auth()->guard('patient')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
         // Retrieve the patient using the provided ID
         $record = Record::with(['vital', 'test', 'patient', 'patientRecord', 'physical_assessment', 'record_qrcode'])->find($id);
         
 
         // Pass the patient data to the view
-        return view('patient.record', compact('patient', 'record'));
+        return view('patient.record', compact('patient', 'record', 'latestNotifications', 'olderNotifications'));
         }
 
     public function TreatmentPlanPage($id)
         {
         $patient = auth()->guard('patient')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
         // Retrieve the patient using the provided ID
         $treatment = TreatmentPlan::with(['test', 'patientRecord'])->find($id);
         
 
         // Pass the patient data to the view
-        return view('patient.TreatmentPlanPage', compact('patient', 'treatment'));
+        return view('patient.TreatmentPlanPage', compact('patient', 'treatment', 'latestNotifications', 'olderNotifications'));
         }
 
     public function OrderPage($id)
         {
         $patient = auth()->guard('patient')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
         // Retrieve the patient using the provided ID
         $order = Order::with(['patientRecord', 'order_qrcode'])->find($id);
         
 
         // Pass the patient data to the view
-        return view('patient.OrderPage', compact('patient', 'order'));
+        return view('patient.OrderPage', compact('patient', 'order', 'latestNotifications', 'olderNotifications'));
         }
 
         public function verifyPassword(Request $request)

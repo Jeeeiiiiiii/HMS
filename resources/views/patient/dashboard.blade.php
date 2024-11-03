@@ -8,7 +8,7 @@
         <div class="grid grid-cols-1 gap-6">
             <!-- Latest Medical Orders Section with Progress Bar -->
             <div class="bg-white border border-gray-200 shadow-lg p-4 rounded-lg">
-                <h2 class="text-lg font-semibold text-gray-800 mb-3">Latest Medical Orders</h2>
+                <h2 class="text-lg font-semibold text-gray-800 mb-3">Admission: {{ $admission->reason_for_admission ?? 'N/A' }} Status</h2>
                 <ul class="space-y-4">
                     @if($admission)
                         <li class="flex flex-col p-4 bg-gray-50 rounded-md">
@@ -112,7 +112,7 @@
             <div class="bg-white border border-gray-200 shadow-lg p-4 rounded-lg">
                 <h2 class="text-lg font-semibold text-gray-800 mb-3">Latest Rounds</h2>
                 <ul class="space-y-3">
-                    @foreach($rounds as $round)
+                    @forelse($rounds as $round)
                         <li class="flex flex-col p-3 bg-gray-50 rounded-md">
                             <div class="flex justify-between mb-2">
                                 <div>
@@ -122,15 +122,17 @@
                                 <span class="text-gray-600">{{ $round->doctor->name ?? 'N/A' }}</span>
                             </div>
                             <div>
-                            <span class="text-gray-600">
-                                Reason for admission: {{ Str::limit($round->patientRecord->reason_for_admission ?? 'N/A', 50, '...') }}
-                            </span>
+                                <span class="text-gray-600">
+                                    Reason for admission: {{ Str::limit($round->patientRecord->reason_for_admission ?? 'N/A', 50, '...') }}
+                                </span>
                             </div>
                             <p class="text-sm text-gray-700">
                                 {{ $round->admitting_date_and_time ? \Carbon\Carbon::parse($round->admitting_date_and_time)->format('F j, Y \a\t g:i A') : 'N/A' }}
                             </p>
                         </li>
-                    @endforeach
+                    @empty
+                        <li class="p-2 text-gray-500">No rounds found.</li>
+                    @endforelse
                 </ul>
             </div>
 

@@ -14,6 +14,8 @@ use App\Models\erOrder;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\OrderStatusChanged;
 use App\Notifications\EROrderStatusChanged;
+use App\Notifications\PatientEROrderStatusChanged;
+use App\Notifications\PatientOrderStatusChanged;
 use Auth;
 
 class DepartmentController extends Controller
@@ -165,6 +167,10 @@ class DepartmentController extends Controller
         $department = $order->doctor; // Assuming the order has a department relationship
         $department->notify(new OrderStatusChanged($order, $orderStatus));
 
+        // Notify the patient user
+        $patient = $order->patient; // Assuming the order has a department relationship
+        $patient->notify(new PatientOrderStatusChanged($order, $orderStatus));
+
         return redirect()->back()->with('success', 'Order status updated successfully.');
     }
 
@@ -180,6 +186,10 @@ class DepartmentController extends Controller
     foreach ($emergencyRoomUsers as $user) {
         $user->notify(new EROrderStatusChanged($order, $orderStatus));
     }
+
+    // Notify the patient user
+    $patient = $order->patient; // Assuming the order has a department relationship
+    $patient->notify(new PatientEROrderStatusChanged($order, $orderStatus));
 
     return redirect()->back()->with('success', 'Emergency Room Order status updated and notified successfully.');
 }

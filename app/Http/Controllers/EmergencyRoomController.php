@@ -94,7 +94,7 @@ class EmergencyRoomController extends Controller
         return view('emergencyroom.ScanQR', compact('eroom', 'latestNotifications', 'olderNotifications'));
     }
 
-    public function Details($id)
+    public function Details($id, $notification_id = null)
     { 
         $eroom = Auth::guard('eroom')->user();
         // Retrieve the patient using the provided ID
@@ -106,6 +106,19 @@ class EmergencyRoomController extends Controller
         // Check if the patient exists
         if (!$patient) {
             return redirect()->back()->withErrors(['message' => 'Patient not found.']);
+        }
+
+        $notification = auth('eroom')->user()->notifications()->find($notification_id);
+        // Check if the notification exists and if it has not been read
+        if ($notification) {
+            if (!$notification->read_at) {
+                $notification->markAsRead();
+                \Log::info('Notification marked as read', ['notification_id' => $notification_id]);
+            } else {
+                \Log::info('Notification was already read', ['notification_id' => $notification_id]);
+            }
+        } else {
+            \Log::info('Notification not found', ['notification_id' => $notification_id]);
         }
 
         // Pass the patient data to the view

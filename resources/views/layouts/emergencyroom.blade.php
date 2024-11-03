@@ -50,8 +50,8 @@
             
             <ul class="ml-auto flex items-center">    
                 <!-- Notification Bell Icon -->
-                <li class="relative ml-3">
-                    <button type="button" onclick="toggleNotifications()" class="relative text-gray-600">
+                <li class="relative ml-3 dropdown">
+                    <button type="button" class="dropdown-toggle relative text-gray-600">
                         <i class="ri-notification-3-line text-xl"></i>
                         @php
                             $user = auth()->guard('eroom')->user();
@@ -66,32 +66,49 @@
                     </button>
 
                     <!-- Notifications Dropdown -->
-                    <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg max-h-80 overflow-y-auto">
+                    <div id="notificationDropdown" class="dropdown-menu hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg max-h-80 overflow-y-auto">
                         <ul id="latestNotifications">
                             @foreach($latestNotifications as $notification)
-                                <li class="p-2 border-b text-sm {{ $notification->read_at ? 'text-gray-500' : 'font-semibold text-black' }}">
-                                    <a href="{{ route('markNotificationAsReadER', $notification->id) }}" class="block hover:bg-gray-100 p-2 rounded-md flex items-center">
-                                        <!-- Blue circle icon for unread notifications -->
+                            <li class="p-2 border-b text-sm {{ $notification->read_at ? 'text-gray-500' : 'font-semibold text-black' }}">
+                                @if(isset($notification->data['url']))
+                                    <a href="{{ $notification->data['url'] }}" class="block hover:bg-gray-100 p-2 rounded-md flex items-center">
                                         @if(!$notification->read_at)
                                             <i class="ri-circle-fill text-blue-500 mr-2"></i>
                                         @endif
                                         {{ $notification->data['message'] }}
                                     </a>
-                                </li>
+                                @else
+                                    <span class="block p-2 rounded-md flex items-center">
+                                        @if(!$notification->read_at)
+                                            <i class="ri-circle-fill text-blue-500 mr-2"></i>
+                                        @endif
+                                        {{ $notification->data['message'] }}
+                                    </span>
+                                @endif
+                            </li>
                             @endforeach
                         </ul>
 
                         <!-- Hidden Section for Older Notifications -->
                         <ul id="olderNotifications" class="hidden">
                             @foreach($olderNotifications as $notification)
-                                <li class="p-2 border-b text-sm {{ $notification->read_at ? 'text-gray-500' : 'font-semibold text-black' }}">
-                                    <a href="{{ route('markNotificationAsReadER', $notification->id) }}" class="block hover:bg-gray-100 p-2 rounded-md flex items-center">
+                            <li class="p-2 border-b text-sm {{ $notification->read_at ? 'text-gray-500' : 'font-semibold text-black' }}">
+                                @if(isset($notification->data['url']))
+                                    <a href="{{ $notification->data['url'] }}" class="block hover:bg-gray-100 p-2 rounded-md flex items-center">
                                         @if(!$notification->read_at)
                                             <i class="ri-circle-fill text-blue-500 mr-2"></i>
                                         @endif
                                         {{ $notification->data['message'] }}
                                     </a>
-                                </li>
+                                @else
+                                    <span class="block p-2 rounded-md flex items-center">
+                                        @if(!$notification->read_at)
+                                            <i class="ri-circle-fill text-blue-500 mr-2"></i>
+                                        @endif
+                                        {{ $notification->data['message'] }}
+                                    </span>
+                                @endif
+                            </li>
                             @endforeach
                         </ul>
 

@@ -149,7 +149,7 @@ Route::middleware('doctor')->group(function (){
     Route::get('doctor/AddPlan/{id}', [DoctorController::class, 'AddPlan'])->name('doctor_addplan');
     Route::get('doctor/AddOrder/{id}', [DoctorController::class, 'AddOrder'])->name('doctor_addorder');
     Route::get('doctor/DetailsPatient/{id}', [DoctorController::class, 'Details'])->name('doctor_detailspatient');
-    Route::get('doctor/PatientRecord/{id}', [DoctorController::class, 'PatientRecord'])->name('doctor_patientrecord');
+    Route::get('doctor/PatientRecord/{id}/{notification_id?}', [DoctorController::class, 'PatientRecord'])->name('doctor_patientrecord');
     Route::get('doctor/Record/{id}', [DoctorController::class, 'Record'])->name('doctor_record');
     Route::get('doctor/treatmentplanpage/{id}', [DoctorController::class, 'TreatmentPlanPage'])->name('doctor_treatmentplanpage');
     Route::get('doctor/orderpage/{id}', [DoctorController::class, 'OrderPage'])->name('doctor_orderpage');
@@ -253,7 +253,7 @@ Route::middleware('patient')->group(function (){
     Route::get('patient/profile/{id}/sessions', [PatientController::class, 'showSessions'])->name('patient_sessions');
 
     Route::get('patient/DetailsPatient/{id}', [PatientController::class, 'Details'])->name('patient_detailspatient');
-    Route::get('patient/PatientRecord/{id}', [PatientController::class, 'PatientRecord'])->name('patient_patientrecord');
+    Route::get('patient/PatientRecord/{id}/{notification_id?}', [PatientController::class, 'PatientRecord'])->name('patient_patientrecord');
     Route::get('patient/Record/{id}', [PatientController::class, 'Record'])->name('patient_record');
     Route::get('patient/treatmentplanpage/{id}', [PatientController::class, 'TreatmentPlanPage'])->name('patient_treatmentplanpage');
     Route::get('patient/orderpage/{id}', [PatientController::class, 'OrderPage'])->name('patient_orderpage');
@@ -317,7 +317,7 @@ Route::middleware('patient')->group(function (){
         Route::post('emergencyroom/order/{id}/update-status', [EmergencyRoomController::class, 'updateOrderStatus'])->name('emergencyroom.updateOrderStatus');
         Route::get('emergencyroom/doctors/{id}/order', [EmergencyRoomController::class, 'showOrder'])->name('emergencyroom_order');
         Route::get('emergencyroom/orderpage/{id}', [EmergencyRoomController::class, 'OrderPage'])->name('emergencyroom_orderpage');
-        Route::get('emergencyroom/doctors/{id}/profile', [EmergencyRoomController::class, 'Details'])->name('emergencyroom_patients_profile');
+        Route::get('emergencyroom/doctors/{id}/profile/{notification_id?}', [EmergencyRoomController::class, 'Details'])->name('emergencyroom_patients_profile');
        
         ////////// qr code
         Route::get('/emergencyroom/order/qr-code/{patientRecordId}', [QrCodeController::class, 'showerOrder']);
@@ -334,6 +334,8 @@ Route::middleware('patient')->group(function (){
     //////////// Notification
     Route::get('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('markNotificationAsRead');
     Route::get('/notifications/mark-as-read-er/{id}', [NotificationController::class, 'markAsReadER'])->name('markNotificationAsReadER');
+    Route::get('/notifications/mark-as-read-patient-er-order/{id}', [NotificationController::class, 'markAsReadPatient'])->name('markAsReadPatient');
+    Route::get('/notifications/mark-as-read-patient/{id}', [NotificationController::class, 'markAsReadPatientDoctor'])->name('markAsReadPatientDoctor');
     Route::get('/notifications', [NotificationController::class, 'allNotifications'])->name('notifications.all');
 
 

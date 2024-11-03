@@ -8,12 +8,15 @@ use App\Models\PatientRecord;
 use App\Models\Record;
 use App\Models\Doctor;
 use App\Models\Department;
+use App\Models\EmergencyRoom;
 use App\Models\Nurse;
 use App\Models\TreatmentPlan;
 use App\Models\Order;
 use App\Models\Test;
 use App\Models\OrderQRcode;
 use App\Models\AbstractQRcode;
+use App\Notifications\DoctorOrderStatusChanged;
+use App\Notifications\DoctorEROrderStatusChanged;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -64,22 +67,30 @@ class DoctorController extends Controller
             
         // Specify the 'doctor' guard to get the logged-in doctor
         $doctor = auth()->guard('doctor')->user(); // Ensure 'doctor' is the correct guard for doctor
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
         // Get all patient records assigned to this doctor
         $patientRecords = $doctor->patientRecords()->with('patient')->get()->unique('patient_id');
 
-        return view('doctor.treatmentPlan', compact('patientRecords', 'doctor'));
+        return view('doctor.treatmentPlan', compact('patientRecords', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function medicalOrder(){
         
         // Specify the 'doctor' guard to get the logged-in doctor
         $doctor = auth()->guard('doctor')->user(); // Ensure 'doctor' is the correct guard for doctor
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
 
         // Get all patient records assigned to this doctor
         $patientRecords = $doctor->patientRecords()->with('patient')->get()->unique('patient_id');
 
-        return view('doctor.medicalOrder', compact('patientRecords', 'doctor'));
+        return view('doctor.medicalOrder', compact('patientRecords', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function AddPlan($id)
@@ -88,6 +99,11 @@ class DoctorController extends Controller
         // Retrieve the patient using the provided ID
         $patient = Patient::with('patientrecord')->find($id);
 
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
         // Check if the patient exists
         if (!$patient) {
             return redirect()->back()->withErrors(['message' => 'Patient not found.']);
@@ -95,12 +111,17 @@ class DoctorController extends Controller
 
 
             // Pass the patient data to the view
-            return view('doctor.AddPlan', compact('patient', 'doctor'));
+            return view('doctor.AddPlan', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function AddOrder($id)
         {
         $doctor = auth()->guard('doctor')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
         // Retrieve the patient using the provided ID
         $patient = Patient::with('patientrecord')->find($id);
 
@@ -111,13 +132,18 @@ class DoctorController extends Controller
 
 
             // Pass the patient data to the view
-            return view('doctor.AddOrder', compact('patient', 'doctor'));
+            return view('doctor.AddOrder', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function Details($id)
         {
         $doctor = auth()->guard('doctor')->user();
         // Retrieve the patient using the provided ID
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
         $patient = Patient::with('patientrecord')->find($id);
 
         // Check if the patient exists
@@ -126,57 +152,95 @@ class DoctorController extends Controller
         }
 
         // Pass the patient data to the view
-        return view('doctor.Details', compact('patient', 'doctor'));
+        return view('doctor.Details', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
-    public function PatientRecord($id)
+    public function PatientRecord($id, $notification_id = null)
         {
         $doctor = auth()->guard('doctor')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
+        $notification = auth('doctor')->user()->notifications()->find($notification_id);
+        // Check if the notification exists and if it has not been read
+        if ($notification) {
+            if (!$notification->read_at) {
+                $notification->markAsRead();
+                \Log::info('Notification marked as read', ['notification_id' => $notification_id]);
+            } else {
+                \Log::info('Notification was already read', ['notification_id' => $notification_id]);
+            }
+        } else {
+            \Log::info('Notification not found', ['notification_id' => $notification_id]);
+        }
+
         // Retrieve the patient using the provided ID
         $patient = PatientRecord::with(['profile', 'vital', 'admission', 'test', 'patient', 'record', 'qrcode', 'treatment_plan', 'order'])->find($id);
         
 
         // Pass the patient data to the view
-        return view('doctor.PatientRecord', compact('patient', 'doctor'));
+        return view('doctor.PatientRecord', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function Record($id)
         {
         $doctor = auth()->guard('doctor')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
         // Retrieve the patient using the provided ID
         $patient = Record::with(['vital', 'test', 'patient', 'patientRecord', 'physical_assessment', 'record_qrcode'])->find($id);
         
 
         // Pass the patient data to the view
-        return view('doctor.record', compact('patient', 'doctor'));
+        return view('doctor.record', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function TreatmentPlanPage($id)
         {
         $doctor = auth()->guard('doctor')->user();
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
         // Retrieve the patient using the provided ID
         $patient = TreatmentPlan::with(['test', 'patientRecord'])->find($id);
         
 
         // Pass the patient data to the view
-        return view('doctor.TreatmentPlanPage', compact('patient', 'doctor'));
+        return view('doctor.TreatmentPlanPage', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function OrderPage($id)
         {
-            $doctor = auth()->guard('doctor')->user();
+        $doctor = auth()->guard('doctor')->user();
         // Retrieve the patient using the provided ID
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
         $patient = Order::with(['patientRecord', 'order_qrcode'])->find($id);
         
 
         // Pass the patient data to the view
-        return view('doctor.OrderPage', compact('patient', 'doctor'));
+        return view('doctor.OrderPage', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function AddTreatment($id)
         {
             $doctor = auth()->guard('doctor')->user();
             // Retrieve the patient using the provided ID
+            // Fetch the latest 5 notifications
+            $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+            // Count older notifications
+            $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
             $patientRecord = PatientRecord::find($id);
 
             $doctors = Doctor::all(); // Retrieve all doctors
@@ -188,12 +252,17 @@ class DoctorController extends Controller
             }
 
             // Pass the patient data to the view
-            return view('doctor.AddTreatment', compact('patientRecord', 'doctors', 'nurses', 'doctor'));
+            return view('doctor.AddTreatment', compact('patientRecord', 'doctors', 'nurses', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function AddMedicalOrder($id)
         {
             $doctor = auth()->guard('doctor')->user();
+            // Fetch the latest 5 notifications
+            $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+            // Count older notifications
+            $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
             // Retrieve the patient using the provided ID
             $patientRecord = PatientRecord::find($id);
             $departments = Department::all();
@@ -206,7 +275,7 @@ class DoctorController extends Controller
             }
 
             // Pass the patient data to the view
-            return view('doctor.AddMedicalOrder', compact('patientRecord', 'doctors', 'nurses', 'doctor', 'departments'));
+            return view('doctor.AddMedicalOrder', compact('patientRecord', 'doctors', 'nurses', 'doctor', 'departments', 'latestNotifications', 'olderNotifications'));
         }
 
     public function updateOrderStatus(Request $request, $id)
@@ -217,7 +286,14 @@ class DoctorController extends Controller
             // Update the status of PatientRecord
             $record->status = $request->input('status');
             $record->save();
-        
+            $recordStatus = $record->status;
+
+            // Retrieve all doctors and notify each one
+            $erooms = EmergencyRoom::all(); // Fetch all Emergency Room
+            foreach ($erooms as $eroom) {
+                $eroom->notify(new DoctorEROrderStatusChanged($record, $recordStatus));
+            }
+            
             // Assuming ErOrder has a relationship with PatientRecord,
             // update the status of the related ErOrder
             if ($record->er_order) {  // Adjust this line if relationship is different
@@ -231,6 +307,10 @@ class DoctorController extends Controller
                 // Only update the status if it's not already 'admitted'
                 $patient->status = $request->input('status');
                 $patient->save();
+                $patientStatus = $patient->status;
+
+                // Assuming the order has a department relationship
+                $patient->notify(new DoctorOrderStatusChanged($patient, $patientStatus));
             }
         
             return redirect()->back()->with('success', 'Admission Status updated successfully for both PatientRecord and ER Order.');
@@ -240,6 +320,11 @@ class DoctorController extends Controller
     public function dischargeDetails($id)
         {
             $doctor = auth()->guard('doctor')->user();
+            // Fetch the latest 5 notifications
+            $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+            // Count older notifications
+            $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
             // Retrieve the patient using the provided ID
             $patient = Patient::with('patientrecord')->find($id);
 
@@ -249,7 +334,7 @@ class DoctorController extends Controller
             }
 
             // Pass the patient data to the view
-            return view('doctor.dischargeDetails', compact('patient', 'doctor'));
+            return view('doctor.dischargeDetails', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
     public function discharge($id)
@@ -257,6 +342,19 @@ class DoctorController extends Controller
             $patient = PatientRecord::findOrFail($id);
             $patient->status = 'discharged';  // Update status to discharged
             $patient->save();
+
+            $patientID = $patient->patient_id;
+            $patientId = Patient::find($patientID);
+            // Check if the patient has any records with a status other than 'discharged'
+            $hasActiveRecords = PatientRecord::where('patient_id', $patientId->id)
+            ->where('status', '!=', 'discharged')
+            ->exists();  // Check if any such records exist
+
+            if (!$hasActiveRecords) {
+                // Update the patient's status to 'discharged'
+                $patientId->status = 'discharged';
+                $patientId->save();
+            }
 
             if ($patient->er_order) {  // Adjust this line if relationship is different
                 $patient->er_order->status = 'discharged';

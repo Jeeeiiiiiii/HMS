@@ -24,4 +24,22 @@ class NotificationController extends Controller
         return back();
     }
 
+    public function markAsReadPatient($id)
+    {
+        $notification = auth('patient')->user()->notifications()->find($id);
+        if ($notification && !$notification->read_at) {
+            $notification->markAsRead();
+        }
+        return back();
+    }
+
+    public function markAsReadPatientDoctor($id)
+    {
+        $notification = auth('patient')->user()->notifications()->find($id);
+        if ($notification && !$notification->read_at) {
+            $notification->markAsRead();
+        }
+        return back();
+    }
+
 }
