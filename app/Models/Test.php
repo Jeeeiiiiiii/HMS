@@ -10,10 +10,10 @@ class Test extends Model
 {
     protected $fillable = [
         'patient_id',
-        'initial_test',
+        'hpi',
         'note',
         'medication',
-        'lab_test',
+        'chief_complaint',
         'diagnose',
     ];
 

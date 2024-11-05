@@ -15,10 +15,10 @@
                             <!-- Progress Bar -->
                             @php
                                 // Define the steps for the progress bar
-                                $steps = ['Triage', 'ER', 'Lab', 'Admission'];
+                                $steps = ['Triage', 'not admitted', 'Lab', 'asd'];
                                 
                                 // Determine the current step based on status
-                                $currentStep = array_search($admission->status, $steps) + 1;
+                                $currentStep = array_search($admission->step_status, $steps) + 1;
                                 $totalSteps = count($steps);
                             @endphp
 
@@ -29,7 +29,7 @@
                                     <div class="flex items-center justify-between">
                                         <!-- Step Circle -->
                                         <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 z-10
-                                            {{ $index + 1 <= $currentStep ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-300 bg-white' }}">
+                                            {{ $index + 1 <= $currentStep ? 'bg-green-600 border-green-600 text-white' : 'border-gray-300 bg-white' }}">
                                             @if ($index + 1 < $currentStep)
                                                 <Check className="w-6 h-6 text-white" />
                                             @else
@@ -45,7 +45,7 @@
                                     <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 z-10
                                         {{ $index + 1 <= $currentStep ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-300 bg-white' }}">
                                         @if ($index + 1 < $currentStep)
-                                            <Check className="w-6 h-6 text-white" />
+                                            <span class="text-sm font-medium">{{ $index + 1 }}</span>
                                         @else
                                             <span class="text-sm font-medium">{{ $index + 1 }}</span>
                                         @endif

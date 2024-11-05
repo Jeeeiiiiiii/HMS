@@ -123,8 +123,8 @@
                         </div>
                         <div class="p-4 space-y-6">
                             <div>
-                                <p class="text-sm font-medium text-gray-500">Initial Test</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->initial_test ?? 'N/A' }}</p>
+                                <p class="text-sm font-medium text-gray-500">History of Present Illness</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->hpi ?? 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Note</p>
@@ -136,7 +136,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Lab Test</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->lab_test ?? 'N/A' }}</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->chief_complaint ?? 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Diagnosis</p>

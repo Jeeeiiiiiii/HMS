@@ -162,10 +162,10 @@ class TriageNurseController extends Controller
 
             $test = Test::create([
                 'patient_id' => $patientId,
-                'initial_test' => $request->initial_test,
+                'hpi' => $request->hpi,
                 'note' => $request->note,
                 'medication' => $request->medication,
-                'lab_test' => $request->lab_test,
+                'chief_complaint' => $request->chief_complaint,
                 'diagnose' => $request->diagnose,
             ]);
             

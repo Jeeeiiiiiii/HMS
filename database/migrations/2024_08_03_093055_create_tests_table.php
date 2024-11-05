@@ -15,9 +15,9 @@ return new class extends Migration
         $table->id();
         $table->foreignId('patient_id')->constrained()->onDelete('cascade');
         $table->string('medication')->nullable();
-        $table->string('initial_test')->nullable();
+        $table->string('hpi')->nullable();
         $table->text('note')->nullable(); 
-        $table->string('lab_test')->nullable();
+        $table->string('chief_complaint')->nullable();
         $table->string('diagnose')->nullable();
         $table->timestamps();
     });
