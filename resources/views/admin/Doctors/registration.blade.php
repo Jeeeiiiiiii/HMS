@@ -16,7 +16,7 @@
             <input type="hidden" name="token" value="{{ $token }}">
             
             <div id="step1" class="step">
-                <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Doctor Registration</div>
+                <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Admin Registration</div>
                 <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Step 1: Basic Information</div>
 
                 <div class="space-y-4">
@@ -29,29 +29,30 @@
                     </div>
 
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">E-Mail Address</label>
-                        <input type="email" id="email" name="email" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @if ($errors->has('email'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
-                        @endif
-                    </div>
-
-                    <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" id="password" name="password" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @if ($errors->has('password'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('password') }}</span>
-                        @endif
+                        <div class="relative">
+                            <input type="password" id="password" name="password" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none pr-10" required>
+                            <span onclick="togglePassword('password', 'passwordIcon')" class="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                                <i id="passwordIcon" class="ri-eye-off-line"></i>
+                            </span>
+                        </div>
+                        <span id="passwordError" class="text-red-500 text-sm hidden">Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character.</span>
                     </div>
 
                     <div>
-                        <label for="password_confirmation" class="text-sm font-medium text-gray-700">{{ __('Confirm Password') }}</label>
-                        <input type="password" id="password_confirmation" name="password_confirmation" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required autocomplete="new-password">
-                        @error('password_confirmation')
-                            <span class="text-red-400 text-sm">{{ $message }}</span>
-                        @enderror
+                        <label for="password_confirmation" class="text-sm font-medium text-gray-700">Confirm Password</label>
+                        <div class="relative">
+                            <input type="password" id="password_confirmation" name="password_confirmation" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none pr-10" required>
+                            <span onclick="togglePassword('password_confirmation', 'confirmPasswordIcon')" class="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                                <i id="confirmPasswordIcon" class="ri-eye-off-line"></i>
+                            </span>
+                        </div>
+                        <span id="confirm-error" class="text-red-500 text-sm hidden">Passwords do not match.</span>
                     </div>
+                </div>
 
+                <div class="bg-blue-100 text-blue-800 p-4 rounded-md mt-4">
+                    <p class="text-sm">Note: The new password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character (@$!%*?&).</p>
                 </div>
 
                 <div class="flex justify-end mt-6">
@@ -63,13 +64,6 @@
                 <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Step 2: Personal Information</div>
 
                 <div class="space-y-4">
-                    <div>
-                        <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
-                        <input type="number" id="age" name="age" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @if ($errors->has('age'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('age') }}</span>
-                        @endif
-                    </div>
 
                     <div>
                         <label for="specialization" class="block text-sm font-medium text-gray-700">Specialization</label>
@@ -110,7 +104,8 @@
                     
                     <div>
                         <label for="telephone_no" class="block text-sm font-medium text-gray-700">Telephone No.</label>
-                        <input type="tel" id="telephone_no" name="telephone_no" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="tel" id="telephone_no" name="telephone_no" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required placeholder="e.g. 09191234567">
+                        <span id="phoneError" class="text-red-500 text-sm hidden">Invalid phone number format.</span>
                         @if ($errors->has('telephone_no'))
                             <span class="text-red-500 text-sm">{{ $errors->first('telephone_no') }}</span>
                         @endif
@@ -170,10 +165,74 @@ document.addEventListener('DOMContentLoaded', function () {
     const step3 = document.getElementById('step3');
     const progressBar = document.getElementById('progress-bar');
 
+    // Define password requirements using a regular expression
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const telephoneRegex = /^09\d{9}$/;
+
+    function validateStep(step) {
+        let valid = true;
+        const inputs = step.querySelectorAll('input[required], select[required]');
+        
+        inputs.forEach(input => {
+            if (!input.value) {
+                input.classList.add('border-red-400'); // Highlight input with red border if invalid
+                valid = false;
+            } else {
+                input.classList.remove('border-red-400');
+            }
+
+            // Additional validation for password field in Step 1
+            if (input.id === 'password') {
+                if (!passwordRegex.test(input.value)) {
+                    input.classList.add('border-red-400');
+                    document.getElementById('passwordError').classList.remove('hidden');
+                    valid = false;
+                } else {
+                    input.classList.remove('border-red-400');
+                    document.getElementById('passwordError').classList.add('hidden');
+                }
+            }
+
+            // Validation for password confirmation
+            if (input.id === 'password_confirmation') {
+                const password = document.getElementById('password').value;
+                const confirmPassword = input.value;
+
+                if (password !== confirmPassword) {
+                    input.classList.add('border-red-400');
+                    document.getElementById('confirm-error').classList.remove('hidden');
+                    valid = false;
+                } else {
+                    input.classList.remove('border-red-400');
+                    document.getElementById('confirm-error').classList.add('hidden');
+                }
+            }
+
+            // Additional validation for telephone field
+            if (input.id === 'telephone_no') {
+                const errorSpan = document.getElementById('phoneError'); // Reference to the phone error span
+                if (!telephoneRegex.test(input.value)) {
+                    input.classList.add('border-red-400');
+                    errorSpan.classList.remove('hidden'); // Show custom error message
+                    valid = false;
+                } else {
+                    input.classList.remove('border-red-400');
+                    errorSpan.classList.add('hidden'); // Hide custom error message if valid
+                }
+            }
+        });
+        
+        return valid;
+    }
+
     document.getElementById('next1').addEventListener('click', function () {
-        step1.classList.add('hidden');
-        step2.classList.remove('hidden');
-        progressBar.style.width = '66%';
+        if (validateStep(step1)) {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            progressBar.style.width = '66%';
+        } else {
+            alert('Please fill out all required fields correctly before proceeding.');
+        }
     });
 
     document.getElementById('back1').addEventListener('click', function () {
@@ -183,9 +242,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('next2').addEventListener('click', function () {
-        step2.classList.add('hidden');
-        step3.classList.remove('hidden');
-        progressBar.style.width = '100%';
+        if (validateStep(step2)) {
+            step2.classList.add('hidden');
+            step3.classList.remove('hidden');
+            progressBar.style.width = '100%';
+        } else {
+            alert('Please fill out all required fields before proceeding.');
+        }
     });
 
     document.getElementById('back2').addEventListener('click', function () {
@@ -194,5 +257,18 @@ document.addEventListener('DOMContentLoaded', function () {
         progressBar.style.width = '66%';
     });
 });
+
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'ri-eye-line';
+    } else {
+        input.type = 'password';
+        icon.className = 'ri-eye-off-line';
+    }
+}
 </script>
 @endsection

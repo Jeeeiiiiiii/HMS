@@ -68,6 +68,15 @@ class AccountController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
+            // Calculate age based on birthday
+            function calculateAge($birthday) {
+                return \Carbon\Carbon::parse($birthday)->age; // Use Carbon to calculate age
+            }
+
+            // Your existing code where you create the admin profile
+            $birthday = $request->birthday; // Get the birthday from the request
+            $age = calculateAge($birthday); // Calculate the age based on the birthday
+
             // Log after successfully creating the user
             Log::info('Admin user created successfully with ID: ' . $user->id); // Debug point 2
 
@@ -76,7 +85,7 @@ class AccountController extends Controller
             AdminProfile::create([
                 'admin_id' => $user->id, // Associate the profile with the admin
                 'name' => $request->name,
-                'age' => $request->age,
+                'age' => $age, // Use the calculated age
                 'birthday' => $request->birthday,
                 'birthplace' => $request->birthplace,
                 'civil_status' => $request->civil_status,
@@ -275,7 +284,7 @@ class AccountController extends Controller
 
     // Create the Doctor record
     $doctor = Doctor::create([
-        'email' => $request->email,
+        'email' => $temporaryUser->email,
         'password' => Hash::make($request->password),
         'name' => $request->name,
         // ... other user fields
@@ -336,7 +345,7 @@ class AccountController extends Controller
 
     // Create the Patient record
     $patient = Patient::create([
-        'email' => $request->email,
+        'email' => $temporaryUser->email,
         'password' => Hash::make($request->password),
         'name' => $request->name,
         // ... other user fields
@@ -396,7 +405,7 @@ public function nurse_final_registration(Request $request, $token)
 
         // Create the nurse
         $user = Nurse::create([
-            'email' => $request->email,
+            'email' => $temporaryUser->email,
             'password' => Hash::make($request->password),
             'name' => $request->name,
             // ... other user fields
@@ -457,7 +466,7 @@ public function nurse_final_registration(Request $request, $token)
 
         // Create the triage nurse
         $user = TriageNurse::create([
-            'email' => $request->email,
+            'email' => $temporaryUser->email,
             'password' => Hash::make($request->password),
             'name' => $request->name,
             // ... other user fields
@@ -517,7 +526,7 @@ public function nurse_final_registration(Request $request, $token)
 
         // Create the department
         $department = Department::create([
-            'email' => $request->email,
+            'email' => $temporaryUser->email,
             'password' => Hash::make($request->password),
             'department_name' => $request->department_name,
             'department_code' => $request->department_code,
@@ -569,7 +578,7 @@ public function nurse_final_registration(Request $request, $token)
 
         // Create the department
         $department = EmergencyRoom::create([
-            'email' => $request->email,
+            'email' => $temporaryUser->email,
             'password' => Hash::make($request->password),
             'department_name' => $request->department_name,
             'department_code' => $request->department_code,

@@ -29,27 +29,25 @@
                     </div>
 
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">E-Mail Address</label>
-                        <input type="email" id="email" name="email" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @if ($errors->has('email'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
-                        @endif
-                    </div>
-
-                    <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" id="password" name="password" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @if ($errors->has('password'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('password') }}</span>
-                        @endif
+                        <div class="relative">
+                            <input type="password" id="password" name="password" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none pr-10" required>
+                            <span onclick="togglePassword('password', 'passwordIcon')" class="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                                <i id="passwordIcon" class="ri-eye-off-line"></i>
+                            </span>
+                        </div>
+                        <span id="passwordError" class="text-red-500 text-sm hidden">Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character.</span>
                     </div>
 
                     <div>
-                        <label for="password_confirmation" class="text-sm font-medium text-gray-700">{{ __('Confirm Password') }}</label>
-                        <input type="password" id="password_confirmation" name="password_confirmation" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required autocomplete="new-password">
-                        @error('password_confirmation')
-                            <span class="text-red-400 text-sm">{{ $message }}</span>
-                        @enderror
+                        <label for="password_confirmation" class="text-sm font-medium text-gray-700">Confirm Password</label>
+                        <div class="relative">
+                            <input type="password" id="password_confirmation" name="password_confirmation" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none pr-10" required>
+                            <span onclick="togglePassword('password_confirmation', 'confirmPasswordIcon')" class="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                                <i id="confirmPasswordIcon" class="ri-eye-off-line"></i>
+                            </span>
+                        </div>
+                        <span id="confirm-error" class="text-red-500 text-sm hidden">Passwords do not match.</span>
                     </div>
 
                 </div>
@@ -80,8 +78,9 @@
                     </div>
                     
                     <div>
-                        <label for="phone_number" class="block text-sm font-medium text-gray-700">Phone No.</label>
-                        <input type="tel" id="phone_number" name="phone_number" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <label for="phone_number" class="block text-sm font-medium text-gray-700">Telephone No.</label>
+                        <input type="tel" id="phone_number" name="phone_number" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required placeholder="e.g. 09191234567">
+                        <span id="phoneError" class="text-red-500 text-sm hidden">Invalid phone number format.</span>
                         @if ($errors->has('phone_number'))
                             <span class="text-red-500 text-sm">{{ $errors->first('phone_number') }}</span>
                         @endif
@@ -105,16 +104,80 @@ document.addEventListener('DOMContentLoaded', function () {
     const step2 = document.getElementById('step2');
     const progressBar = document.getElementById('progress-bar');
 
+    // Define password requirements using a regular expression
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const telephoneRegex = /^09\d{9}$/;
+
+    function validateStep(step) {
+        let valid = true;
+        const inputs = step.querySelectorAll('input[required], select[required]');
+        
+        inputs.forEach(input => {
+            if (!input.value) {
+                input.classList.add('border-red-400'); // Highlight input with red border if invalid
+                valid = false;
+            } else {
+                input.classList.remove('border-red-400');
+            }
+
+            // Additional validation for password field in Step 1
+            if (input.id === 'password') {
+                if (!passwordRegex.test(input.value)) {
+                    input.classList.add('border-red-400');
+                    document.getElementById('passwordError').classList.remove('hidden');
+                    valid = false;
+                } else {
+                    input.classList.remove('border-red-400');
+                    document.getElementById('passwordError').classList.add('hidden');
+                }
+            }
+
+            // Validation for password confirmation
+            if (input.id === 'password_confirmation') {
+                const password = document.getElementById('password').value;
+                const confirmPassword = input.value;
+
+                if (password !== confirmPassword) {
+                    input.classList.add('border-red-400');
+                    document.getElementById('confirm-error').classList.remove('hidden');
+                    valid = false;
+                } else {
+                    input.classList.remove('border-red-400');
+                    document.getElementById('confirm-error').classList.add('hidden');
+                }
+            }
+
+            // Additional validation for telephone field
+            if (input.id === 'telephone_no') {
+                const errorSpan = document.getElementById('phoneError'); // Reference to the phone error span
+                if (!telephoneRegex.test(input.value)) {
+                    input.classList.add('border-red-400');
+                    errorSpan.classList.remove('hidden'); // Show custom error message
+                    valid = false;
+                } else {
+                    input.classList.remove('border-red-400');
+                    errorSpan.classList.add('hidden'); // Hide custom error message if valid
+                }
+            }
+        });
+        
+        return valid;
+    }
+
     document.getElementById('next1').addEventListener('click', function () {
-        step1.classList.add('hidden');
-        step2.classList.remove('hidden');
-        progressBar.style.width = '100%';
+        if (validateStep(step1)) {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            progressBar.style.width = '100%'; // Set progress to 100% when moving to step 2
+        } else {
+            alert('Please fill out all required fields correctly before proceeding.');
+        }
     });
 
     document.getElementById('back1').addEventListener('click', function () {
         step1.classList.remove('hidden');
         step2.classList.add('hidden');
-        progressBar.style.width = '50%';
+        progressBar.style.width = '50%'; // Adjust progress for going back
     });
 });
 </script>
