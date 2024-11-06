@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Log;
 
 class PatientController extends Controller
 {
-    public function dashboard(){
+    public function dashboard($notification_id = null){
     // Retrieve the currently authenticated patient
     $patient = Auth::guard('patient')->user();
     $sessions = $patient->sessions()->orderBy('last_active_at', 'desc')->get();
@@ -27,6 +27,19 @@ class PatientController extends Controller
     $latestNotifications = auth('patient')->user()->notifications()->latest()->take(5)->get();
     // Count older notifications
     $olderNotifications = auth('patient')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
+    $notification = auth('patient')->user()->notifications()->find($notification_id);
+    // Check if the notification exists and if it has not been read
+    if ($notification) {
+        if (!$notification->read_at) {
+            $notification->markAsRead();
+            \Log::info('Notification marked as read', ['notification_id' => $notification_id]);
+        } else {
+            \Log::info('Notification was already read', ['notification_id' => $notification_id]);
+        }
+    } else {
+        \Log::info('Notification not found', ['notification_id' => $notification_id]);
+    }
 
 
      // Fetch the latest medical orders, rounds, and admission information

@@ -1,4 +1,4 @@
-@extends('layouts.DepartmentProfile')
+@extends('layouts.EmergencyRoomProfile')
 
 @section('title', 'Registration')
 

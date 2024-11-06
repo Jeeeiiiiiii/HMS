@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\Nurse;
 use App\Models\TriageNurse;
 use App\Models\Patient;
+use App\Models\PatientRecord;
 use App\Models\Department;
 use App\Models\EmergencyRoom;
 use App\Models\Order;
@@ -180,6 +181,10 @@ class DepartmentController extends Controller
     $order->order_status = $request->input('status');
     $order->save();
     $orderStatus = $order->order_status;
+
+    $record = PatientRecord::findOrFail($order->patient_record_id);
+    $record->step_status = "Lab";
+    $record->save();
 
     // Using the eroom guard to notify EmergencyRoom users
     $emergencyRoomUsers = EmergencyRoom::where('id', $order->emergency_room_id)->get();

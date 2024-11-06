@@ -210,7 +210,7 @@ class EmergencyRoomController extends Controller
 
         DB::commit();
 
-        $patientRecord->step_status = "Lab";
+        $patientRecord->step_status = "ER";
         $patientRecord->save();
 
         // Fetch the patient record to generate QR code

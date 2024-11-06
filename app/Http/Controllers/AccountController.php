@@ -277,10 +277,18 @@ class AccountController extends Controller
     // Validate the input
     Validator::make($request->all(), [
         'name' => 'required',
-        'email' => 'required|email',
         'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
         'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
     ])->validate();
+
+    // Calculate age based on birthday
+    function calculateAge($birthday) {
+        return \Carbon\Carbon::parse($birthday)->age; // Use Carbon to calculate age
+    }
+
+    // Your existing code where you create the admin profile
+    $birthday = $request->birthday; // Get the birthday from the request
+    $age = calculateAge($birthday); // Calculate the age based on the birthday
 
     // Create the Doctor record
     $doctor = Doctor::create([
@@ -294,7 +302,7 @@ class AccountController extends Controller
     DoctorProfile::create([
         'doctor_id' => $doctor->id, // Associate the profile with the doctor
         'name' => $request->name,
-        'age' => $request->age,
+        'age' => $age,
         'birthday' => $request->birthday,
         'birthplace' => $request->birthplace,
         'specialization' => $request->specialization,
@@ -338,10 +346,18 @@ class AccountController extends Controller
     // Validate the input
     Validator::make($request->all(), [
         'name' => 'required',
-        'email' => 'required|email',
         'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
         'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
     ])->validate();
+
+    // Calculate age based on birthday
+    function calculateAge($birthday) {
+        return \Carbon\Carbon::parse($birthday)->age; // Use Carbon to calculate age
+    }
+
+    // Your existing code where you create the admin profile
+    $birthday = $request->birthday; // Get the birthday from the request
+    $age = calculateAge($birthday); // Calculate the age based on the birthday
 
     // Create the Patient record
     $patient = Patient::create([
@@ -355,7 +371,7 @@ class AccountController extends Controller
     Profile::create([
         'patient_id' => $patient->id, // Associate the profile with the patient
         'name' => $request->name,
-        'age' => $request->age,
+        'age' => $age,
         'birthday' => $request->birthday,
         'birthplace' => $request->birthplace,
         'civil_status' => $request->civil_status,
@@ -398,10 +414,18 @@ public function nurse_final_registration(Request $request, $token)
         // Validate the input
         Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
             'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
             'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
         ])->validate();
+
+        // Calculate age based on birthday
+        function calculateAge($birthday) {
+            return \Carbon\Carbon::parse($birthday)->age; // Use Carbon to calculate age
+        }
+
+        // Your existing code where you create the admin profile
+        $birthday = $request->birthday; // Get the birthday from the request
+        $age = calculateAge($birthday); // Calculate the age based on the birthday
 
         // Create the nurse
         $user = Nurse::create([
@@ -415,7 +439,7 @@ public function nurse_final_registration(Request $request, $token)
         NurseProfile::create([
             'nurse_id' => $user->id, // Associate the profile with the nurse
             'name' => $request->name,
-            'age' => $request->age,
+            'age' => $age,
             'birthday' => $request->birthday,
             'birthplace' => $request->birthplace,
             'civil_status' => $request->civil_status,
@@ -460,9 +484,17 @@ public function nurse_final_registration(Request $request, $token)
         // Validate the input
         Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
             'password' => ['required','confirmed','min:8','regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
         ])->validate();
+
+        // Calculate age based on birthday
+        function calculateAge($birthday) {
+            return \Carbon\Carbon::parse($birthday)->age; // Use Carbon to calculate age
+        }
+
+        // Your existing code where you create the admin profile
+        $birthday = $request->birthday; // Get the birthday from the request
+        $age = calculateAge($birthday); // Calculate the age based on the birthday
 
         // Create the triage nurse
         $user = TriageNurse::create([
@@ -476,7 +508,7 @@ public function nurse_final_registration(Request $request, $token)
         TriageNurseProfile::create([
             'triage_nurse_id' => $user->id,
             'name' => $request->name,
-            'age' => $request->age,
+            'age' => $age,
             'birthday' => $request->birthday,
             'birthplace' => $request->birthplace,
             'civil_status' => $request->civil_status,
@@ -519,7 +551,6 @@ public function nurse_final_registration(Request $request, $token)
         // Validate the input
         Validator::make($request->all(), [
             'department_name' => 'required',
-            'email' => 'required|email',
             'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
             'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
         ])->validate();
@@ -571,7 +602,6 @@ public function nurse_final_registration(Request $request, $token)
         // Validate the input
         Validator::make($request->all(), [
             'department_name' => 'required',
-            'email' => 'required|email',
             'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
             'password.regex' => 'The password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
         ])->validate();

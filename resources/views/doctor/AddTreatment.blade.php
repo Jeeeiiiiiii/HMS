@@ -29,9 +29,9 @@
                 </div>
                 
                 <div class="mb-4">
-                    <label for="initial_test" class="block text-sm font-medium text-gray-700">Initial Test</label>
-                    <input type="text" id="initial_test" name="initial_test" class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                    @error('initial_test')
+                    <label for="hpi" class="block text-sm font-medium text-gray-700">History of Present Illness</label>
+                    <input type="text" id="hpi" name="hpi" class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-500" required>
+                    @error('hpi')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
@@ -53,9 +53,9 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="lab_test" class="block text-sm font-medium text-gray-700">Lab Test</label>
-                    <input type="text" id="lab_test" name="lab_test" class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                    @error('lab_test')
+                    <label for="chief_complaint" class="block text-sm font-medium text-gray-700">Chief Complaint</label>
+                    <input type="text" id="chief_complaint" name="chief_complaint" class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-500" required>
+                    @error('chief_complaint')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>

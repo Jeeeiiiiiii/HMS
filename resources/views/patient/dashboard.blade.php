@@ -8,7 +8,7 @@
         <div class="grid grid-cols-1 gap-6">
             <!-- Latest Medical Orders Section with Progress Bar -->
             <div class="bg-white border border-gray-200 shadow-lg p-4 rounded-lg">
-                <h2 class="text-lg font-semibold text-gray-800 mb-3">Admission: {{ $admission->reason_for_admission ?? 'N/A' }} Status</h2>
+                <h2 class="text-lg font-semibold text-gray-800 mb-3">Admission Status: {{ $admission->reason_for_admission ?? 'N/A' }}</h2>
                 <ul class="space-y-4">
                     @if($admission)
                         <li class="flex flex-col p-4 bg-gray-50 rounded-md">
@@ -184,27 +184,45 @@
                     </div>
 
                     <!-- Button to open the QR Code modal -->
-                    <button id="myBtn{{ $erorder->id }}" data-patient-record-id="{{ $erorder->id }}" class="mt-2 py-1 px-3 border border-gray-400 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none">
+                    <button 
+                        id="myBtn{{ $erorder ? $erorder->id : '' }}" data-patient-record-id="{{ $erorder ? $erorder->id : '' }}" class="mt-2 py-1 px-3 border border-gray-400 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none">
                         View QR Code
                     </button>
                     
                     <!-- The Modal -->
-                    <div id="myModal{{ $erorder->id }}" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 overflow-auto">
-                        <div class="relative bg-white rounded-lg mx-auto mt-20 p-6 w-11/12 md:w-1/3">
-                            <div class="flex items-center justify-between border-b border-gray-200 pb-2 mb-4">
-                                <h2 class="text-xl font-semibold text-gray-800">QR Code</h2>
-                                <button class="text-gray-600 hover:text-gray-800 close" id="closeBtn{{ $erorder->id }}">&times;</button>
-                            </div>
-                            <div class="mb-4 text-center">
-                                <p class="text-gray-600 mb-4">Scan to show details</p>
-                                <img id="qrCodeImg{{ $erorder->id }}" src="" alt="QR Code" class="mx-auto">
-                            </div>
-                            <div class="text-center">
-                                <button onclick="printQRCode('{{ $erorder->id }}')" class="py-1 px-3 border border-gray-400 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none">
-                                    Print
-                                </button>
+                    @isset($erorder)
+                        <div id="myModal{{ $erorder->id }}" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 overflow-auto">
+                            <div class="relative bg-white rounded-lg mx-auto mt-20 p-6 w-11/12 md:w-1/3">
+                                <div class="flex items-center justify-between border-b border-gray-200 pb-2 mb-4">
+                                    <h2 class="text-xl font-semibold text-gray-800">QR Code</h2>
+                                    <button class="text-gray-600 hover:text-gray-800 close" id="closeBtn{{ $erorder->id }}">&times;</button>
+                                </div>
+                                <div class="mb-4 text-center">
+                                    <p class="text-gray-600 mb-4">Scan to show details</p>
+                                    <img id="qrCodeImg{{ $erorder->id }}" src="" alt="QR Code" class="mx-auto">
+                                </div>
+                                <div class="text-center">
+                                    <button onclick="printQRCode('{{ $erorder->id }}')" class="py-1 px-3 border border-gray-400 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none">
+                                        Print
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                    @endisset
+                    <div class="bg-gray-50 rounded-md">
+                        <h3 class="font-semibold text-gray-700">Status</h3>
+                        <!-- Conditional Styling for Order Status -->
+                        @if ($erorder)
+                            @if ($erorder->order_status === 'pending')
+                                <p class="text-lg font-semibold text-yellow-400">{{ $erorder->order_status }}</p>
+                            @elseif ($erorder->order_status === 'completed')
+                                <p class="text-lg font-semibold text-green-400">{{ $erorder->order_status }}</p>
+                            @else
+                                <p class="text-lg font-semibold text-gray-400">{{ $erorder->order_status }}</p>
+                            @endif
+                        @else
+                            <p class="text-lg font-semibold text-gray-400">N/A</p>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -76,7 +76,7 @@
                                 </td>
                                 <td class="py-2 px-4 border-b border-gray-200">
                                     <div class="flex gap-2">
-                                        <a href="{{ route('emergencyroom_addorder', $patient->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-blue-300 transition duration-200">Detail</a>
+                                        <a href="{{ route('emergencyroom_addorder', $patient->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-blue-300 transition duration-200">Issue Order</a>
                                     </div>
                                 </td>
                             </tr>

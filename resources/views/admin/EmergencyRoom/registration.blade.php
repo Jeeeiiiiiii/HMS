@@ -180,5 +180,18 @@ document.addEventListener('DOMContentLoaded', function () {
         progressBar.style.width = '50%'; // Adjust progress for going back
     });
 });
+
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'ri-eye-line';
+    } else {
+        input.type = 'password';
+        icon.className = 'ri-eye-off-line';
+    }
+}
 </script>
 @endsection

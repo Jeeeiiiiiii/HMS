@@ -244,7 +244,7 @@ Route::middleware('triagenurse')->group(function (){
 /////////////////////////////////// patient
 
 Route::middleware('patient')->group(function (){
-    Route::get('patient/dashboard', [PatientController::class, 'dashboard'])->name('patient_dashboard');
+    Route::get('patient/dashboard/{notification_id?}', [PatientController::class, 'dashboard'])->name('patient_dashboard');
     Route::get('patient/profile/{id}', [PatientController::class, 'profile'])->name('patient_profile');
     Route::get('patient/profile/{id}/changepass', [PatientController::class, 'changepass'])->name('patient_changepass');
     Route::post('patient/profile/patient_submitpass', [PatientController::class, 'patient_submitpass'])->name('patient_submitpass');

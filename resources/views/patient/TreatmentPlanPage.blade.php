@@ -23,8 +23,8 @@
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Initial Test</label>
-                <p class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full">{{ $treatment->test->initial_test }}</p>
+                <label class="block text-sm font-medium text-gray-700">History of Present Illness</label>
+                <p class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full">{{ $treatment->test->hpi }}</p>
             </div>
 
             <div class="mb-4">
@@ -38,8 +38,8 @@
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Lab Test</label>
-                <p class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full">{{ $treatment->test->lab_test }}</p>
+                <label class="block text-sm font-medium text-gray-700">Chief Complaint</label>
+                <p class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full">{{ $treatment->test->chief_complaint }}</p>
             </div>
 
             <div class="mb-4">
