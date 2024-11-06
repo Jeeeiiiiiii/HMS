@@ -210,6 +210,21 @@ class DepartmentController extends Controller
     return view('department.showOrder', compact('patient', 'department'));
     }
 
+    public function showErOrder($id)
+    {
+    $department = auth()->guard('department')->user();
+    // Retrieve the patient using the provided ID
+    $patient = erOrder::find($id);
+
+    // Check if the patient exists
+    if (!$patient) {
+        return redirect()->back()->withErrors(['message' => 'Order not found.']);
+    }
+
+    // Pass the patient data to the view
+    return view('department.showErOrder', compact('patient', 'department'));
+    }
+
 
     public function showDoctorProfile($id)
     {

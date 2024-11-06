@@ -205,6 +205,9 @@ class TriageNurseController extends Controller
             
             DB::commit();
 
+            $patientRecord->step_status = "ER";
+            $patientRecord->save();
+
             // Fetch the patient record to generate QR code
             $patientRecord = PatientRecord::with(['profile', 'test', 'vital', 'admission', 'qrcode'])->findOrFail($patientRecord->id);
 

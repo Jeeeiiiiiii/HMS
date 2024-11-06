@@ -65,7 +65,7 @@
                             <td class="py-2 px-4 border-b border-gray-200">{{ \Carbon\Carbon::parse($order->order_date)->format('Y-m-d') }}</td>
                             <td class="py-2 px-4 border-b border-gray-200">
                                 <div class="flex gap-2">
-                                    <a href="{{ route('department_order', $order->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-blue-300 transition duration-200">View Details</a>
+                                    <a href="{{ route('department_erorder', $order->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-blue-300 transition duration-200">View Details</a>
                                     
                                     <!-- Form for updating order status -->
                                     <form action="{{ route('department.updateEROrderStatus', $order->id) }}" method="POST" class="flex items-center justify-center">

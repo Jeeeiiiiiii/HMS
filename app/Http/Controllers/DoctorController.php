@@ -12,6 +12,7 @@ use App\Models\EmergencyRoom;
 use App\Models\Nurse;
 use App\Models\TreatmentPlan;
 use App\Models\Order;
+use App\Models\erOrder;
 use App\Models\Test;
 use App\Models\OrderQRcode;
 use App\Models\AbstractQRcode;
@@ -184,6 +185,26 @@ class DoctorController extends Controller
         return view('doctor.PatientRecord', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
+        public function DoctorErOrder($id)
+        {
+        $doctor = auth()->guard('doctor')->user();
+        // Retrieve the patient using the provided ID
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
+        $patient = erOrder::find($id);
+
+        // Check if the patient exists
+        if (!$patient) {
+            return redirect()->back()->withErrors(['message' => 'Order not found.']);
+        }
+
+        // Pass the patient data to the view
+        return view('doctor.DoctorErOrder', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
+        }
+
     public function Record($id)
         {
         $doctor = auth()->guard('doctor')->user();
@@ -287,6 +308,16 @@ class DoctorController extends Controller
             $record->status = $request->input('status');
             $record->save();
             $recordStatus = $record->status;
+
+            // Check if the status is 'admitted', and if so, set step_status to 'Admitted'
+            if ($request->input('status') === 'admitted') {
+                $record->step_status = 'Admitted';
+            } else {
+                // You can set a default or different value for step_status if necessary
+                // For example, if the status is not 'admitted', you could leave it unchanged or set it to something else
+                $record->step_status = $request->input('status');
+            }
+            $record->save();
 
             // Retrieve all doctors and notify each one
             $erooms = EmergencyRoom::all(); // Fetch all Emergency Room

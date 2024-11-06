@@ -150,6 +150,7 @@ Route::middleware('doctor')->group(function (){
     Route::get('doctor/AddOrder/{id}', [DoctorController::class, 'AddOrder'])->name('doctor_addorder');
     Route::get('doctor/DetailsPatient/{id}', [DoctorController::class, 'Details'])->name('doctor_detailspatient');
     Route::get('doctor/PatientRecord/{id}/{notification_id?}', [DoctorController::class, 'PatientRecord'])->name('doctor_patientrecord');
+    Route::get('doctor/DoctorErOrder/{id}', [DoctorController::class, 'DoctorErOrder'])->name('doctor_erOder');
     Route::get('doctor/Record/{id}', [DoctorController::class, 'Record'])->name('doctor_record');
     Route::get('doctor/treatmentplanpage/{id}', [DoctorController::class, 'TreatmentPlanPage'])->name('doctor_treatmentplanpage');
     Route::get('doctor/orderpage/{id}', [DoctorController::class, 'OrderPage'])->name('doctor_orderpage');
@@ -285,6 +286,7 @@ Route::middleware('patient')->group(function (){
         Route::post('department/order/{id}/update-status', [DepartmentController::class, 'updateOrderStatus'])->name('department.updateOrderStatus');
         Route::post('department/er_order/{id}/update-status', [DepartmentController::class, 'updateEROrderStatus'])->name('department.updateEROrderStatus');
         Route::get('department/doctors/{id}/order', [DepartmentController::class, 'showOrder'])->name('department_order');
+        Route::get('department/doctors/{id}/erorder', [DepartmentController::class, 'showErOrder'])->name('department_erorder');
         Route::get('department/doctors/{id}/profile', [DepartmentController::class, 'showDoctorProfile'])->name('department_doctors_profile');
         Route::get('department/nurses/{id}/profile', [DepartmentController::class, 'showNurseProfile'])->name('department_nurses_profile');
         Route::get('department/triagenurse/{id}/profile', [DepartmentController::class, 'showTriageProfile'])->name('department_triage_nurses_profile');

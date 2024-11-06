@@ -15,7 +15,7 @@
                             <!-- Progress Bar -->
                             @php
                                 // Define the steps for the progress bar
-                                $steps = ['Triage', 'not admitted', 'Lab', 'asd'];
+                                $steps = ['Triage', 'ER', 'Lab', 'Admitted'];
                                 
                                 // Determine the current step based on status
                                 $currentStep = array_search($admission->step_status, $steps) + 1;

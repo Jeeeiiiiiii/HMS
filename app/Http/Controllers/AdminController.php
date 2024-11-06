@@ -52,7 +52,7 @@ class AdminController extends Controller
     public function doctorPostRegistration(Request $request): RedirectResponse
     {  
         $request->validate([
-        'email' => 'required|email',
+        'email' => 'required|email|unique:doctors,email',
     ]);
 
     $token = Str::random(32);
@@ -130,7 +130,7 @@ class AdminController extends Controller
     public function patientPostRegistration(Request $request): RedirectResponse
     {  
         $request->validate([
-        'email' => 'required|email',
+        'email' => 'required|email|unique:patients,email',
     ]);
 
     $token = Str::random(32);
@@ -203,7 +203,7 @@ class AdminController extends Controller
     public function nursePostRegistration(Request $request): RedirectResponse
     {  
         $request->validate([
-        'email' => 'required|email',
+        'email' => 'required|email|unique:nurses,email',
     ]);
 
     $token = Str::random(32);
@@ -278,7 +278,7 @@ class AdminController extends Controller
     public function triage_nursePostRegistration(Request $request): RedirectResponse
     {  
         $request->validate([
-        'email' => 'required|email',
+        'email' => 'required|email|unique:triage_nurses,email',
     ]);
 
     $token = Str::random(32);
@@ -410,7 +410,7 @@ class AdminController extends Controller
     public function departmentPostRegistration(Request $request): RedirectResponse
     {  
         $request->validate([
-        'email' => 'required|email',
+        'email' => 'required|email|unique:departments,email',
     ]);
 
     $token = Str::random(32);
@@ -659,7 +659,7 @@ class AdminController extends Controller
     public function EmergencyRoomPostRegistration(Request $request): RedirectResponse
     {  
         $request->validate([
-        'email' => 'required|email',
+        'email' => 'required|email|unique:emergency_rooms,email',
     ]);
 
     $token = Str::random(32);

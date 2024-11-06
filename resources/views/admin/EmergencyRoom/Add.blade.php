@@ -20,6 +20,9 @@
                         <button type="submit" class="ml-2 bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 font-medium text-white rounded-lg text-sm px-3 py-2">Submit</button>
                     </div>
                 </div>
+                @if ($errors->has('email'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
+                @endif
             </form>
         </div>
     </div>

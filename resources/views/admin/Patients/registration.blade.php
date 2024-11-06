@@ -16,7 +16,7 @@
             <input type="hidden" name="token" value="{{ $token }}">
             
             <div id="step1" class="step">
-                <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Admin Registration</div>
+                <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Patient Registration</div>
                 <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Step 1: Basic Information</div>
 
                 <div class="space-y-4">

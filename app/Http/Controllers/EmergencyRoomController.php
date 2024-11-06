@@ -210,6 +210,9 @@ class EmergencyRoomController extends Controller
 
         DB::commit();
 
+        $patientRecord->step_status = "Lab";
+        $patientRecord->save();
+
         // Fetch the patient record to generate QR code
         $order = erOrder::with(['patientRecord', 'order_qrcode'])->findOrFail($order->id);
 

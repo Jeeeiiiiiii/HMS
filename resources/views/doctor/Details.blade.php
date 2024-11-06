@@ -51,7 +51,7 @@
                         <thead>
                             <tr>
                                 <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Admission</th>
-                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Date of Admission</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">ER Details</th>
                                 <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Status of Admission</th>
                                 <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Action</th>
                             </tr>
@@ -65,7 +65,10 @@
                                     </a>
                                 </td>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
-                                    {{ $record->admitting_date_and_time }}
+                                    <!-- Check if er_order exists before accessing the title -->
+                                    <a href="{{ $record->er_order ? route('doctor_erOder', $record->er_order->id) : '#' }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
+                                        {{ $record->er_order ? $record->er_order->title : 'No ER Order' }}
+                                    </a>
                                 </td>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
                                     @if ($record->status === 'pending')
