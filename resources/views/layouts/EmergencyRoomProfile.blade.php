@@ -19,19 +19,19 @@
         </a>
         <ul class="mt-4">
             <li class="mb-1 group">
-                <a href="{{ route('emergencyroom_profile', $department->id) }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
+                <a href="{{ route('emergencyroom_profile', $eroom->id) }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
                     <i class="ri-home-2-line mr-3 text-lg"></i>
                     <span class="text-sm">Overview</span>
                 </a>
             </li>
             <li class="mb-1 group">
-                <a href="{{ route('emergencyroom_changepass', $department->id) }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
+                <a href="{{ route('emergencyroom_changepass', $eroom->id) }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
                     <i class="ri-lock-line mr-3 text-lg"></i>
                     <span class="text-sm">Change Password</span>
                 </a>
             </li>
             <li class="mb-1 group">
-                <a href="{{ route('emergencyroom_sessions', $department->id) }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
+                <a href="{{ route('emergencyroom_sessions', $eroom->id) }}" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md">
                     <i class="ri-calendar-line mr-3 text-lg"></i>
                     <span class="text-sm">Session</span>
                 </a>
@@ -65,7 +65,7 @@
                     </button>
                     <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
                         <li>
-                            <a href="{{ route('department_profile', $department->id) }}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                            <a href="{{ route('emergencyroom_profile', $eroom->id) }}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
                         </li>
                         <li>
                             <a href="{{ route('logout') }}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>

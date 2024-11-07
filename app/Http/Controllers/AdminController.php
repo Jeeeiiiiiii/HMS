@@ -502,7 +502,7 @@ class AdminController extends Controller
     {
         // Validate the request
         $validated = $request->validate([
-            'triage_nurse_id' => 'required|exists:nurses,id',
+            'triage_nurse_id' => 'required|exists:triage_nurses,id',
             'department_id' => 'required|exists:departments,id',
         ]);
 
