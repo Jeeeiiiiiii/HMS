@@ -15,7 +15,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
                 
                 <!-- Status Filter -->
-                <form action="{{ route('emergencyroom_dashboard') }}" method="GET" class="flex flex-col sm:flex-row w-full sm:w-auto gap-4">
+                <form action="{{ route('emergencyroom_medical_order') }}" method="GET" class="flex flex-col sm:flex-row w-full sm:w-auto gap-4">
                     <div>
                         <select name="status" class="w-full sm:w-[180px] border border-gray-300 rounded-lg p-2" onchange="this.form.submit()">
                             <option value="pending" {{ request('status', 'pending') == 'pending' ? 'selected' : '' }}>Pending</option>
