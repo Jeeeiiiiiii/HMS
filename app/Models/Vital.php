@@ -11,7 +11,8 @@ class Vital extends Model
     protected $fillable = [
         'patient_id',
         'body_temperature',
-        'blood_pressure',
+        'systolic_pressure',
+        'diastolic_pressure',
         'respiratory_rate',
         'weight',
         'height',

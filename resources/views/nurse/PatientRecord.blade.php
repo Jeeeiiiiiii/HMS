@@ -92,7 +92,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Blood Pressure</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->vital->blood_pressure ?? 'N/A' }}</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->vital->systolic_pressure ?? 'N/A' }}/{{ $patient->vital->diastolic_pressure ?? 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Respiratory Rate</p>

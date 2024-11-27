@@ -10,20 +10,25 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-    {
-        Schema::create('vitals', 
- function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('patient_id')->constrained()->onDelete('cascade'); 
-            $table->string('body_temperature'); // Adjust precision as needed
-            $table->string('blood_pressure');
-            $table->string('respiratory_rate');
-            $table->string('weight'); // Adjust precision as needed
-            $table->string('height'); // Adjust precision as needed
-            $table->string('pulse_rate');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('vitals', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('patient_id')->constrained()->onDelete('cascade');
+        
+        // Adjusted precision and scale for each field
+        $table->float('body_temperature', 4, 2); // 5 total digits, 2 after decimal
+        $table->float('systolic_pressure', 5, 2); // For the systolic value
+        $table->float('diastolic_pressure', 5, 2); // For the diastolic value
+        $table->float('respiratory_rate', 5, 2); // Precision: 5 digits (example: 30.00)
+        $table->float('weight', 5, 2);           // Precision: 6 digits (example: 250.00 kg)
+        $table->float('height', 5, 2);           // Precision: 5 digits (example: 200.00 cm)
+        $table->float('pulse_rate', 5, 2);       // Precision: 5 digits (example: 120.00 bpm)
+        
+        $table->timestamps();
+    });
+}
+
+
 
     /**
      * Reverse the migrations.

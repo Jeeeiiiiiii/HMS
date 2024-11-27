@@ -58,23 +58,35 @@
                 <div class="space-y-4">
                     <div>
                         <label for="body_temperature" class="block text-sm font-medium text-gray-700">Body Temperature</label>
-                        <input type="text" id="body_temperature" name="body_temperature" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" id="body_temperature" name="body_temperature" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <p class="text-xs text-gray-500 mt-1">Body temperature is assumed to be in degrees Celsius (°C), e.g., 36.50°C (store it as 36.50)</p>
                         @error('body_temperature')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div>
-                        <label for="blood_pressure" class="block text-sm font-medium text-gray-700">Blood Pressure</label>
-                        <input type="text" id="blood_pressure" name="blood_pressure" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @error('blood_pressure')
+                        <label for="systolic_pressure" class="block text-sm font-medium text-gray-700">Systolic Pressure</label>
+                        <input type="number" id="systolic_pressure" name="systolic_pressure" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <p class="text-xs text-gray-500 mt-1">Systolic pressure is assumed to be in millimeters of mercury (mmHg), e.g., 120/80 mmHg (store it as 120.80)</p>
+                        @error('systolic_pressure')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="diastolic_pressure" class="block text-sm font-medium text-gray-700">Diastolic Pressure</label>
+                        <input type="number" id="diastolic_pressure" name="diastolic_pressure" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <p class="text-xs text-gray-500 mt-1">Diastolic pressure is assumed to be in millimeters of mercury (mmHg), e.g., 120/80 mmHg (store it as 120.80)</p>
+                        @error('diastolic_pressure')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div>
                         <label for="respiratory_rate" class="block text-sm font-medium text-gray-700">Respiratory Rate</label>
-                        <input type="text" id="respiratory_rate" name="respiratory_rate" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" id="respiratory_rate" name="respiratory_rate" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <p class="text-xs text-gray-500 mt-1">Respiratory rate is assumed to be in breaths per minute (bpm), e.g., 162.00 bpm</p>
                         @error('respiratory_rate')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -82,7 +94,8 @@
 
                     <div>
                         <label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
-                        <input type="text" id="weight" name="weight" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" id="weight" name="weight" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <p class="text-xs text-gray-500 mt-1">Weight is assumed to be in kilograms (kg), e.g., 250.34 kg</p>
                         @error('weight')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -90,7 +103,8 @@
 
                     <div>
                         <label for="height" class="block text-sm font-medium text-gray-700">Height</label>
-                        <input type="text" id="height" name="height" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" id="height" name="height" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <p class="text-xs text-gray-500 mt-1">Height is assumed to be in centimeters (cm), e.g., 174.45 cm</p>
                         @error('height')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -98,7 +112,8 @@
 
                     <div>
                         <label for="pulse_rate" class="block text-sm font-medium text-gray-700">Pulse Rate</label>
-                        <input type="text" id="pulse_rate" name="pulse_rate" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" id="pulse_rate" name="pulse_rate" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <p class="text-xs text-gray-500 mt-1">Pulse rate is assumed to be in beats per minute (bpm), e.g., 72.00 bpm</p>
                         @error('pulse_rate')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
