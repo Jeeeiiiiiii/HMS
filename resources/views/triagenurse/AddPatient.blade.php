@@ -19,18 +19,11 @@
                 <div class="font-semibold text-lg mb-4 text-gray-800 text-center">Step 1: Test/Medication</div>
 
                 <div class="space-y-4">
-                    <div>
-                        <label for="hpi" class="block text-sm font-medium text-gray-700">History of Present Illness</label>
-                        <input type="text" id="hpi" name="hpi" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @error('hpi')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
 
                     <div>
-                        <label for="note" class="block text-sm font-medium text-gray-700">Note</label>
-                        <input type="text" id="note" name="note" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @error('note')
+                        <label for="chief_complaint" class="block text-sm font-medium text-gray-700">Chief Complaint</label>
+                        <input type="text" id="chief_complaint" name="chief_complaint" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        @error('chief_complaint')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
@@ -44,20 +37,13 @@
                     </div>
 
                     <div>
-                        <label for="chief_complaint" class="block text-sm font-medium text-gray-700">Chief Complaint</label>
-                        <input type="text" id="chief_complaint" name="chief_complaint" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @error('chief_complaint')
+                        <label for="note" class="block text-sm font-medium text-gray-700">Note</label>
+                        <input type="text" id="note" name="note" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        @error('note')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
 
-                    <div>
-                        <label for="diagnose" class="block text-sm font-medium text-gray-700">Diagnose</label>
-                        <input type="text" id="diagnose" name="diagnose" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
-                        @error('diagnose')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
                 </div>
 
                 <div class="flex justify-end mt-6">

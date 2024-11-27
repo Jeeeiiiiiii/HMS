@@ -121,26 +121,18 @@
                             <h2 class="text-lg font-semibold text-gray-800">Tests/Medications</h2>
                             <button class="text-gray-600 hover:text-gray-800 close" id="closeTestsModal{{ $patient->id }}">&times;</button>
                         </div>
-                        <div class="p-4 space-y-6">
+                        <div class="p-4 space-y-6"> 
                             <div>
-                                <p class="text-sm font-medium text-gray-500">Initial Test</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->initial_test ?? 'N/A' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Note</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->note ?? 'N/A' }}</p>
+                                <p class="text-sm font-medium text-gray-500">Chief Complaint</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->chief_complaint ?? 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Medication</p>
                                 <p class="text-lg font-semibold text-gray-800">{{ $patient->test->medication ?? 'N/A' }}</p>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-500">Chief Complaint</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->chief_complaint ?? 'N/A' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Diagnosis</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->diagnose ?? 'N/A' }}</p>
+                                <p class="text-sm font-medium text-gray-500">Note</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->note ?? 'N/A' }}</p>
                             </div>
                         </div>
                     </div>

@@ -26,6 +26,7 @@ class Nurse extends Authenticatable
         'name',
         'email',
         'password',
+        'status',
     ];
     protected $guard = 'nurse';
     /**

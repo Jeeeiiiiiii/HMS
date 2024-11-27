@@ -123,24 +123,16 @@
                         </div>
                         <div class="p-4 space-y-6">
                             <div>
-                                <p class="text-sm font-medium text-gray-500">History of Present Illness</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->hpi ?? 'N/A' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Note</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->note ?? 'N/A' }}</p>
+                                <p class="text-sm font-medium text-gray-500">Chief Complaint</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->chief_complaint ?? 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Medication</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->medication ?? 'N/A' }}</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->medication ?? 'N/A' }}</p>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-500">Lab Test</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->chief_complaint ?? 'N/A' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Diagnosis</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patientRecord->test->diagnose ?? 'N/A' }}</p>
+                                <p class="text-sm font-medium text-gray-500">Note</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->note ?? 'N/A' }}</p>
                             </div>
                         </div>
                     </div>

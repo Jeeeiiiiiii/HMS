@@ -33,6 +33,7 @@ class EmergencyRoom extends Authenticatable
         'phone_number',
         'address',
         'head_id',
+        'status',
     ];
     protected $guard = 'department';
     /**
