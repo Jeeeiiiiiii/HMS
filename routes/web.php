@@ -133,8 +133,9 @@ Route::middleware('admin')->group(function (){
     Route::post('admin/emergencyroom/post/register', [AdminController::class, 'EmergencyRoomPostRegistration'])->name('emergency.room.register.post'); 
 
 
-    //Delete Functions
-    Route::delete('/{userType}/{id}', [AdminController::class, 'deleteUser'])->name('users.delete');
+    //Inactive and Activate Functions
+    Route::post('/{userType}/{id}', [AdminController::class, 'deleteUser'])->name('users.delete');
+    Route::post('/activate/{userType}/{id}', [AdminController::class, 'ActivateUser'])->name('users.activate');
 
     });
 
