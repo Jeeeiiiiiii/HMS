@@ -26,6 +26,7 @@ class erOrder extends Model
         'status', 
         'order_date',
         'title',
+        'admitting_doctor',
         ];
 
     protected $dates = ['order_date'];

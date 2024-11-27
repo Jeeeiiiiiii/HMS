@@ -202,6 +202,7 @@ class EmergencyRoomController extends Controller
             'patient_record_id' => $patientRecord->id,
             'emergency_room_id' => $eroom->id,
             'type' => $request->type,
+            'admitting_doctor' => $request->admitting_doctor,
             'description' => $request->description,
             'status' => $request->status,
             'order_date' => $request->order_date,
@@ -267,6 +268,7 @@ class EmergencyRoomController extends Controller
                 'er_order_id' => $order->id,
                 'file_path' => $filePath,
                 'patient_id' => $order->patient_id,
+                'department_id' => $order->department_id,
             ]);
         }
         

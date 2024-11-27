@@ -57,6 +57,19 @@
                     @enderror
                 </div>
 
+                <div class="mb-4">
+                    <label for="admitting_doctor" class="block text-sm font-medium text-gray-700">Attending Physician</label>
+                    <select id="admitting_doctor" name="admitting_doctor" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <option value="" disabled selected>Select a physician</option>
+                        @foreach ($doctors as $doctor)
+                            <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('admitting_doctor')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 <!-- Order Description -->
                 <div class="mb-4">
                     <label for="description" class="block text-sm font-medium text-gray-700">Description</label>

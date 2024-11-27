@@ -529,6 +529,7 @@ class DoctorController extends Controller
                 'order_id' => $order->id,
                 'file_path' => $filePath,
                 'patient_id' => $order->patient_id,
+                'department_id' => $order->department_id,
             ]);
         }
 
