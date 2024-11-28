@@ -471,6 +471,7 @@ class DoctorController extends Controller
             'status' => $request->status,
             'order_date' => $request->order_date,
             'title' => $request->title,
+            'admitting_doctor' => $request->admitting_doctor,
         ]);
 
         DB::commit();
@@ -593,6 +594,20 @@ class DoctorController extends Controller
             // If no valid guard is found, deny access
             if (!$userGuard) {
                 return redirect()->route('login')->with('error', 'Unauthorized Access');
+            }
+
+            // If no valid guard is found, deny access
+            if (!$userGuard) {
+                return redirect()->route('login')->with('error', 'Unauthorized Access');
+            }
+
+            // Check if the authenticated user has access to this specific department
+            $authenticatedUser = auth()->guard($userGuard)->user();
+            $userDepartmentId = $authenticatedUser->department_id; // Assuming each user has a department_id
+        
+              // Restrict access: Check if the department_id matches
+            if ($userDepartmentId !== $order->department_id) {
+                return redirect()->route('login')->with('error', 'Department does not have permission to view this order.');
             }
         
             // If authorized, show the QR code details

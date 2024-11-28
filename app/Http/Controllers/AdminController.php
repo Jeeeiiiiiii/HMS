@@ -640,7 +640,7 @@ class AdminController extends Controller
     }
 
     // Redirect back with success message
-    return redirect()->back()->with('success', ucfirst($userType) . ' deleted successfully');
+    return redirect()->back()->with('success', ucfirst($userType) . ' deactivated successfully');
 }
 
 

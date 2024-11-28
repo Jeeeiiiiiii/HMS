@@ -57,13 +57,12 @@
                     @enderror
                 </div>
 
+                <!-- Attending Physician -->
                 <div class="mb-4">
                     <label for="admitting_doctor" class="block text-sm font-medium text-gray-700">Attending Physician</label>
                     <select id="admitting_doctor" name="admitting_doctor" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
                         <option value="" disabled selected>Select a physician</option>
-                        @foreach ($doctors as $doctor)
-                            <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
-                        @endforeach
+                        <!-- Doctors will be dynamically populated here -->
                     </select>
                     @error('admitting_doctor')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -126,5 +125,49 @@ function goBack() {
 }
 
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // When the department is selected
+        $('#admitting_department').on('change', function() {
+            var departmentId = $(this).val(); // Get selected department ID
+            
+            // Clear the doctor dropdown and disable it until we fetch the data
+            $('#admitting_doctor').empty().append('<option value="" disabled selected>Loading...</option>');
+            
+            if (departmentId) {
+                // Use fetch API to get doctors for the selected department
+                fetch(`/get-doctors-by-department?department_id=${departmentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Empty the dropdown and add default option
+                        $('#admitting_doctor').empty().append('<option value="" disabled selected>Select a physician</option>');
+                        
+                        // Check if doctors are returned
+                        if (data.doctors.length > 0) {
+                            // Loop through the returned doctors and append them to the dropdown
+                            data.doctors.forEach(doctor => {
+                                $('#admitting_doctor').append('<option value="' + doctor.id + '">' + doctor.name + '</option>');
+                            });
+                        } else {
+                            // If no doctors found, display message
+                            $('#admitting_doctor').append('<option value="" disabled>No doctors found for this department</option>');
+                        }
+                    })
+                    .catch(error => {
+                        // Handle any errors
+                        console.error('Error fetching doctors:', error);
+                        $('#admitting_doctor').empty().append('<option value="" disabled>Error loading doctors</option>');
+                    });
+            } else {
+                // If no department selected, clear the doctor dropdown
+                $('#admitting_doctor').empty().append('<option value="" disabled selected>Select a physician</option>');
+            }
+        });
+    });
+</script>
+
+
 
 @endsection

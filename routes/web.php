@@ -134,7 +134,7 @@ Route::middleware('admin')->group(function (){
 
 
     //Inactive and Activate Functions
-    Route::post('/{userType}/{id}', [AdminController::class, 'deleteUser'])->name('users.delete');
+    Route::post('/{userType}/{id}', [AdminController::class, 'deactivateUser'])->name('users.delete');
     Route::post('/activate/{userType}/{id}', [AdminController::class, 'ActivateUser'])->name('users.activate');
 
     });
@@ -321,6 +321,7 @@ Route::middleware('patient')->group(function (){
         Route::get('emergencyroom/doctors/{id}/order', [EmergencyRoomController::class, 'showOrder'])->name('emergencyroom_order');
         Route::get('emergencyroom/orderpage/{id}', [EmergencyRoomController::class, 'OrderPage'])->name('emergencyroom_orderpage');
         Route::get('emergencyroom/doctors/{id}/profile/{notification_id?}', [EmergencyRoomController::class, 'Details'])->name('emergencyroom_patients_profile');
+        Route::get('/get-doctors-by-department', [EmergencyRoomController::class, 'getDoctorsByDepartment'])->name('getDoctorsByDepartment');
        
         ////////// qr code
         Route::get('/emergencyroom/order/qr-code/{patientRecordId}', [QrCodeController::class, 'showerOrder']);

@@ -172,7 +172,8 @@ class TriageNurseController extends Controller
             $vital = Vital::create([
                 'patient_id' => $patientId,
                 'body_temperature' => $request->body_temperature,
-                'blood_pressure' => $request->blood_pressure,
+                'systolic_pressure' => $request->systolic_pressure,
+                'diastolic_pressure' => $request->diastolic_pressure,
                 'respiratory_rate' => $request->respiratory_rate,
                 'weight' => $request->weight,
                 'height' => $request->height,

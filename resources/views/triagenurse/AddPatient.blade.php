@@ -58,7 +58,7 @@
                 <div class="space-y-4">
                     <div>
                         <label for="body_temperature" class="block text-sm font-medium text-gray-700">Body Temperature</label>
-                        <input type="number" id="body_temperature" name="body_temperature" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" step="any" id="body_temperature" name="body_temperature" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
                         <p class="text-xs text-gray-500 mt-1">Body temperature is assumed to be in degrees Celsius (°C), e.g., 36.50°C (store it as 36.50)</p>
                         @error('body_temperature')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -67,7 +67,7 @@
 
                     <div>
                         <label for="systolic_pressure" class="block text-sm font-medium text-gray-700">Systolic Pressure</label>
-                        <input type="number" id="systolic_pressure" name="systolic_pressure" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" step="any" id="systolic_pressure" name="systolic_pressure" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
                         <p class="text-xs text-gray-500 mt-1">Systolic pressure is assumed to be in millimeters of mercury (mmHg), e.g., 120/80 mmHg (store it as 120.80)</p>
                         @error('systolic_pressure')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -76,7 +76,7 @@
 
                     <div>
                         <label for="diastolic_pressure" class="block text-sm font-medium text-gray-700">Diastolic Pressure</label>
-                        <input type="number" id="diastolic_pressure" name="diastolic_pressure" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" step="any" id="diastolic_pressure" name="diastolic_pressure" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
                         <p class="text-xs text-gray-500 mt-1">Diastolic pressure is assumed to be in millimeters of mercury (mmHg), e.g., 120/80 mmHg (store it as 120.80)</p>
                         @error('diastolic_pressure')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -85,7 +85,7 @@
 
                     <div>
                         <label for="respiratory_rate" class="block text-sm font-medium text-gray-700">Respiratory Rate</label>
-                        <input type="number" id="respiratory_rate" name="respiratory_rate" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" step="any" id="respiratory_rate" name="respiratory_rate" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
                         <p class="text-xs text-gray-500 mt-1">Respiratory rate is assumed to be in breaths per minute (bpm), e.g., 162.00 bpm</p>
                         @error('respiratory_rate')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -94,7 +94,7 @@
 
                     <div>
                         <label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
-                        <input type="number" id="weight" name="weight" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" step="any" id="weight" name="weight" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
                         <p class="text-xs text-gray-500 mt-1">Weight is assumed to be in kilograms (kg), e.g., 250.34 kg</p>
                         @error('weight')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -103,7 +103,7 @@
 
                     <div>
                         <label for="height" class="block text-sm font-medium text-gray-700">Height</label>
-                        <input type="number" id="height" name="height" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" step="any" id="height" name="height" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
                         <p class="text-xs text-gray-500 mt-1">Height is assumed to be in centimeters (cm), e.g., 174.45 cm</p>
                         @error('height')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -112,7 +112,7 @@
 
                     <div>
                         <label for="pulse_rate" class="block text-sm font-medium text-gray-700">Pulse Rate</label>
-                        <input type="number" id="pulse_rate" name="pulse_rate" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <input type="number" step="any" id="pulse_rate" name="pulse_rate" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
                         <p class="text-xs text-gray-500 mt-1">Pulse rate is assumed to be in beats per minute (bpm), e.g., 72.00 bpm</p>
                         @error('pulse_rate')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -204,15 +204,133 @@
 
 <script>
     document.getElementById('next1').addEventListener('click', function() {
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
-        document.getElementById('progress-bar').style.width = '66%';
+        // Clear previous error messages
+        document.querySelectorAll('.error-message').forEach(function(error) {
+            error.remove();
+        });
+
+        // Get the values of the input fields in Step 1
+        var chiefComplaint = document.getElementById('chief_complaint').value;
+        var medication = document.getElementById('medication').value;
+        var note = document.getElementById('note').value;
+
+        var valid = true;
+
+        // Check if all fields are filled out
+        if (chiefComplaint.trim() === "") {
+            valid = false;
+            showError('chief_complaint', 'Chief complaint is required.');
+        }
+
+        if (medication.trim() === "") {
+            valid = false;
+            showError('medication', 'Medication is required.');
+        }
+
+        if (note.trim() === "") {
+            valid = false;
+            showError('note', 'Note is required.');
+        }
+
+        if (valid) {
+            // If all fields are filled, move to the next step
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '66%';
+        }
     });
 
     document.getElementById('next2').addEventListener('click', function() {
-        document.getElementById('step2').classList.add('hidden');
-        document.getElementById('step3').classList.remove('hidden');
-        document.getElementById('progress-bar').style.width = '100%';
+        // Clear previous error messages
+        document.querySelectorAll('.error-message').forEach(function(error) {
+            error.remove();
+        });
+
+        // Get the values of the input fields in Step 2
+        var bodyTemperature = document.getElementById('body_temperature').value;
+        var systolicPressure = document.getElementById('systolic_pressure').value;
+        var diastolicPressure = document.getElementById('diastolic_pressure').value;
+        var respiratoryRate = document.getElementById('respiratory_rate').value;
+        var weight = document.getElementById('weight').value;
+        var height = document.getElementById('height').value;
+        var pulseRate = document.getElementById('pulse_rate').value;
+
+        var valid = true;
+
+        // Regular expression to check for numbers with up to 2 decimal places
+        var decimalPattern = /^\d{1,3}(\.\d{1,2})?$/;
+
+        // Maximum allowed value for validation
+        var maxBodyTemperature = 999.99;
+        var maxPressure = 999.99;
+        var maxRespiratoryRate = 999.99;
+        var maxWeight = 999.99;
+        var maxHeight = 999.99;
+        var maxPulseRate = 999.99;
+
+        // Check if the values match the decimal format and the limits
+        if (!decimalPattern.test(bodyTemperature)) {
+            valid = false;
+            showError('body_temperature', 'Body temperature must be a valid number with up to 2 decimal places and should not exceed 999.99.');
+        } else if (parseFloat(bodyTemperature) > maxBodyTemperature) {
+            valid = false;
+            showError('body_temperature', 'Body temperature cannot exceed 999.99.');
+        }
+
+        if (!decimalPattern.test(systolicPressure)) {
+            valid = false;
+            showError('systolic_pressure', 'Systolic pressure must be a valid number with up to 2 decimal places and should not exceed 999.99.');
+        } else if (parseFloat(systolicPressure) > maxPressure) {
+            valid = false;
+            showError('systolic_pressure', 'Systolic pressure cannot exceed 999.99.');
+        }
+
+        if (!decimalPattern.test(diastolicPressure)) {
+            valid = false;
+            showError('diastolic_pressure', 'Diastolic pressure must be a valid number with up to 2 decimal places and should not exceed 999.99.');
+        } else if (parseFloat(diastolicPressure) > maxPressure) {
+            valid = false;
+            showError('diastolic_pressure', 'Diastolic pressure cannot exceed 999.99.');
+        }
+
+        if (!decimalPattern.test(respiratoryRate)) {
+            valid = false;
+            showError('respiratory_rate', 'Respiratory rate must be a valid number with up to 2 decimal places and should not exceed 999.99.');
+        } else if (parseFloat(respiratoryRate) > maxRespiratoryRate) {
+            valid = false;
+            showError('respiratory_rate', 'Respiratory rate cannot exceed 999.99.');
+        }
+
+        if (!decimalPattern.test(weight)) {
+            valid = false;
+            showError('weight', 'Weight must be a valid number with up to 2 decimal places and should not exceed 999.99.');
+        } else if (parseFloat(weight) > maxWeight) {
+            valid = false;
+            showError('weight', 'Weight cannot exceed 999.99.');
+        }
+
+        if (!decimalPattern.test(height)) {
+            valid = false;
+            showError('height', 'Height must be a valid number with up to 2 decimal places and should not exceed 999.99.');
+        } else if (parseFloat(height) > maxHeight) {
+            valid = false;
+            showError('height', 'Height cannot exceed 999.99.');
+        }
+
+        if (!decimalPattern.test(pulseRate)) {
+            valid = false;
+            showError('pulse_rate', 'Pulse rate must be a valid number with up to 2 decimal places and should not exceed 999.99.');
+        } else if (parseFloat(pulseRate) > maxPulseRate) {
+            valid = false;
+            showError('pulse_rate', 'Pulse rate cannot exceed 999.99.');
+        }
+
+        // If all fields are valid, move to the next step
+        if (valid) {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '100%';
+        }
     });
 
     document.getElementById('back1').addEventListener('click', function() {
@@ -226,5 +344,72 @@
         document.getElementById('step2').classList.remove('hidden');
         document.getElementById('progress-bar').style.width = '66%';
     });
+
+    // Add validation for Step 3
+    document.getElementById('next3').addEventListener('click', function() {
+        // Clear previous error messages
+        document.querySelectorAll('.error-message').forEach(function(error) {
+            error.remove();
+        });
+
+        // Get the values of the input fields in Step 3
+        var reasonForAdmission = document.getElementById('reason_for_admission').value;
+        var room = document.getElementById('room').value;
+        var attendingPhysician = document.getElementById('attending_physician').value;
+        var attendingNurse = document.getElementById('attending_nurse').value;
+        var admittingDateAndTime = document.getElementById('admitting_date_and_time').value;
+        var admittingDepartment = document.getElementById('admitting_department').value;
+
+        var valid = true;
+
+        // Check if the fields are filled out
+        if (reasonForAdmission.trim() === "") {
+            valid = false;
+            showError('reason_for_admission', 'Reason for admission is required.');
+        }
+
+        if (room.trim() === "") {
+            valid = false;
+            showError('room', 'Room is required.');
+        }
+
+        if (!attendingPhysician) {
+            valid = false;
+            showError('attending_physician', 'Attending physician is required.');
+        }
+
+        if (!attendingNurse) {
+            valid = false;
+            showError('attending_nurse', 'Attending nurse is required.');
+        }
+
+        if (!admittingDateAndTime) {
+            valid = false;
+            showError('admitting_date_and_time', 'Admission date and time is required.');
+        }
+
+        if (!admittingDepartment) {
+            valid = false;
+            showError('admitting_department', 'Admitting department is required.');
+        }
+
+        // If all fields are valid, allow form submission (or proceed to submit)
+        if (valid) {
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('progress-bar').style.width = '100%';  // or submit the form
+        }
+    });
+
+    // Function to display error messages
+    function showError(fieldId, message) {
+        var inputField = document.getElementById(fieldId);
+        var errorMessage = document.createElement('span');
+        errorMessage.classList.add('error-message', 'text-red-500', 'text-sm');
+        errorMessage.innerText = message;
+        inputField.parentNode.appendChild(errorMessage);
+    }
 </script>
+
+
+
 @endsection

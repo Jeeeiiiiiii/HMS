@@ -9,6 +9,7 @@ use App\Models\Record;
 use App\Models\Doctor;
 use App\Models\EmergencyRoom;
 use App\Models\Department;
+use App\Models\DepartmentDoctor;
 use App\Models\Nurse;
 use App\Models\TreatmentPlan;
 use App\Models\erOrder;
@@ -296,7 +297,16 @@ class EmergencyRoomController extends Controller
             if (!$userGuard) {
                 return redirect()->route('login')->with('error', 'Unauthorized Access');
             }
+
+            // Check if the authenticated user has access to this specific department
+            $authenticatedUser = auth()->guard($userGuard)->user();
+            $userDepartmentId = $authenticatedUser->department_id; // Assuming each user has a department_id
         
+              // Restrict access: Check if the department_id matches
+            if ($userDepartmentId !== $order->department_id) {
+                return redirect()->route('login')->with('error', 'Department does not have permission to view this order.');
+            }
+            
             // If authorized, show the QR code details
             return view('emergencyroom.show', compact('order'));
         }
@@ -411,6 +421,32 @@ class EmergencyRoomController extends Controller
 
         return redirect()->back()->with('success', 'Triage Nurse removed from department successfully.');
     }
+
+
+    public function getDoctorsByDepartment(Request $request)
+    {
+        // Get the department ID from the request
+        $departmentId = $request->get('department_id');
+
+        // Fetch the department and get its doctors using the relationship
+        $department = Department::find($departmentId);
+
+        // If the department is found, get the associated doctors
+        if ($department) {
+            $doctors = $department->doctors; // Get the doctors through the pivot table
+
+            // Return the doctors as a JSON response
+            return response()->json([
+                'doctors' => $doctors
+            ]);
+        }
+
+        // If the department is not found, return an empty array
+        return response()->json([
+            'doctors' => []
+        ]);
+    }
+
 
 
 
