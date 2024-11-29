@@ -86,7 +86,7 @@ class PatientRecord extends Model
 
     public function er_order()
     {
-        return $this->hasOne(erOrder::class);
+        return $this->hasMany(erOrder::class);
     }
 
     public function qrcode()

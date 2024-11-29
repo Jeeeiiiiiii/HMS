@@ -55,4 +55,9 @@ class erOrder extends Model
     {
         return $this->HasMany(erOrderQrCode::class);
     }
+
+    public function admittingDoctor()
+    {
+        return $this->belongsTo(Doctor::class, 'admitting_doctor');
+    }
 }

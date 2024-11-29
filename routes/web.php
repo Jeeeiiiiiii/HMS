@@ -150,6 +150,8 @@ Route::middleware('doctor')->group(function (){
     Route::get('doctor/AddPlan/{id}', [DoctorController::class, 'AddPlan'])->name('doctor_addplan');
     Route::get('doctor/AddOrder/{id}', [DoctorController::class, 'AddOrder'])->name('doctor_addorder');
     Route::get('doctor/DetailsPatient/{id}', [DoctorController::class, 'Details'])->name('doctor_detailspatient');
+    Route::get('doctor/ErOrdersPatient/{id}', [DoctorController::class, 'ErOrders'])->name('doctor_erorders');
+    Route::get('doctor/orderpageER/{id}', [DoctorController::class, 'OrderPageER'])->name('doctor_orderpageER');
     Route::get('doctor/PatientRecord/{id}/{notification_id?}', [DoctorController::class, 'PatientRecord'])->name('doctor_patientrecord');
     Route::get('doctor/DoctorErOrder/{id}', [DoctorController::class, 'DoctorErOrder'])->name('doctor_erOder');
     Route::get('doctor/Record/{id}', [DoctorController::class, 'Record'])->name('doctor_record');
@@ -168,6 +170,7 @@ Route::middleware('doctor')->group(function (){
     Route::get('/doctor/qr-code/{patientRecordId}', [QrCodeController::class, 'show']);
     Route::get('/doctor/record/qr-code/{patientRecordId}', [QrCodeController::class, 'showRecord']);
     Route::get('/doctor/order/qr-code/{patientRecordId}', [QrCodeController::class, 'showOrder']);
+    Route::get('/doctor/erorder/qr-code/{patientRecordId}', [QrCodeController::class, 'showerOrder']);
    
 
     //Profile
@@ -257,10 +260,13 @@ Route::middleware('patient')->group(function (){
     Route::get('patient/profile/{id}/sessions', [PatientController::class, 'showSessions'])->name('patient_sessions');
 
     Route::get('patient/DetailsPatient/{id}', [PatientController::class, 'Details'])->name('patient_detailspatient');
+    Route::get('patient/DetailsER/{id}', [PatientController::class, 'DetailsER'])->name('patient_detailsERpatient');
+    Route::get('patient/ErOrdersPatient/{id}', [PatientController::class, 'ErOrders'])->name('patient_erorders');
     Route::get('patient/PatientRecord/{id}/{notification_id?}', [PatientController::class, 'PatientRecord'])->name('patient_patientrecord');
     Route::get('patient/Record/{id}', [PatientController::class, 'Record'])->name('patient_record');
     Route::get('patient/treatmentplanpage/{id}', [PatientController::class, 'TreatmentPlanPage'])->name('patient_treatmentplanpage');
     Route::get('patient/orderpage/{id}', [PatientController::class, 'OrderPage'])->name('patient_orderpage');
+    Route::get('patient/orderpageER/{id}', [PatientController::class, 'OrderPageER'])->name('patient_orderpageER');
     Route::get('patient/patient_treatmentplan/{id}', [PatientController::class, 'TreatmentPlan'])->name('patient_treatmentplan');
     Route::get('patient/medicalabstract/{id}', [PatientController::class, 'MedicalAbstract'])->name('patient_medicalabstract');
     Route::get('patient/medicalabstractpage/{id}', [PatientController::class, 'MedicalAbstractPage'])->name('patient_medicalabstractpage');

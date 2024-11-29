@@ -156,6 +156,40 @@ class DoctorController extends Controller
         return view('doctor.Details', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
+    public function ErOrders($id)
+        {
+        $doctor = auth()->guard('doctor')->user();
+        // Retrieve the patient using the provided ID
+        $patient = PatientRecord::find($id);
+    
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+    
+        // Check if the patient exists
+        if (!$patient) {
+            return redirect()->back()->withErrors(['message' => 'Patient not found.']);
+        }
+    
+        // Pass the patient data to the view
+        return view('doctor.EmergencyRoomOrders', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
+        }
+
+    public function OrderPageER($id)
+        {
+        $doctor = auth()->guard('doctor')->user();
+        // Retrieve the patient using the provided ID
+        $erorder = erOrder::with(['patientRecord', 'order_qrcode'])->find($id);
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
+        // Pass the patient data to the view
+        return view('doctor.OrderPageER', compact('doctor', 'erorder', 'latestNotifications', 'olderNotifications'));
+        }
+
     public function PatientRecord($id, $notification_id = null)
         {
         $doctor = auth()->guard('doctor')->user();
