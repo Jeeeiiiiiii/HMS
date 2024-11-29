@@ -132,12 +132,12 @@ function goBack() {
     $(document).ready(function() {
         // Define a mapping of order types to relevant departments
         const orderTypeToDepartments = {
-            'imaging': ['Radiology'],
-            'lab_test': ['Intensive Care Unit'],
-            'procedure': ['Surgery', 'Emergency'],
-            'medication': ['Pharmacy'],
-            'other': ['General']
-        };
+    'imaging': ['Radiology', 'Intensive Care Unit', 'Orthopedics', 'Neurology'], // Imaging may involve orthopedics (for x-rays) or neurology (for brain scans)
+    'lab_test': ['Intensive Care Unit', 'Laboratory', 'Emergency', 'Cardiology'], // Lab tests can happen in the ICU, emergency, and labs
+    'procedure': ['Surgery', 'Emergency', 'Orthopedics', 'Cardiology', 'Gastroenterology'], // Procedures often occur in surgery, emergency, and specialized units
+    'medication': ['Pharmacy', 'Intensive Care Unit', 'Pediatrics', 'Oncology'], // Medication orders may be relevant for pediatrics, ICU, and oncology departments
+    'other': ['General', 'Outpatient', 'Rehabilitation', 'Dermatology', 'Geriatrics'], // Other orders could cover a wide range, including outpatient, dermatology, and geriatrics
+    };
 
         // Disable department dropdown initially
         $('#admitting_department').prop('disabled', true);
