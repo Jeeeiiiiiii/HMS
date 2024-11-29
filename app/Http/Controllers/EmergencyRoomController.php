@@ -424,28 +424,30 @@ class EmergencyRoomController extends Controller
 
 
     public function getDoctorsByDepartment(Request $request)
-    {
-        // Get the department ID from the request
-        $departmentId = $request->get('department_id');
+{
+    // Get the department ID from the request
+    $departmentId = $request->get('department_id');
 
-        // Fetch the department and get its doctors using the relationship
-        $department = Department::find($departmentId);
+    // Fetch the department and get its doctors using the relationship
+    $department = Department::find($departmentId);
 
-        // If the department is found, get the associated doctors
-        if ($department) {
-            $doctors = $department->doctors; // Get the doctors through the pivot table
+    // If the department is found, get the associated doctors
+    if ($department) {
+        // Eager load the doctor profile to get the specialization
+        $doctors = $department->doctors()->with('profile')->get(); // Assuming 'profile' is the relation
 
-            // Return the doctors as a JSON response
-            return response()->json([
-                'doctors' => $doctors
-            ]);
-        }
-
-        // If the department is not found, return an empty array
+        // Return the doctors as a JSON response
         return response()->json([
-            'doctors' => []
+            'doctors' => $doctors
         ]);
     }
+
+    // If the department is not found, return an empty array
+    return response()->json([
+        'doctors' => []
+    ]);
+}
+
 
 
 

@@ -230,6 +230,8 @@ Route::middleware('triagenurse')->group(function (){
     Route::post('triagenurse{id}/storeProfile', [TriageNurseController::class, 'storeProfile'])->name('storeProfile');
     Route::get('triagenurse/PatientRecord/{id}', [TriageNurseController::class, 'PatientRecord'])->name('triagenurse_patientrecord');
     Route::get('triagenurse/Record/{id}', [TriageNurseController::class, 'Record'])->name('triagenurse_record');
+    Route::get('triagenurse/EditPatientRecord/{id}', [TriageNurseController::class, 'EditPatientRecord'])->name('triagenurse_editpatientrecord');
+    Route::post('/triagenurse/{patientId}/storeEditedPatientRecord', [TriageNurseController::class, 'storeEditPatientRecord'])->name('storeEditPatientRecord');
     
     // QR Codes
     Route::get('/qr-code/{patientRecordId}', [QrCodeController::class, 'show']);

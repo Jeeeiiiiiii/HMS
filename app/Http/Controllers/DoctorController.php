@@ -596,11 +596,6 @@ class DoctorController extends Controller
                 return redirect()->route('login')->with('error', 'Unauthorized Access');
             }
 
-            // If no valid guard is found, deny access
-            if (!$userGuard) {
-                return redirect()->route('login')->with('error', 'Unauthorized Access');
-            }
-
             // Check if the authenticated user has access to this specific department
             $authenticatedUser = auth()->guard($userGuard)->user();
             $userDepartmentId = $authenticatedUser->department_id; // Assuming each user has a department_id

@@ -81,6 +81,24 @@ class TriageNurseController extends Controller
             return view('triagenurse.AddPatient', compact('patient', 'doctors', 'nurses', 'triagenurse', 'departments'));
         }
 
+    public function EditPatientRecord($id)
+        {
+            $triagenurse = Auth::guard('triagenurse')->user();
+            // Retrieve the patient using the provided ID
+            $patient = PatientRecord::find($id);
+            $doctors = Doctor::all(); // Retrieve all doctors
+            $nurses = Nurse::all();   // Retrieve all nurses
+            $departments = Department::all();
+
+            // Check if the patient exists
+            if (!$patient) {
+                return redirect()->back()->withErrors(['message' => 'Patient not found.']);
+            }
+
+            // Pass the patient data to the view
+            return view('triagenurse.EditPatientRecord', compact('patient', 'doctors', 'nurses', 'triagenurse', 'departments'));
+        }
+
 
     public function Details($id)
         { 
@@ -162,11 +180,9 @@ class TriageNurseController extends Controller
 
             $test = Test::create([
                 'patient_id' => $patientId,
-                'hpi' => $request->hpi,
                 'note' => $request->note,
                 'medication' => $request->medication,
                 'chief_complaint' => $request->chief_complaint,
-                'diagnose' => $request->diagnose,
             ]);
             
             $vital = Vital::create([
@@ -296,6 +312,74 @@ class TriageNurseController extends Controller
             // If authorized, show the QR code details
             return view('triagenurse.show', compact('patientRecord'));
         }
+
+    
+        public function storeEditPatientRecord(Request $request, $patientId)
+        {
+            DB::beginTransaction();
+        
+            try { 
+                // Find the profile record
+                $profile = Profile::where('patient_id', $patientId)->firstOrFail();
+        
+                // Find the existing test record or create a new one if it doesn't exist
+                $test = Test::where('patient_id', $patientId)->firstOrFail();
+                $test->update([
+                    'note' => $request->note,
+                    'medication' => $request->medication,
+                    'chief_complaint' => $request->chief_complaint,
+                ]);
+        
+                // Find the existing vital record or create a new one if it doesn't exist
+                $vital = Vital::where('patient_id', $patientId)->firstOrFail();
+                $vital->update([
+                    'body_temperature' => $request->body_temperature,
+                    'systolic_pressure' => $request->systolic_pressure,
+                    'diastolic_pressure' => $request->diastolic_pressure,
+                    'respiratory_rate' => $request->respiratory_rate,
+                    'weight' => $request->weight,
+                    'height' => $request->height,
+                    'pulse_rate' => $request->pulse_rate,
+                ]);
+        
+                // Find the existing admission record or create a new one if it doesn't exist
+                $admission = Admission::where('patient_id', $patientId)->firstOrFail();
+                $admission->update([
+                    'room' => $request->room,
+                    'doctor_id' => $request->attending_physician,
+                    'nurse_id' => $request->attending_nurse,
+                    'department_id' => $request->admitting_department,
+                ]);
+        
+                // Update the triage nurse ID if needed
+                $triageNurseId = Auth::guard('triagenurse')->user();
+        
+                // Find the existing patient record
+                $patientRecord = PatientRecord::where('patient_id', $patientId)->firstOrFail();
+                $patientRecord->update([
+                    'doctor_id' => $request->attending_physician,
+                    'nurse_id' => $request->attending_nurse,
+                    'triage_nurse_id' => $triageNurseId->id,
+                    'profile_id' => $profile->id,
+                    'test_id' => $test->id,
+                    'vital_id' => $vital->id,
+                    'admission_id' => $admission->id,
+                    'reason_for_admission' => $request->reason_for_admission,
+                    'admitting_date_and_time' => $request->admitting_date_and_time,
+                ]);
+        
+                // Commit the transaction
+                DB::commit();
+        
+                return redirect()->route('triagenurse_dashboard')->with('success', 'Patient record updated successfully.');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                // Log the error message and stack trace
+                \Log::error('Error updating patient record: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+                return redirect()->route('triagenurse_dashboard')->with('error', 'There was an error updating the patient record: ' . $e->getMessage());
+            }
+        }
+        
 
 
 

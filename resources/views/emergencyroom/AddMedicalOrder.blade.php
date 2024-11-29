@@ -32,6 +32,7 @@
                 <div class="mb-4">
                     <label for="type" class="block text-sm font-medium text-gray-700">Order Type</label>
                     <select id="type" name="type" class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-500" required>
+                        <option value="">Select Order Type</option>
                         <option value="lab_test">Lab Test</option>
                         <option value="procedure">Procedure</option>
                         <option value="imaging">Imaging</option>
@@ -129,9 +130,44 @@ function goBack() {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // When the department is selected
+        // Define a mapping of order types to relevant departments
+        const orderTypeToDepartments = {
+            'imaging': ['Radiology'],
+            'lab_test': ['Intensive Care Unit'],
+            'procedure': ['Surgery', 'Emergency'],
+            'medication': ['Pharmacy'],
+            'other': ['General']
+        };
+
+        // Disable department dropdown initially
+        $('#admitting_department').prop('disabled', true);
+
+        // When the order type is selected
+        $('#type').on('change', function() {
+            var orderType = $(this).val(); // Get the selected order type
+            
+            // Enable the department dropdown when an order type is selected
+            $('#admitting_department').prop('disabled', false);
+
+            // Clear and reset department dropdown
+            $('#admitting_department').empty().append('<option value="" disabled selected>Select a department</option>');
+
+            if (orderType) {
+                // Get the list of departments for the selected order type
+                var departmentsToShow = orderTypeToDepartments[orderType] || [];
+
+                // Filter departments based on the order type
+                @foreach($departments as $department)
+                    if (departmentsToShow.includes("{{ $department->department_name }}")) {
+                        $('#admitting_department').append('<option value="{{ $department->id }}">{{ $department->department_name }}</option>');
+                    }
+                @endforeach
+            }
+        });
+
+        // When the department is changed (to update doctors)
         $('#admitting_department').on('change', function() {
-            var departmentId = $(this).val(); // Get selected department ID
+            var departmentId = $(this).val(); // Get the selected department ID
             
             // Clear the doctor dropdown and disable it until we fetch the data
             $('#admitting_doctor').empty().append('<option value="" disabled selected>Loading...</option>');
@@ -148,7 +184,7 @@ function goBack() {
                         if (data.doctors.length > 0) {
                             // Loop through the returned doctors and append them to the dropdown
                             data.doctors.forEach(doctor => {
-                                $('#admitting_doctor').append('<option value="' + doctor.id + '">' + doctor.name + '</option>');
+                                $('#admitting_doctor').append('<option value="' + doctor.id + '">' + doctor.name + ' - ' + (doctor.profile ? doctor.profile.specialization : 'No specialization') + '</option>');
                             });
                         } else {
                             // If no doctors found, display message
@@ -167,6 +203,8 @@ function goBack() {
         });
     });
 </script>
+
+
 
 
 
