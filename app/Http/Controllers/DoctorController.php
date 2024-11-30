@@ -635,7 +635,7 @@ class DoctorController extends Controller
             $userDepartmentId = $authenticatedUser->department_id; // Assuming each user has a department_id
         
               // Restrict access: Check if the department_id matches
-            if ($userDepartmentId !== $order->department_id) {
+            if ($userDepartmentId !== $order->id) {
                 return redirect()->route('login')->with('error', 'Department does not have permission to view this order.');
             }
         

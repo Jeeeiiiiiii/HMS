@@ -300,7 +300,7 @@ class EmergencyRoomController extends Controller
 
             // Check if the authenticated user has access to this specific department
             $authenticatedUser = auth()->guard($userGuard)->user();
-            $userDepartmentId = $authenticatedUser->department_id; // Assuming each user has a department_id
+            $userDepartmentId = $authenticatedUser->id; // Assuming each user has a department_id
         
               // Restrict access: Check if the department_id matches
             if ($userDepartmentId !== $order->department_id) {
