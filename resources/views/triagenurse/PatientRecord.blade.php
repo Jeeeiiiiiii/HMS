@@ -10,6 +10,9 @@
         <div class="lg:col-span-1 bg-white p-4 rounded-md shadow-md border border-gray-200">
             <div class="flex justify-between items-center bg-gray-100 rounded-t-md p-4">
                 <h2 class="text-lg font-semibold text-gray-800">Admission Details</h2>
+                <a href="{{ route('triagenurse_editpatientrecord', $patient->id) }}" class="text-white-600 hover:text-blue-500 transition-colors">
+                    <i class="ri-edit-box-line"></i>
+                </a>
             </div>
             <div class="p-4 space-y-6"> <!-- Added space-y-6 for consistent spacing -->
                 <div>
@@ -92,7 +95,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Blood Pressure</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->vital->blood_pressure ?? 'N/A' }}</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->vital->systolic_pressure ?? 'N/A' }}/{{ $patient->vital->diastolic_pressure ?? 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Respiratory Rate</p>
@@ -121,26 +124,18 @@
                             <h2 class="text-lg font-semibold text-gray-800">Tests/Medications</h2>
                             <button class="text-gray-600 hover:text-gray-800 close" id="closeTestsModal{{ $patient->id }}">&times;</button>
                         </div>
-                        <div class="p-4 space-y-6">
+                        <div class="p-4 space-y-6"> 
                             <div>
-                                <p class="text-sm font-medium text-gray-500">Initial Test</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->initial_test ?? 'N/A' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Note</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->note ?? 'N/A' }}</p>
+                                <p class="text-sm font-medium text-gray-500">Chief Complaint</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->chief_complaint ?? 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Medication</p>
                                 <p class="text-lg font-semibold text-gray-800">{{ $patient->test->medication ?? 'N/A' }}</p>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-500">Chief Complaint</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->chief_complaint ?? 'N/A' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Diagnosis</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->diagnose ?? 'N/A' }}</p>
+                                <p class="text-sm font-medium text-gray-500">Note</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $patient->test->note ?? 'N/A' }}</p>
                             </div>
                         </div>
                     </div>

@@ -77,20 +77,25 @@ class AdminController extends Controller
     {
         $admin = auth()->guard('admin')->user();
         
-        // Get the search query from the request
+        // Get the search input and status (optional, assuming there is a status filter for doctors as well)
         $search = $request->input('search');
+        $status = $request->input('status', 'active'); // Default status is 'active', modify as needed
 
-        // Query nurses based on the search input
-        $doctors = Doctor::where(function($query) use ($search) {
-            if ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%');
-            }
-        })->get();
-        
-        // Pass the nurses and admin to the view
+        // Retrieve doctors based on search query and status
+        $doctors = Doctor::where('status', $status) // Filter by status first
+            ->when($search, function($query, $search) {
+                // If there is a search term, filter by name or email
+                return $query->where(function($subQuery) use ($search) {
+                    $subQuery->where('name', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%');
+                });
+            })
+            ->get();
+
+        // Pass the filtered doctors and the admin to the view
         return view('admin.Doctors.DoctorsDashboard', compact('doctors', 'admin'));
     }
+
 
     public function showDoctorProfile($id)
     {
@@ -225,23 +230,28 @@ class AdminController extends Controller
 
 
     public function nurses(Request $request)
-    {
-        $admin = auth()->guard('admin')->user();
-        
-        // Get the search query from the request
-        $search = $request->input('search');
+{
+    $admin = auth()->guard('admin')->user();
+    
+    // Get the search input and status (optional, with 'active' as the default status)
+    $search = $request->input('search');
+    $status = $request->input('status', 'active'); // Default status is 'active', modify if needed
 
-        // Query nurses based on the search input
-        $nurses = Nurse::where(function($query) use ($search) {
-            if ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%');
-            }
-        })->get();
-        
-        // Pass the nurses and admin to the view
-        return view('admin.Nurse.Nurses', compact('nurses', 'admin'));
-    }
+    // Retrieve nurses based on search query and status
+    $nurses = Nurse::where('status', $status) // Filter by status first
+        ->when($search, function($query, $search) {
+            // If there is a search term, filter by name or email
+            return $query->where(function($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                         ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        })
+        ->get();
+
+    // Pass the filtered nurses and the admin to the view
+    return view('admin.Nurse.Nurses', compact('nurses', 'admin'));
+}
+
 
     public function showNurseProfile($id)
     {
@@ -299,23 +309,29 @@ class AdminController extends Controller
     }
 
 
-    public function triagenurse(Request $request){
-        $admin = auth()->guard('admin')->user();
-        
-        // Get the search query from the request
-        $search = $request->input('search');
+    public function triagenurse(Request $request)
+{
+    $admin = auth()->guard('admin')->user();
+    
+    // Get the search input and status (optional, with 'active' as the default status)
+    $search = $request->input('search');
+    $status = $request->input('status', 'active'); // Default status is 'active', modify if needed
 
-        // Query nurses based on the search input
-        $triagenurses = TriageNurse::where(function($query) use ($search) {
-            if ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%');
-            }
-        })->get();
-        
-        // Pass the nurses and admin to the view
-        return view('admin.TriageNurse.TriageNurseDashboard', compact('triagenurses', 'admin'));
-    }
+    // Retrieve triage nurses based on search query and status
+    $triagenurses = TriageNurse::where('status', $status) // Filter by status first
+        ->when($search, function($query, $search) {
+            // If there is a search term, filter by name or email
+            return $query->where(function($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                         ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        })
+        ->get();
+
+    // Pass the filtered triage nurses and the admin to the view
+    return view('admin.TriageNurse.TriageNurseDashboard', compact('triagenurses', 'admin'));
+}
+
 
     public function showTriageProfile($id)
     {
@@ -338,23 +354,28 @@ class AdminController extends Controller
     ///////////////////////////////////////////////// Department Logic
 
     public function departments(Request $request) 
-    {
-        $admin = auth()->guard('admin')->user();
-        
-        // Get the search query from the request
-        $search = $request->input('search');
+{
+    $admin = auth()->guard('admin')->user();
+    
+    // Get the search input and status (optional, with 'active' as the default status)
+    $search = $request->input('search');
+    $status = $request->input('status', 'active'); // Default status is 'active', modify if needed
 
-        // Query nurses based on the search input
-        $departments = Department::where(function($query) use ($search) {
-            if ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%');
-            }
-        })->get();
-        
-        // Pass the departments and admin to the view
-        return view('admin.Department.Departments', compact('departments', 'admin'));
-    }
+    // Retrieve departments based on search query and status
+    $departments = Department::where('status', $status) // Filter by status first
+        ->when($search, function($query, $search) {
+            // If there is a search term, filter by name or email
+            return $query->where(function($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                         ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        })
+        ->get();
+
+    // Pass the filtered departments and the admin to the view
+    return view('admin.Department.Departments', compact('departments', 'admin'));
+}
+
 
 
     public function departmentsDetail($id, Request $request) 
@@ -561,7 +582,7 @@ class AdminController extends Controller
 
 
     
-    public function deleteUser($userType, $id)
+    public function deactivateUser($userType, $id)
 {
     // Determine the correct model based on the userType
     switch ($userType) {
@@ -572,7 +593,7 @@ class AdminController extends Controller
             $qrCodes = $model->qr_codes; // For PatientQrCode
             $recordQRCodes = $model->record_qr_codes; // For RecordQrCode
             $orderQRCodes = $model->order_qr_codes; // For OrderQrCode
-            
+
             break;
         case 'doctor':
             $model = Doctor::findOrFail($id);
@@ -583,18 +604,19 @@ class AdminController extends Controller
         case 'triage_nurse':
             $model = TriageNurse::findOrFail($id);
             break;
-        case 'admin':
-            $model = Admin::findOrFail($id);
-            break;
         case 'department':
             $model = Department::findOrFail($id);
+            break;
+        case 'er':
+            $model = EmergencyRoom::findOrFail($id);
             break;
         default:
             return redirect()->back()->with('error', 'Invalid user type.');
     }
 
-    // Delete the user
-    $model->delete();
+    // Update the status to 'inactive' instead of deleting the user
+    $model->status = 'inactive';
+    $model->save();
 
     // If the user type is patient, delete the associated QR code images from storage
     if ($userType === 'patient') {
@@ -618,8 +640,43 @@ class AdminController extends Controller
     }
 
     // Redirect back with success message
-    return redirect()->back()->with('success', ucfirst($userType) . ' deleted successfully');
+    return redirect()->back()->with('success', ucfirst($userType) . ' deactivated successfully');
 }
+
+
+    public function ActivateUser($userType, $id)
+    {
+        // Determine the correct model based on the userType
+        switch ($userType) {
+            case 'patient':
+                $model = Patient::findOrFail($id);
+                break;
+            case 'doctor':
+                $model = Doctor::findOrFail($id);
+                break;
+            case 'nurse':
+                $model = Nurse::findOrFail($id);
+                break;
+            case 'triage_nurse':
+                $model = TriageNurse::findOrFail($id);
+                break;
+            case 'department':
+                $model = Department::findOrFail($id);
+                break;
+            case 'er':
+                $model = EmergencyRoom::findOrFail($id);
+                break;
+            default:
+                return redirect()->back()->with('error', 'Invalid user type.');
+        }
+
+        // Update the status to 'active' to reactivate the user
+        $model->status = 'active';
+        $model->save();
+
+        return redirect()->back()->with('status', 'User reactivated successfully.');
+    }
+
 
 
 
@@ -631,23 +688,28 @@ class AdminController extends Controller
     /////////////////////////////////// Emergency Room
 
     public function emergencyrooms(Request $request) 
-    {
-        $admin = auth()->guard('admin')->user();
-        
-        // Get the search query from the request
-        $search = $request->input('search');
+{
+    $admin = auth()->guard('admin')->user();
+    
+    // Get the search input and status (optional, with 'active' as the default status)
+    $search = $request->input('search');
+    $status = $request->input('status', 'active'); // Default status is 'active', modify if needed
 
-        // Query nurses based on the search input
-        $emergencyrooms = EmergencyRoom::where(function($query) use ($search) {
-            if ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%');
-            }
-        })->get();
-        
-        // Pass the emergencyrooms and admin to the view
-        return view('admin.EmergencyRoom.EmergencyRoom', compact('emergencyrooms', 'admin'));
-    }
+    // Retrieve emergency rooms based on search query and status
+    $emergencyrooms = EmergencyRoom::where('status', $status) // Filter by status first
+        ->when($search, function($query, $search) {
+            // If there is a search term, filter by name or email
+            return $query->where(function($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                         ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        })
+        ->get();
+
+    // Pass the filtered emergency rooms and the admin to the view
+    return view('admin.EmergencyRoom.EmergencyRoom', compact('emergencyrooms', 'admin'));
+}
+
 
 
     public function EmergencyRoomRegister(){

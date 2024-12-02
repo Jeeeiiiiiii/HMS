@@ -156,6 +156,40 @@ class DoctorController extends Controller
         return view('doctor.Details', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
         }
 
+    public function ErOrders($id)
+        {
+        $doctor = auth()->guard('doctor')->user();
+        // Retrieve the patient using the provided ID
+        $patient = PatientRecord::find($id);
+    
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+    
+        // Check if the patient exists
+        if (!$patient) {
+            return redirect()->back()->withErrors(['message' => 'Patient not found.']);
+        }
+    
+        // Pass the patient data to the view
+        return view('doctor.EmergencyRoomOrders', compact('patient', 'doctor', 'latestNotifications', 'olderNotifications'));
+        }
+
+    public function OrderPageER($id)
+        {
+        $doctor = auth()->guard('doctor')->user();
+        // Retrieve the patient using the provided ID
+        $erorder = erOrder::with(['patientRecord', 'order_qrcode'])->find($id);
+        // Fetch the latest 5 notifications
+        $latestNotifications = auth('doctor')->user()->notifications()->latest()->take(5)->get();
+        // Count older notifications
+        $olderNotifications = auth('doctor')->user()->notifications()->latest()->skip(5)->take(20)->get();
+
+        // Pass the patient data to the view
+        return view('doctor.OrderPageER', compact('doctor', 'erorder', 'latestNotifications', 'olderNotifications'));
+        }
+
     public function PatientRecord($id, $notification_id = null)
         {
         $doctor = auth()->guard('doctor')->user();
@@ -471,6 +505,7 @@ class DoctorController extends Controller
             'status' => $request->status,
             'order_date' => $request->order_date,
             'title' => $request->title,
+            'admitting_doctor' => $request->admitting_doctor,
         ]);
 
         DB::commit();
@@ -529,6 +564,7 @@ class DoctorController extends Controller
                 'order_id' => $order->id,
                 'file_path' => $filePath,
                 'patient_id' => $order->patient_id,
+                'department_id' => $order->department_id,
             ]);
         }
 
@@ -592,6 +628,15 @@ class DoctorController extends Controller
             // If no valid guard is found, deny access
             if (!$userGuard) {
                 return redirect()->route('login')->with('error', 'Unauthorized Access');
+            }
+
+            // Check if the authenticated user has access to this specific department
+            $authenticatedUser = auth()->guard($userGuard)->user();
+            $userDepartmentId = $authenticatedUser->department_id; // Assuming each user has a department_id
+        
+              // Restrict access: Check if the department_id matches
+            if ($userDepartmentId !== $order->id) {
+                return redirect()->route('login')->with('error', 'Department does not have permission to view this order.');
             }
         
             // If authorized, show the QR code details

@@ -102,7 +102,7 @@
                 </div>
                 <div>
                     <p class="text-sm font-medium text-gray-500">Ordered by</p>
-                    <p class="text-lg font-semibold text-gray-800">Dr. {{ $order->doctor->name ?? 'N/A' }}</p>
+                    <p class="text-lg font-semibold text-gray-800">Dr. {{ $order->admitting_doctor->name ?? 'N/A' }}</p>
                 </div>
             </div>
         </div> 

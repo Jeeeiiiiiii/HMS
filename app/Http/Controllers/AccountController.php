@@ -145,6 +145,13 @@ class AccountController extends Controller
         
         elseif(Auth::guard('doctor')->attempt($credentials)){
             $user = Doctor::where('email', $request->input('email'))->first();
+
+            // Check if the user's status is 'inactive'
+            if ($user && $user->status === 'inactive') {
+                // If inactive, do not log them in and redirect with an error message
+                return redirect()->back()->with('error', 'Your account is inactive.');
+            }
+            
             Auth::guard('doctor')->login($user);
 
             // Log session for doctor
@@ -161,6 +168,13 @@ class AccountController extends Controller
         
         elseif(Auth::guard('nurse')->attempt($credentials)){
             $user = Nurse::where('email', $request->input('email'))->first();
+
+            // Check if the user's status is 'inactive'
+            if ($user && $user->status === 'inactive') {
+                // If inactive, do not log them in and redirect with an error message
+                return redirect()->back()->with('error', 'Your account is inactive.');
+            }
+
             Auth::guard('nurse')->login($user);
 
             // Log session for nurse
@@ -177,7 +191,14 @@ class AccountController extends Controller
         
         elseif(Auth::guard('triagenurse')->attempt($credentials)){
             $user = TriageNurse::where('email', $request->input('email'))->first();
-            Auth::guard('nurse')->login($user);
+
+            // Check if the user's status is 'inactive'
+            if ($user && $user->status === 'inactive') {
+                // If inactive, do not log them in and redirect with an error message
+                return redirect()->back()->with('error', 'Your account is inactive.');
+            }
+
+            Auth::guard('triagenurse')->login($user);
 
             // Log session for triage nurse
             TriageNurseSession::create([
@@ -193,6 +214,13 @@ class AccountController extends Controller
         
         elseif (Auth::guard('patient')->attempt($credentials)) {
             $user = Patient::where('email', $request->input('email'))->first();
+
+            // Check if the user's status is 'inactive'
+            if ($user && $user->status === 'inactive') {
+                // If inactive, do not log them in and redirect with an error message
+                return redirect()->back()->with('error', 'Your account is inactive.');
+            }
+
             Auth::guard('patient')->login($user);
 
             // Log session for patient
@@ -207,6 +235,13 @@ class AccountController extends Controller
 
         elseif (Auth::guard('department')->attempt($credentials)) {
             $user = Department::where('email', $request->input('email'))->first();
+
+            // Check if the user's status is 'inactive'
+            if ($user && $user->status === 'inactive') {
+                // If inactive, do not log them in and redirect with an error message
+                return redirect()->back()->with('error', 'Your account is inactive.');
+            }
+
             Auth::guard('department')->login($user);
 
             // Log session for department
@@ -222,6 +257,13 @@ class AccountController extends Controller
 
         elseif (Auth::guard('eroom')->attempt($credentials)) {
             $user = EmergencyRoom::where('email', $request->input('email'))->first();
+
+            // Check if the user's status is 'inactive'
+            if ($user && $user->status === 'inactive') {
+                // If inactive, do not log them in and redirect with an error message
+                return redirect()->back()->with('error', 'Your account is inactive.');
+            }
+
             Auth::guard('eroom')->login($user);
 
             // Log session for department

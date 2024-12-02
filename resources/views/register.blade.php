@@ -124,7 +124,12 @@
                 <div class="space-y-4">
                     <div>
                         <label for="civil_status" class="block text-sm font-medium text-gray-700">Civil Status</label>
-                        <input type="text" id="civil_status" name="civil_status" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <select id="civil_status" name="civil_status" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                            <option value="">Select Civil Status</option>
+                            <option value="single">Single</option>
+                            <option value="married">Married</option>
+                            <option value="others">Others</option>
+                        </select>
                         @if ($errors->has('civil_status'))
                             <span class="text-red-500 text-sm">{{ $errors->first('civil_status') }}</span>
                         @endif

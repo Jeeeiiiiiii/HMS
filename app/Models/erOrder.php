@@ -26,6 +26,7 @@ class erOrder extends Model
         'status', 
         'order_date',
         'title',
+        'admitting_doctor',
         ];
 
     protected $dates = ['order_date'];
@@ -53,5 +54,10 @@ class erOrder extends Model
     public function order_qrcode()
     {
         return $this->HasMany(erOrderQrCode::class);
+    }
+
+    public function admittingDoctor()
+    {
+        return $this->belongsTo(Doctor::class, 'admitting_doctor');
     }
 }

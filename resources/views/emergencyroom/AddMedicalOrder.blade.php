@@ -32,6 +32,7 @@
                 <div class="mb-4">
                     <label for="type" class="block text-sm font-medium text-gray-700">Order Type</label>
                     <select id="type" name="type" class="bg-gray-50 text-sm text-gray-600 py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-500" required>
+                        <option value="">Select Order Type</option>
                         <option value="lab_test">Lab Test</option>
                         <option value="procedure">Procedure</option>
                         <option value="imaging">Imaging</option>
@@ -53,6 +54,18 @@
                         @endforeach
                     </select>
                     @error('admitting_department')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Attending Physician -->
+                <div class="mb-4">
+                    <label for="admitting_doctor" class="block text-sm font-medium text-gray-700">Attending Physician</label>
+                    <select id="admitting_doctor" name="admitting_doctor" class="bg-gray-50 text-sm py-3 px-4 rounded-md w-full border border-gray-300 focus:border-blue-500 focus:outline-none" required>
+                        <option value="" disabled selected>Select a physician</option>
+                        <!-- Doctors will be dynamically populated here -->
+                    </select>
+                    @error('admitting_doctor')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
@@ -113,5 +126,86 @@ function goBack() {
 }
 
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Define a mapping of order types to relevant departments
+        const orderTypeToDepartments = {
+    'imaging': ['Radiology', 'Intensive Care Unit', 'Orthopedics', 'Neurology'], // Imaging may involve orthopedics (for x-rays) or neurology (for brain scans)
+    'lab_test': ['Intensive Care Unit', 'Laboratory', 'Emergency', 'Cardiology'], // Lab tests can happen in the ICU, emergency, and labs
+    'procedure': ['Surgery', 'Emergency', 'Orthopedics', 'Cardiology', 'Gastroenterology'], // Procedures often occur in surgery, emergency, and specialized units
+    'medication': ['Pharmacy', 'Intensive Care Unit', 'Pediatrics', 'Oncology'], // Medication orders may be relevant for pediatrics, ICU, and oncology departments
+    'other': ['General', 'Outpatient', 'Rehabilitation', 'Dermatology', 'Geriatrics'], // Other orders could cover a wide range, including outpatient, dermatology, and geriatrics
+    };
+
+        // Disable department dropdown initially
+        $('#admitting_department').prop('disabled', true);
+
+        // When the order type is selected
+        $('#type').on('change', function() {
+            var orderType = $(this).val(); // Get the selected order type
+            
+            // Enable the department dropdown when an order type is selected
+            $('#admitting_department').prop('disabled', false);
+
+            // Clear and reset department dropdown
+            $('#admitting_department').empty().append('<option value="" disabled selected>Select a department</option>');
+
+            if (orderType) {
+                // Get the list of departments for the selected order type
+                var departmentsToShow = orderTypeToDepartments[orderType] || [];
+
+                // Filter departments based on the order type
+                @foreach($departments as $department)
+                    if (departmentsToShow.includes("{{ $department->department_name }}")) {
+                        $('#admitting_department').append('<option value="{{ $department->id }}">{{ $department->department_name }}</option>');
+                    }
+                @endforeach
+            }
+        });
+
+        // When the department is changed (to update doctors)
+        $('#admitting_department').on('change', function() {
+            var departmentId = $(this).val(); // Get the selected department ID
+            
+            // Clear the doctor dropdown and disable it until we fetch the data
+            $('#admitting_doctor').empty().append('<option value="" disabled selected>Loading...</option>');
+            
+            if (departmentId) {
+                // Use fetch API to get doctors for the selected department
+                fetch(`/get-doctors-by-department?department_id=${departmentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Empty the dropdown and add default option
+                        $('#admitting_doctor').empty().append('<option value="" disabled selected>Select a physician</option>');
+                        
+                        // Check if doctors are returned
+                        if (data.doctors.length > 0) {
+                            // Loop through the returned doctors and append them to the dropdown
+                            data.doctors.forEach(doctor => {
+                                $('#admitting_doctor').append('<option value="' + doctor.id + '">' + doctor.name + ' - ' + (doctor.profile ? doctor.profile.specialization : 'No specialization') + '</option>');
+                            });
+                        } else {
+                            // If no doctors found, display message
+                            $('#admitting_doctor').append('<option value="" disabled>No doctors found for this department</option>');
+                        }
+                    })
+                    .catch(error => {
+                        // Handle any errors
+                        console.error('Error fetching doctors:', error);
+                        $('#admitting_doctor').empty().append('<option value="" disabled>Error loading doctors</option>');
+                    });
+            } else {
+                // If no department selected, clear the doctor dropdown
+                $('#admitting_doctor').empty().append('<option value="" disabled selected>Select a physician</option>');
+            }
+        });
+    });
+</script>
+
+
+
+
 
 @endsection

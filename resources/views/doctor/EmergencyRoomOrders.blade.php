@@ -42,35 +42,40 @@
 
         <!-- Admission Details -->
         <div class="lg:col-span-2 bg-white rounded-md border border-gray-100 shadow-lg">
-            <div class="bg-gray-600 text-white text-lg font-semibold rounded-t-lg p-4">
-                Admission Records
+            <div class="bg-gray-600 text-white text-lg font-semibold rounded-t-lg p-4 flex justify-between items-center">
+                <div>Admission Records</div>
+                <a href="{{ route('emergencyroom_addorder', $patient->id) }}" class="text-white-600 hover:text-blue-500 transition-colors">
+                    <i class="ri-edit-box-line"></i>
+                </a>
             </div>
             <div class="p-6">
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-center text-gray-600 border-collapse border border-gray-200">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Admission</th>
-                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">ER Details</th>
-                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Status of Admission</th>
-                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Action</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">ER Medical Order</th>
+                                <th class="px-4 py-2 font-semibold border-b border-r border-gray-300">Order Status</th>
+                                <th class="px-4 py-2 font-semibold border-b border-gray-300">Admission Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($patient->patientrecord as $record)
+                            @foreach ($patient->er_order as $record)
                             <tr>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
-                                    <a href="{{ route('doctor_patientrecord', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
-                                        {{ $record->reason_for_admission }}
+                                    <a href="{{ route('doctor_orderpageER', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
+                                        {{ $record->type }}
                                     </a>
                                 </td>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
-                                    <!-- Check if er_order exists before accessing the title -->
-                                    <a href="{{ route('doctor_erorders', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
-                                        ER Order Details
-                                    </a>
+                                    @if ($record->order_status === 'pending')
+                                        <span class="text-lg font-semibold text-yellow-400">Pending</span>
+                                    @elseif ($record->order_status === 'completed')
+                                        <span class="text-lg font-semibold text-green-400">Completed</span>
+                                    @else
+                                        <span class="text-lg font-semibold text-gray-400">N/A</span>
+                                    @endif
                                 </td>
-                                <td class="px-4 py-2 border-b border-r border-gray-200">
+                                <td class="px-4 py-2 border-b border-gray-200">
                                     @if ($record->status === 'pending')
                                         <span class="text-lg font-semibold text-yellow-400">Pending</span>
                                     @elseif ($record->status === 'admitted')
@@ -82,21 +87,6 @@
                                     @else
                                         <span class="text-lg font-semibold text-gray-400">N/A</span>
                                     @endif
-                                </td>
-                                <td class="px-4 py-2 border-b border-gray-200">
-                                    <form action="{{ route('doctor.updateOrderStatus', $record->id) }}" method="POST" class="flex items-center justify-center">
-                                        @csrf
-                                        <div class="flex items-center space-x-4">
-                                            <select name="status" class="form-select border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-500 focus:border-blue-500">
-                                                <option value="pending" {{ $record->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                                <option value="not admitted" {{ $record->status == 'not admitted' ? 'selected' : '' }}>Not Admitted</option>
-                                                <option value="admitted" {{ $record->status == 'admitted' ? 'selected' : '' }}>Admit</option>
-                                            </select>
-                                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-5 rounded shadow transition-all duration-150 ease-in-out">
-                                                Update
-                                            </button>
-                                        </div>
-                                    </form>
                                 </td>
                             </tr>
                             @endforeach

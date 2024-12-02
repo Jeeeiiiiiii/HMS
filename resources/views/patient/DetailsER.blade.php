@@ -1,6 +1,6 @@
 @extends('layouts.patient')
 
-@section('title', 'Details')
+@section('title', 'Details Emergency Room')
 
 @section('contents')
 <div class="p-6 space-y-6">
@@ -58,7 +58,7 @@
                             @foreach ($patient->patientrecord as $record)
                             <tr>
                                 <td class="px-4 py-2 border-b border-r border-gray-200">
-                                    <a href="{{ route('patient_patientrecord', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
+                                    <a href="{{ route('patient_erorders', $record->id) }}" class="text-blue-700 hover:text-blue-500 font-semibold transition-colors duration-100 ease-in-out">
                                         {{ $record->reason_for_admission }}
                                     </a>
                                 </td>

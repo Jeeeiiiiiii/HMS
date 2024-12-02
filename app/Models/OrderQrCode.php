@@ -15,6 +15,7 @@ class OrderQrCode extends Model
         'patient_record_id',
         'order_id',
         'patient_id',
+        'department_id',
         ];
 
     public function patient()

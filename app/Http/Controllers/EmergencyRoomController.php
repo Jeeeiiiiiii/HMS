@@ -9,6 +9,7 @@ use App\Models\Record;
 use App\Models\Doctor;
 use App\Models\EmergencyRoom;
 use App\Models\Department;
+use App\Models\DepartmentDoctor;
 use App\Models\Nurse;
 use App\Models\TreatmentPlan;
 use App\Models\erOrder;
@@ -202,6 +203,7 @@ class EmergencyRoomController extends Controller
             'patient_record_id' => $patientRecord->id,
             'emergency_room_id' => $eroom->id,
             'type' => $request->type,
+            'admitting_doctor' => $request->admitting_doctor,
             'description' => $request->description,
             'status' => $request->status,
             'order_date' => $request->order_date,
@@ -267,6 +269,7 @@ class EmergencyRoomController extends Controller
                 'er_order_id' => $order->id,
                 'file_path' => $filePath,
                 'patient_id' => $order->patient_id,
+                'department_id' => $order->department_id,
             ]);
         }
         
@@ -294,7 +297,16 @@ class EmergencyRoomController extends Controller
             if (!$userGuard) {
                 return redirect()->route('login')->with('error', 'Unauthorized Access');
             }
+
+            // Check if the authenticated user has access to this specific department
+            $authenticatedUser = auth()->guard($userGuard)->user();
+            $userDepartmentId = $authenticatedUser->id; // Assuming each user has a department_id
         
+              // Restrict access: Check if the department_id matches
+            if ($userDepartmentId !== $order->department_id) {
+                return redirect()->route('login')->with('error', 'Department does not have permission to view this order.');
+            }
+            
             // If authorized, show the QR code details
             return view('emergencyroom.show', compact('order'));
         }
@@ -409,6 +421,34 @@ class EmergencyRoomController extends Controller
 
         return redirect()->back()->with('success', 'Triage Nurse removed from department successfully.');
     }
+
+
+    public function getDoctorsByDepartment(Request $request)
+{
+    // Get the department ID from the request
+    $departmentId = $request->get('department_id');
+
+    // Fetch the department and get its doctors using the relationship
+    $department = Department::find($departmentId);
+
+    // If the department is found, get the associated doctors
+    if ($department) {
+        // Eager load the doctor profile to get the specialization
+        $doctors = $department->doctors()->with('profile')->get(); // Assuming 'profile' is the relation
+
+        // Return the doctors as a JSON response
+        return response()->json([
+            'doctors' => $doctors
+        ]);
+    }
+
+    // If the department is not found, return an empty array
+    return response()->json([
+        'doctors' => []
+    ]);
+}
+
+
 
 
 

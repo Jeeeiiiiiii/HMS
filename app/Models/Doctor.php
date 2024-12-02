@@ -26,6 +26,7 @@ class Doctor extends Authenticatable
         'name',
         'email',
         'password',
+        'status',
     ];
     protected $guard = 'doctor';
     /**

@@ -163,11 +163,16 @@
 
             <!-- Emergency Room Medical Order Section -->
             <div class="bg-white border border-gray-200 shadow-lg p-4 rounded-lg">
-                <h2 class="text-lg font-semibold text-gray-800 mb-3">Emergency Room Medical Order</h2>
+                <div class = "flex justify-between items-center">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-3">Latest ER Medical Order</h2>
+                    <a href="{{ route('patient_detailsERpatient', $patient->id) }}" class="text-black-600 hover:text-blue-500 transition-colors">
+                        <i class="ri-arrow-right-up-line text-2xl font-semibold mr-2"></i>
+                    </a>
+                </div>
                 <div class="space-y-4">
                     <div class = "bg-gray-50 rounded-md">
                         <div class = "flex">
-                            <i class="ri-calendar-2-line  text-xl text-blue-500 mr-2"></i>
+                            <i class="ri-calendar-2-line text-xl text-blue-500 mr-2"></i>
                             <h3 class="font-semibold text-gray-700">Order Date</h3>
                         </div>
                         <p>{{ $erorder && $erorder->order_date ? \Carbon\Carbon::parse($admission->admitting_date_and_time)->format('F j, Y \a\t g:i A') : 'N/A' }}</p>
